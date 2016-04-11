@@ -10,4 +10,4 @@ This site is a growing repository of scripts and various other code that I produ
 
 <br>
 
-This site is built using <a href="http://rmarkdown.rstudio.com" target="_blank">rmarkdown <i class="fa fa-external-link"></i></a>, and the source for the site is available <a href="https://github.com/camposfa/rmd_website" target="_blank"> here <i class="fa fa-external-link"></i></a>
+This site is built using <a href="http://rmarkdown.rstudio.com" target="_blank">rmarkdown <i class="fa fa-external-link"></i></a>, and the source for the site is available <a href="https://github.com/camposfa/camposfa.github.io" target="_blank"> here <i class="fa fa-external-link"></i></a>
