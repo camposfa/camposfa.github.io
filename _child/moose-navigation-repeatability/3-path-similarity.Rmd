@@ -1,0 +1,147 @@
+<br>
+<hr>
+<br>
+
+```{r prepare_workspace, message = FALSE, echo = FALSE, results = 'hide'}
+```
+
+# Path Similarity: Overview
+
+The hypothesis that we're testing here is that if navigation during migration is guided primarily by memory, then individuals will show high repeatability of migration paths from one year to another.
+
+For each migratory path, we want to:
+
+1. extract the two migratory portions only (remove summer and winter ranges)
+2. identify as either spring or fall migration
+3. calculate path similarity index between it and all other paths
+4. do the same but after "centering" the tracks to remove effects of geographic separation
+
+We can then create distance matricies between the paths and carry out analysis.
+
+<br>
+
+<hr>
+
+<br>
+
+# Extract migratory portions
+Here we build on the results from the [migrant identification](2-identify-migrants.html) analysis.
+
+To keep this tidy, we use a "nested" tbl_df. The migration parameters are nested in the "params" column and the location data are nested in the "data" column.
+```{r extract_migratory_portions1, eval = FALSE}
+```
+
+<br>
+
+What this looks like:
+```{r, echo = FALSE}
+select(by_id, -burst)
+```
+
+<br>
+
+Continuing along, we now need to take each MooseYrID trajectory, obtain the subset of points that corresponds to the spring and fall migrations, and discard the rest. This is based on the migration parameters obtained for each animal earlier (xmidA and xmidB represent the midpoints, and scale1 and scale2 relate to the duration).
+
+Since this needs to by applied separately for each trajectory based on the individual parameters, we first define a general function that carries out this subsetting. Then we can call it on each separate trajectory.
+```{r extract_migratory_portions2}
+```
+
+<br>
+
+# Path similarity measures
+
+## Calculate similarities
+This is the main section that calculates pairwise path similarity for every combination of migration paths. I use two different measures of path similarity: Frechet Distance and Hausdorff's Distance.
+
+If you're attempting to run this code, be aware that _it takes an extremely long time to run!_ With ~151 separate paths for each migration phase, there are `choose(151, 2) =` `r choose(151, 2)` unique pairwise combinations for which the distance needs to be calculated, for each different similarity index. On my Macbook pro, this took about 26 hours for the Spring migration and another 26 hours for the Fall migration. The main bottleneck is the Frechet Distance; the Hausdorff Distance is much easier to calculate and only takes a few minutes.
+
+**Proceed with caution!!!!**
+```{r path_similarity, eval = FALSE}
+```
+
+<br>
+
+## Put distances together
+```{r combine_distances, eval = FALSE}
+```
+
+<br>
+
+# Plot distances
+
+##  Heat maps
+First, we create a plotting function that can accept one of the raw matrices we created
+```{r plot_heat_map, message = FALSE}
+```
+
+<br>
+
+Pairwise Frechet distance
+Spring migration, uncentered, ignoring time
+```{r}
+heatmap_fc(frechet_mat_spring_un)
+```
+
+<br>
+
+Pairwise Frechet distance
+Spring migration, centered, ignoring time
+```{r}
+heatmap_fc(frechet_mat_spring_cn)
+```
+
+<br>
+
+## Tracks with distances
+Visualize the centering/non-centering and distances
+```{r plot_dist_tracks, message = FALSE}
+```
+
+<br>
+
+Example plot: We look at the centered and uncentered distances to the spring migration path for YrMooseID `aa_ac_05_115.yr2`. This track is the thick red line. The same animal (`aa_ac_05_115`) has two other spring migrations: `aa_ac_05_115.yr3` and `aa_ac_05_115.yr3`. These are shown as thin red lines. All of the other spring migrations are shown with color shading that indicates the Frechet distance to the focal path, `aa_ac_05_115.yr2`. We can see the effect that centering has on the distance value. Centering reduces the influence of geographic separation on the distance calculation.
+```{r}
+dist_track_plot(myid = "aa_ac_05_115.yr2", myseason = "Spring",
+                t_filter = "Path Only")
+```
+
+<br>
+
+# Compare Frechet distances
+Now we begin to evaluate the hypothesis stated at the top of the page. Specifically, we expect the migration paths _of the same individual in different years_ to be significantly more similar to each other (i.e., to have smaller Frechet distance)  compared the paths of _different individuals_, regardless of year.
+
+One way to visualize this is to look at histograms of Frechet distance for same-individual path pairs vs. different-individual path pairs. Since there are vastly more different-individual dyads, we rescale these plots to show density rather than actual counts.
+
+From this point forward, I'm only going to consider 2-D Frechet distance, i.e., based on path geometry only and ignoring time. The reason for ignoring time is that we're really only interested in the repeatability of the path and not the timing, which might vary from year to year due to weather conditions. Also, it's not really obvious how the "distance" calculation should handle mixed units (kilometers for the x and y dimensions, days for the time dimension). The results for 3-D Frechet distance are qualitatively very similar to the 2-D results anyway, and likewise, the Hausdorff Distance gives similar results as well.
+```{r frechet_distance_histogram, message = FALSE}
+```
+
+This plot cleary supports the idea that same-individual pairs tend to show greater path similarity than different-individual pairs.
+
+<br>
+
+# Permutation test
+We can use permutation methods to test the hypothesis that the migration paths of the same animal in different years show significantly greater similarity in terms of Frechet distance. The null hypothesis is that the observed mean similarity for same-animal paths is no different from random.
+
+First we create some functions for permuting the distances for a given "chunk".
+```{r permutation_test1, eval = FALSE}
+```
+
+<br>
+
+Then we calculate the observed mean for same-animal paths in different years.
+```{r permutation_test2, eval = FALSE}
+```
+
+<br>
+Next we carry out the permutation, compile the results, and summarize them for plotting.
+```{r permutation_test3, eval = FALSE}
+```
+
+<br>
+
+Finaly, plot the results.
+```{r plot_perm_test}
+```
+
+The observed mean value clearly lies outside the 95% CI in each of the conditions, so we reject the null hypothesis. Same-animal paths in different years are significantly more similar to each other than would be expected if migration paths were taken at random.

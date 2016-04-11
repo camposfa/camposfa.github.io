@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Fernando Campos" />
+
+
+<title>Capuchin Home Ranges</title>
+
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="libs/tocify-1.9.1/jquery.tocify.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="libs/navigation-1.0/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<script src="libs/navigation-1.0/codefolding.js"></script>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<nav class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Code</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">R Packages <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="r-packages-plhdbR.html">plhdbR</a></li>
+            <li><a href="r-packages-paceR.html">paceR</a></li>
+            <li><a href="r-packages-ClimGrid.html">ClimGrid</a></li>
+          </ul>
+        </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reproducible Analysis <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="moose-migration-repeatability.html">Moose Navigation</a></li>
+            <li><a href="capuchin-home-ranges.html">Capuchin Home Ranges</a></li>
+          </ul>
+        </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PACE Tutorials <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Fruit Biomass</a></li>
+            <li><a href="#">Leaf Seasonality</a></li>
+            <li><a href="#">Weather Data</a></li>
+          </ul>
+        </li>
+      </ul>
+        
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="https://github.com/camposfa"><i class="fa fa-github fa-lg"></i></a></li>
+      </ul>
+      
+      
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</nav><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text-muted">Code</span> <span class="text-muted caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All</a></li>
+</ul>
+</div>
+
+
+<h1 class="title toc-ignore">Capuchin Home Ranges</h1>
+<h4 class="author"><em>Fernando Campos</em></h4>
+<h4 class="date"><em>April 9, 2016</em></h4>
+
+</div>
+
+
+<hr />
+<p>Source files available on <a href="https://github.com/camposfa/HomeRanges">Github</a></p>
+<p><a href="mailto:camposfa@gmail.com">Contact me</a> if you are interested in the raw data</p>
+<p><br></p>
+<div id="data-prep" class="section level1">
+<h1>Data Prep</h1>
+<div id="load-packages" class="section level2">
+<h2>Load Packages</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Sys.setenv</span>(<span class="dt">TZ=</span><span class="st">&#39;UTC&#39;</span>)
+list.of.packages &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;adehabitatHR&quot;</span>, <span class="st">&quot;plyr&quot;</span>, <span class="st">&quot;lubridate&quot;</span>, <span class="st">&quot;scales&quot;</span>, 
+                         <span class="st">&quot;reshape2&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, <span class="st">&quot;rgdal&quot;</span>, 
+                         <span class="st">&quot;gridExtra&quot;</span>, <span class="st">&quot;rgeos&quot;</span>, <span class="st">&quot;colorspace&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;tidyr&quot;</span>,
+                         <span class="st">&quot;readr&quot;</span>)
+new.packages &lt;-<span class="st"> </span>list.of.packages[!(list.of.packages %in%<span class="st"> </span><span class="kw">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>])]
+if(<span class="kw">length</span>(new.packages)) <span class="kw">install.packages</span>(<span class="kw">unlist</span>(new.packages))
+<span class="kw">unlist</span>(<span class="kw">lapply</span>(list.of.packages, library, <span class="dt">character.only =</span> T, <span class="dt">logical.return =</span> <span class="ot">TRUE</span>))
+
+<span class="kw">source</span>(<span class="st">&quot;_source/brb-method.R&quot;</span>)</code></pre></div>
+<p><br></p>
+</div>
+<div id="location-data" class="section level2">
+<h2>Location data</h2>
+<p>We first read the tracking data stored in the file <code>ranging-waypoints.csv</code>. This file is not made available here because some of the data belong to other reserchers.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read the file</span>
+all &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;_data/capuchin-home-ranges/ranging-waypoints.csv&quot;</span>)
+
+<span class="co"># Use only the points flagged for calculating home ranges.</span>
+<span class="co"># The purpose of this flag is to filter out duplicate points </span>
+<span class="co"># when two or more researchers were recording data intependently</span>
+<span class="co"># on the same focal group. We want only one point per group for each</span>
+<span class="co"># designated sampling interval. This flag was calculated separately </span>
+<span class="co"># in the database, but it&#39;s very simple: if there are multiple points</span>
+<span class="co"># for a given group and sampling time, take the point nearest to the </span>
+<span class="co"># designated time (usually these are not exaxtly on schedule because </span>
+<span class="co"># the points are recorded manually on the GPS units)</span>
+hr_pts &lt;-<span class="st"> </span><span class="kw">filter</span>(all, use_for_hr ==<span class="st"> </span><span class="ot">TRUE</span>)
+
+<span class="co"># Parse some columns</span>
+da &lt;-<span class="st"> </span><span class="kw">ymd_hms</span>(hr_pts$timestamp)
+hr_pts$group &lt;-<span class="st"> </span><span class="kw">factor</span>(hr_pts$group)
+
+<span class="co"># Convert each group&#39;s total path to an ltraj trajectory</span>
+ran &lt;-<span class="st"> </span><span class="kw">as.ltraj</span>(<span class="dt">xy =</span> hr_pts[, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>,<span class="st">&quot;y&quot;</span>)], 
+                <span class="dt">date =</span> da, 
+                <span class="dt">id =</span> hr_pts$group, 
+                <span class="dt">infolocs =</span> hr_pts[, <span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">6</span>:<span class="dv">12</span>)])
+
+<span class="co"># Plot the trajectories for each group</span>
+<span class="kw">plot</span>(ran, <span class="dt">final =</span> <span class="ot">FALSE</span>, <span class="dt">addpoints =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/load_data-1.png" /><!-- --></p>
+<p><br></p>
+<p>Check data and plot researcher contributions</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert to data frame</span>
+ran_df &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(<span class="kw">ld</span>(ran))
+ran_df$date_of &lt;-<span class="st"> </span><span class="kw">as.Date</span>(ran_df$date)
+
+date_begin &lt;-<span class="st"> </span><span class="kw">min</span>(ran_df$date_of)
+date_end &lt;-<span class="st"> </span><span class="kw">max</span>(ran_df$date_of)
+
+<span class="co"># Plot contributions</span>
+researcher_contrib &lt;-<span class="st"> </span>ran_df %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(id, observer, date_of) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n_pts =</span> <span class="kw">n</span>())
+
+<span class="co"># There are a small number of cases where n_pts is greater that 26 (13 hrs)</span>
+<span class="co"># This obscures the plot a bit, so just set those cases to 26 pts for plotting</span>
+researcher_contrib[researcher_contrib$n_pts ==<span class="st"> </span><span class="dv">28</span>, ]$n_pts &lt;-<span class="st"> </span><span class="dv">26</span>
+researcher_contrib[researcher_contrib$n_pts ==<span class="st"> </span><span class="dv">27</span>, ]$n_pts &lt;-<span class="st"> </span><span class="dv">26</span>
+
+<span class="kw">ggplot</span>(researcher_contrib, <span class="kw">aes</span>(<span class="dt">x =</span> date_of, 
+                 <span class="dt">y =</span> (n_pts /<span class="st"> </span><span class="dv">26</span>), <span class="dt">color =</span> observer)) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>), <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="dv">1</span>), <span class="dt">color =</span> <span class="st">&quot;gray70&quot;</span>, <span class="dt">lty =</span> <span class="dv">3</span>) +
+<span class="st">  </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">xend =</span> date_of, <span class="dt">yend =</span> <span class="dv">0</span>)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() +
+<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;1 years&quot;</span>), 
+               <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%Y&quot;</span>),
+               <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">as.Date</span>(date_begin), 
+                          <span class="kw">as.Date</span>(date_end))) +
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">breaks =</span> <span class="dv">1</span>, <span class="dt">labels =</span> <span class="st">&quot;13h&quot;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.border =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid.major.y =</span> <span class="kw">element_blank</span>(), 
+        <span class="dt">panel.grid.minor.y =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">7</span>),
+        <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_color_brewer</span>(<span class="dt">name =</span> <span class="st">&quot;Observer&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;Set3&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observation Periods&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_grid</span>(id ~<span class="st"> </span>., <span class="dt">drop =</span> <span class="ot">TRUE</span>)</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/review_data-1.png" /><!-- --></p>
+<p><br></p>
+<p>Number of points by group and observer</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(ran_df, <span class="kw">aes</span>(<span class="dt">x =</span> id, <span class="dt">fill =</span> observer)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_bar</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">name =</span> <span class="st">&quot;Observer&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;Set3&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of Points&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/plot_contributions2-1.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">give.n &lt;-<span class="st"> </span>function(x){
+  <span class="kw">return</span>(<span class="kw">c</span>(<span class="dt">y =</span> <span class="dv">500</span>, <span class="dt">label =</span> <span class="kw">length</span>(x)))
+}
+
+<span class="kw">ggplot</span>(ran_df, <span class="kw">aes</span>(<span class="dt">x =</span> observer, <span class="dt">fill =</span> observer)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_bar</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">name =</span> <span class="st">&quot;Observer&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;Set3&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">stat_summary</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="dv">500</span>), <span class="dt">fun.data =</span> give.n, <span class="dt">geom =</span> <span class="st">&quot;text&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of Points&quot;</span>)</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/plot_contributions2-2.png" /><!-- --></p>
+<p><br></p>
+</div>
+</div>
+<div id="home-ranges-scales" class="section level1">
+<h1>Home ranges scales</h1>
+<div id="time-intervals" class="section level2">
+<h2>Time intervals</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">date_begin &lt;-<span class="st"> </span><span class="kw">floor_date</span>(<span class="kw">min</span>(da), <span class="dt">unit =</span> <span class="st">&quot;year&quot;</span>)
+date_end &lt;-<span class="st"> </span><span class="kw">ceiling_date</span>(<span class="kw">max</span>(da), <span class="dt">unit =</span> <span class="st">&quot;year&quot;</span>) -<span class="st"> </span><span class="kw">days</span>(<span class="dv">1</span>)
+
+<span class="co"># monthly</span>
+start_vec &lt;-<span class="st"> </span><span class="kw">seq</span>(date_begin, date_end, <span class="st">&quot;1 months&quot;</span>)
+end_vec &lt;-<span class="st"> </span>start_vec[-<span class="dv">1</span>] -<span class="st"> </span><span class="kw">days</span>(<span class="dv">1</span>)
+end_vec &lt;-<span class="st"> </span><span class="kw">c</span>(end_vec, date_end)
+
+mon_ints &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">block_type =</span> <span class="st">&quot;month&quot;</span>, 
+                       <span class="dt">date_begin =</span> start_vec, 
+                       <span class="dt">date_end =</span> end_vec)
+
+<span class="co"># eighth</span>
+start_vec1 &lt;-<span class="st"> </span><span class="kw">seq</span>(date_begin, date_end, <span class="st">&quot;3 months&quot;</span>)
+start_vec2 &lt;-<span class="st"> </span><span class="kw">seq</span>((date_begin +<span class="st"> </span><span class="kw">months</span>(<span class="dv">1</span>) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">15</span>)), 
+                  date_end, <span class="st">&quot;3 months&quot;</span>)
+start_vec &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">c</span>(start_vec1, start_vec2))
+
+end_vec1 &lt;-<span class="st"> </span>start_vec1[-<span class="dv">1</span>] -<span class="st"> </span><span class="kw">days</span>(<span class="dv">1</span>)
+end_vec2 &lt;-<span class="st"> </span>start_vec2 -<span class="st"> </span><span class="kw">days</span>(<span class="dv">1</span>)
+end_vec &lt;-<span class="st"> </span><span class="kw">sort</span>(<span class="kw">c</span>(end_vec1, end_vec2, date_end))
+
+eig_ints &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">block_type =</span> <span class="st">&quot;eighth&quot;</span>, 
+                       <span class="dt">date_begin =</span> start_vec, 
+                       <span class="dt">date_end =</span> end_vec)
+
+<span class="co"># quarter</span>
+start_vec &lt;-<span class="st"> </span><span class="kw">seq</span>(date_begin -<span class="st"> </span><span class="kw">months</span>(<span class="dv">2</span>) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">15</span>), 
+                 date_end, <span class="st">&quot;3 months&quot;</span>)
+end_vec &lt;-<span class="st"> </span>start_vec[-<span class="dv">1</span>] -<span class="st"> </span><span class="kw">days</span>(<span class="dv">1</span>)
+end_vec &lt;-<span class="st"> </span><span class="kw">c</span>(end_vec, date_end)
+
+qua_ints &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">block_type =</span> <span class="st">&quot;quarter&quot;</span>, 
+                       <span class="dt">date_begin =</span> start_vec, 
+                       <span class="dt">date_end =</span> end_vec)
+
+<span class="co"># half</span>
+start_vec &lt;-<span class="st"> </span><span class="kw">seq</span>(date_begin -<span class="st"> </span><span class="kw">months</span>(<span class="dv">2</span>) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">15</span>), 
+                 date_end, <span class="st">&quot;6 months&quot;</span>)
+end_vec &lt;-<span class="st"> </span>start_vec[-<span class="kw">c</span>(<span class="dv">1</span>)] -<span class="st"> </span><span class="kw">days</span>(<span class="dv">1</span>)
+start_vec &lt;-<span class="st"> </span>start_vec[-<span class="kw">length</span>(start_vec)]
+
+hal_ints &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">block_type =</span> <span class="st">&quot;half&quot;</span>, 
+                       <span class="dt">date_begin =</span> start_vec, 
+                       <span class="dt">date_end =</span> end_vec)
+
+<span class="co"># year</span>
+start_vec &lt;-<span class="st"> </span><span class="kw">seq</span>(date_begin, date_end +<span class="st"> </span><span class="kw">days</span>(<span class="dv">1</span>), <span class="st">&quot;1 year&quot;</span>)
+end_vec &lt;-<span class="st"> </span>end_vec &lt;-<span class="st"> </span>start_vec[-<span class="kw">c</span>(<span class="dv">1</span>)] -<span class="st"> </span><span class="kw">days</span>(<span class="dv">1</span>)
+start_vec &lt;-<span class="st"> </span>start_vec[-<span class="kw">length</span>(start_vec)]
+
+yea_ints &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">block_type =</span> <span class="st">&quot;year&quot;</span>, 
+                       <span class="dt">date_begin =</span> start_vec, 
+                       <span class="dt">date_end =</span> end_vec)
+
+<span class="co"># Combine all scales</span>
+ob_ints &lt;-<span class="st"> </span><span class="kw">rbind</span>(mon_ints, eig_ints, qua_ints, hal_ints, yea_ints)
+ob_all &lt;-<span class="st"> </span><span class="ot">NULL</span>
+
+<span class="co"># Create scale entry for each group for every possible time interval from</span>
+<span class="co"># start of study to end of study</span>
+for(i in <span class="dv">1</span>:<span class="kw">length</span>(<span class="kw">levels</span>(ran_df$id)))
+{
+  temp &lt;-<span class="st"> </span><span class="kw">cbind</span>(ob_ints, <span class="kw">rep</span>(<span class="kw">levels</span>(ran_df$id)[i], <span class="dt">times =</span> <span class="kw">nrow</span>(ob_ints)))
+  <span class="kw">names</span>(temp)[<span class="dv">4</span>] &lt;-<span class="st"> &quot;id&quot;</span>
+  ob_all &lt;-<span class="st"> </span><span class="kw">rbind</span>(ob_all, temp)  
+}</code></pre></div>
+<p><br></p>
+</div>
+<div id="number-of-locations" class="section level2">
+<h2>Number of locations</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ob_all$nb_reloc &lt;-<span class="st"> </span><span class="dv">0</span>
+
+<span class="co"># rearrange</span>
+ob_all &lt;-<span class="st"> </span><span class="kw">select</span>(ob_all, block_type, id, nb_reloc, date_begin, date_end)
+ob_all &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(ob_all)
+
+<span class="co"># Now we need to see how many location points actually lie in each time interval</span>
+<span class="co"># for each group. We do this by joining to ran_df</span>
+temp &lt;-<span class="st"> </span><span class="kw">left_join</span>(ob_all, ran_df)</code></pre></div>
+<pre><code>## Joining by: &quot;id&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create date interval for filtering</span>
+temp$date_interval &lt;-<span class="st"> </span><span class="kw">interval</span>(temp$date_begin, temp$date_end)
+
+<span class="co"># Count number of points for each group in each date interval</span>
+ob_all &lt;-<span class="st"> </span>temp %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(date_of %within%<span class="st"> </span>date_interval) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(id, block_type, date_begin, date_end) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">nb_reloc =</span> <span class="kw">n</span>())</code></pre></div>
+<p><br></p>
+</div>
+<div id="filters" class="section level2">
+<h2>Filters</h2>
+<p>Here we remove periods with few locations</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now we remove a few intervals for which the data are too sparse (too few pts)</span>
+<span class="co"># I define this as follows:</span>
+<span class="co"># - 96 pts (~8 full days) for monthly home range</span>
+<span class="co"># - 192 pts (~16 full days) for quarterly home range</span>
+<span class="co"># - 384 pts (~32 full days) for half-yearly home range</span>
+<span class="co"># - 768 pts (~64 full days) for annual home range</span>
+ob &lt;-<span class="st"> </span>ob_all %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>((block_type ==<span class="st"> &quot;month&quot;</span> &amp;<span class="st"> </span>nb_reloc &gt;=<span class="st"> </span><span class="dv">96</span>) |
+<span class="st">           </span>(block_type ==<span class="st"> &quot;quarter&quot;</span> &amp;<span class="st"> </span>nb_reloc &gt;=<span class="st"> </span><span class="dv">192</span>) |<span class="st"> </span>
+<span class="st">           </span>(block_type ==<span class="st"> &quot;half&quot;</span> &amp;<span class="st"> </span>nb_reloc &gt;=<span class="st"> </span><span class="dv">384</span>) |
+<span class="st">           </span>(block_type ==<span class="st"> &quot;year&quot;</span> &amp;<span class="st"> </span>nb_reloc &gt;=<span class="st"> </span><span class="dv">768</span>))
+
+ob$ints &lt;-<span class="st"> </span><span class="kw">interval</span>(ob$date_begin, ob$date_end)
+ob &lt;-<span class="st"> </span><span class="kw">select</span>(ob, -date_begin, -date_end)</code></pre></div>
+<p><br></p>
+</div>
+<div id="hr-interval-plots" class="section level2">
+<h2>HR Interval Plots</h2>
+<p>Plots of seasonal ranges to be included in the study</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">date_begin &lt;-<span class="st"> </span><span class="kw">min</span>(<span class="kw">int_start</span>(ob$ints))
+date_end &lt;-<span class="st"> </span><span class="kw">max</span>(<span class="kw">int_end</span>(ob$ints))
+
+temp &lt;-<span class="st"> </span>ran_df %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">group_by</span>(id, date_of) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n_pts =</span> <span class="kw">n</span>())
+
+temp[temp$n_pts ==<span class="st"> </span><span class="dv">28</span>, ]$n_pts &lt;-<span class="st"> </span><span class="dv">26</span>
+temp[temp$n_pts ==<span class="st"> </span><span class="dv">27</span>, ]$n_pts &lt;-<span class="st"> </span><span class="dv">26</span>
+
+p1 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(temp, <span class="kw">aes</span>(<span class="dt">x =</span> date_of, 
+                       <span class="dt">y =</span> (n_pts /<span class="st"> </span><span class="dv">26</span>), <span class="dt">color =</span> id)) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>), <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="dv">1</span>), <span class="dt">color =</span> <span class="st">&quot;gray70&quot;</span>, <span class="dt">lty =</span> <span class="dv">3</span>) +
+<span class="st">  </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">xend =</span> date_of, <span class="dt">yend =</span> <span class="dv">0</span>), <span class="dt">alpha =</span> <span class="fl">0.5</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() +
+<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;1 years&quot;</span>), 
+               <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%Y&quot;</span>),
+               <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">as.Date</span>(date_begin), 
+                          <span class="kw">as.Date</span>(date_end))) +
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">breaks =</span> <span class="dv">1</span>, <span class="dt">labels =</span> <span class="st">&quot;13h&quot;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.border =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid.major.y =</span> <span class="kw">element_blank</span>(), 
+        <span class="dt">panel.grid.minor.y =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">7</span>),
+        <span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_color_discrete</span>(<span class="dt">name =</span> <span class="st">&quot;Group&quot;</span>, <span class="dt">guide =</span> <span class="st">&quot;none&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observation Periods&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_grid</span>(id ~<span class="st"> </span>., <span class="dt">drop =</span> <span class="ot">TRUE</span>)
+
+
+## Time Periods
+p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(ob, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">int_start</span>(ints) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">3</span>),
+                     <span class="dt">y =</span> <span class="kw">factor</span>(id, <span class="dt">levels =</span> <span class="kw">rev</span>(<span class="kw">levels</span>(id))),
+                     <span class="dt">color =</span> id)) +
+<span class="st">  </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">xend =</span> <span class="kw">int_end</span>(ints) -<span class="st"> </span><span class="kw">days</span>(<span class="dv">3</span>), 
+                   <span class="dt">yend =</span> id), 
+               <span class="dt">size =</span> <span class="dv">2</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_color_discrete</span>(<span class="dt">guide =</span> <span class="st">&quot;none&quot;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;grey50&quot;</span>),
+        <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">8</span>)) +
+<span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;1 years&quot;</span>), 
+                   <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%Y&quot;</span>),
+                   <span class="dt">limits =</span> <span class="kw">c</span>(date_begin, date_end)) +
+<span class="st">  </span><span class="kw">facet_grid</span>(block_type ~<span class="st"> </span>.) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>) +
+<span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Included HR intervals&quot;</span>)
+
+<span class="kw">grid.arrange</span>(p1, p2)</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/plot_times-1.png" /><!-- --></p>
+<p><br> ****** <br></p>
+</div>
+</div>
+<div id="predictor-variables" class="section level1">
+<h1>Predictor variables</h1>
+<p><br></p>
+<div id="group-mass" class="section level2">
+<h2>Group mass</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Use group data pulled from database on 2013-09-23</span>
+c_groups &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(<span class="kw">read.csv</span>(<span class="st">&quot;_data/capuchin-home-ranges/groups-query.csv&quot;</span>))
+
+<span class="co"># Include only alive or immigrated animals</span>
+tcomp &lt;-<span class="st"> </span><span class="kw">filter</span>(c_groups, status ==<span class="st"> &quot;Alive&quot;</span> |<span class="st"> </span>status ==<span class="st"> &quot;Immigrated&quot;</span>)
+
+<span class="co"># Include only sexually mature animals</span>
+comp &lt;-<span class="st"> </span><span class="kw">filter</span>(tcomp, age ==<span class="st"> &quot;Adult&quot;</span> |<span class="st"> </span>age ==<span class="st"> &quot;SubAdult&quot;</span>)
+
+<span class="co"># Inlcude only study group</span>
+comp &lt;-<span class="st"> </span><span class="kw">filter</span>(comp, id %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AD&quot;</span>, <span class="st">&quot;BH&quot;</span>, <span class="st">&quot;CP&quot;</span>, <span class="st">&quot;EX&quot;</span>, <span class="st">&quot;GN&quot;</span>, <span class="st">&quot;LV&quot;</span>, <span class="st">&quot;RM&quot;</span>))
+comp$date_of &lt;-<span class="st"> </span><span class="kw">as.Date</span>(comp$date_of)
+
+<span class="co"># Round the date to find census date</span>
+comp$census_date &lt;-<span class="st"> </span><span class="kw">round_date</span>(comp$date_of, <span class="dt">unit =</span> <span class="st">&quot;month&quot;</span>)
+
+<span class="co"># Convert to age/sex and reshape</span>
+comp &lt;-<span class="st"> </span><span class="kw">unite</span>(comp, age_sex, age, sex)
+
+<span class="co"># Reshape</span>
+comp_wide &lt;-<span class="st"> </span><span class="kw">dcast</span>(comp, id +<span class="st"> </span>date_of ~<span class="st"> </span>age_sex, 
+                   <span class="dt">value.var =</span> <span class="st">&quot;n&quot;</span>, 
+                   <span class="dt">fun.aggregate =</span> sum, 
+                   <span class="dt">drop =</span> <span class="ot">TRUE</span>, 
+                   <span class="dt">fill =</span> <span class="dv">0</span>)
+
+comp_wide$id &lt;-<span class="st"> </span><span class="kw">droplevels</span>(comp_wide$id)
+comp_wide &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(comp_wide)
+
+<span class="co"># Empty data frame for final composition data</span>
+final_comps &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="kw">length</span>(<span class="kw">levels</span>(comp_wide$id)))
+
+<span class="co"># Define limits, pull group comp data for each group, and interpolate values</span>
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(<span class="kw">levels</span>(comp_wide$id)))
+{
+  <span class="co"># Make temporary subsets</span>
+  temp_ob &lt;-<span class="st"> </span><span class="kw">subset</span>(ob, id ==<span class="st"> </span><span class="kw">levels</span>(comp_wide$id)[i])
+  temp_comp &lt;-<span class="st"> </span><span class="kw">subset</span>(comp_wide, id ==<span class="st"> </span><span class="kw">levels</span>(comp_wide$id)[i])
+  
+  <span class="co"># Find date limits</span>
+  date_begin &lt;-<span class="st"> </span><span class="kw">floor_date</span>(<span class="kw">min</span>(<span class="kw">int_start</span>(temp_ob$ints)), <span class="dt">unit =</span> <span class="st">&quot;month&quot;</span>)
+  date_end &lt;-<span class="st"> </span><span class="kw">ceiling_date</span>(<span class="kw">max</span>(<span class="kw">int_end</span>(temp_ob$ints)), <span class="dt">unit =</span> <span class="st">&quot;month&quot;</span>)  
+  
+  <span class="co"># Generate even sequence of first-of-month dates</span>
+  date_seq &lt;-<span class="st"> </span><span class="kw">as.Date</span>(<span class="kw">seq</span>(date_begin, date_end, <span class="st">&quot;days&quot;</span>))
+  
+  <span class="co"># Create daily data frame for composition values</span>
+  comp_frame &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="kw">levels</span>(comp_wide$id)[i],
+                           <span class="dt">census_date =</span> date_seq,
+                           <span class="dt">Adult_F =</span> <span class="ot">NA</span>,
+                           <span class="dt">Adult_M =</span> <span class="ot">NA</span>,
+                           <span class="dt">SubAdult_F =</span> <span class="ot">NA</span>,
+                           <span class="dt">SubAdult_M =</span> <span class="ot">NA</span>)
+  
+  <span class="co"># Fill in census dates with actual information</span>
+  comp_frame$Adult_F &lt;-<span class="st"> </span>temp_comp[<span class="kw">match</span>(comp_frame$census_date, 
+                                        temp_comp$date_of), ]$Adult_F
+  comp_frame$Adult_M &lt;-<span class="st"> </span>temp_comp[<span class="kw">match</span>(comp_frame$census_date, 
+                                        temp_comp$date_of), ]$Adult_M
+  comp_frame$SubAdult_F &lt;-<span class="st"> </span>temp_comp[<span class="kw">match</span>(comp_frame$census_date, 
+                                           temp_comp$date_of), ]$SubAdult_F
+  comp_frame$SubAdult_M &lt;-<span class="st"> </span>temp_comp[<span class="kw">match</span>(comp_frame$census_date, 
+                                           temp_comp$date_of), ]$SubAdult_M
+  
+  <span class="co"># Interpolate between census dates for each day</span>
+  comp_frame$s_Adult_F &lt;-<span class="st"> </span><span class="kw">approx</span>(<span class="dt">x =</span> comp_frame$census_date,
+                                 <span class="dt">y =</span> comp_frame$Adult_F,
+                                 <span class="dt">n =</span> <span class="kw">nrow</span>(comp_frame),
+                                 <span class="dt">method =</span> <span class="st">&quot;constant&quot;</span>)$y
+  
+  comp_frame$s_Adult_M &lt;-<span class="st"> </span><span class="kw">approx</span>(<span class="dt">x =</span> comp_frame$census_date,
+                                 <span class="dt">y =</span> comp_frame$Adult_M,
+                                 <span class="dt">n =</span> <span class="kw">nrow</span>(comp_frame),
+                                 <span class="dt">method =</span> <span class="st">&quot;constant&quot;</span>)$y
+  
+  comp_frame$s_SubAdult_F &lt;-<span class="st"> </span><span class="kw">approx</span>(<span class="dt">x =</span> comp_frame$census_date,
+                                    <span class="dt">y =</span> comp_frame$SubAdult_F,
+                                    <span class="dt">n =</span> <span class="kw">nrow</span>(comp_frame),
+                                    <span class="dt">method =</span> <span class="st">&quot;constant&quot;</span>)$y
+  
+  comp_frame$s_SubAdult_M &lt;-<span class="st"> </span><span class="kw">approx</span>(<span class="dt">x =</span> comp_frame$census_date,
+                                    <span class="dt">y =</span> comp_frame$SubAdult_M,
+                                    <span class="dt">n =</span> <span class="kw">nrow</span>(comp_frame),
+                                    <span class="dt">method =</span> <span class="st">&quot;constant&quot;</span>)$y
+  
+  comp_frame &lt;-<span class="st"> </span><span class="kw">select</span>(comp_frame, id, <span class="dt">date_of =</span> census_date, <span class="kw">matches</span>(<span class="st">&quot;s_&quot;</span>))
+  
+  final_comps[[i]] &lt;-<span class="st"> </span>comp_frame
+}
+
+final_comps &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(final_comps)
+
+<span class="co"># Fix names</span>
+<span class="kw">names</span>(final_comps) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;date_of&quot;</span>, <span class="st">&quot;n_af&quot;</span>, <span class="st">&quot;n_am&quot;</span>, <span class="st">&quot;n_saf&quot;</span>, <span class="st">&quot;n_sam&quot;</span>)
+final_comps$date_of &lt;-<span class="st"> </span><span class="kw">ymd</span>(final_comps$date_of)
+
+<span class="co"># Calculate mean adult mass values for each HR interval</span>
+ob$adult_mass &lt;-<span class="st"> </span><span class="dv">0</span>
+for (i in <span class="dv">1</span>:<span class="kw">nrow</span>(ob)) {
+  g1 &lt;-<span class="st"> </span><span class="kw">mean</span>(final_comps[<span class="kw">which</span>(final_comps$date_of %within%<span class="st"> </span>ob[i,]$ints &amp;<span class="st"> </span>
+<span class="st">                                 </span>final_comps$id ==<span class="st"> </span>ob[i, ]$id), ]$n_af)
+  g2 &lt;-<span class="st"> </span><span class="kw">mean</span>(final_comps[<span class="kw">which</span>(final_comps$date_of %within%<span class="st"> </span>ob[i,]$ints &amp;<span class="st"> </span>
+<span class="st">                                 </span>final_comps$id ==<span class="st"> </span>ob[i, ]$id), ]$n_am)
+  g3 &lt;-<span class="st"> </span><span class="kw">mean</span>(final_comps[<span class="kw">which</span>(final_comps$date_of %within%<span class="st"> </span>ob[i,]$ints &amp;<span class="st"> </span>
+<span class="st">                                 </span>final_comps$id ==<span class="st"> </span>ob[i, ]$id), ]$n_sam)
+  g4 &lt;-<span class="st"> </span><span class="kw">mean</span>(final_comps[<span class="kw">which</span>(final_comps$date_of %within%<span class="st"> </span>ob[i,]$ints &amp;<span class="st"> </span>
+<span class="st">                                 </span>final_comps$id ==<span class="st"> </span>ob[i, ]$id), ]$n_saf)
+  
+  ob[i, ]$adult_mass &lt;-<span class="st"> </span>((g1 +<span class="st"> </span>g3 +<span class="st"> </span>g4) *<span class="st"> </span><span class="fl">2.54</span>) +<span class="st"> </span>(g2 *<span class="fl">3.68</span>)
+}
+
+<span class="co"># Plot mass over time for each group</span>
+final_comps$adult_mass &lt;-<span class="st"> </span>((final_comps$n_af +<span class="st"> </span>
+<span class="st">                              </span>final_comps$n_saf +<span class="st"> </span>
+<span class="st">                              </span>final_comps$n_sam) *<span class="st"> </span><span class="fl">2.54</span>) +<span class="st"> </span>
+<span class="st">  </span>(final_comps$n_am *<span class="fl">3.68</span>)
+
+<span class="kw">ggplot</span>(final_comps, <span class="kw">aes</span>(<span class="dt">x =</span> date_of, <span class="dt">y =</span> adult_mass, <span class="dt">color =</span> id)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">size =</span> <span class="dv">1</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_color_brewer</span>(<span class="dt">name =</span> <span class="st">&quot;Observer&quot;</span>, <span class="dt">palette =</span> <span class="st">&quot;Set1&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Adult mass (kg)&quot;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)) +
+<span class="st">  </span><span class="kw">facet_grid</span>(. ~<span class="st"> </span>id)</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/calculate_group_size-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+<div id="available-fruit-biomass" class="section level2">
+<h2>Available fruit biomass</h2>
+<p>Full details here: <a href="http://people.ucalgary.ca/~facampos/data/fruit/" class="uri">http://people.ucalgary.ca/~facampos/data/fruit/</a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load data</span>
+biomass &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;_data/capuchin-home-ranges/biomass-monthly.csv&quot;</span>)
+
+<span class="co"># Add one additional january to the end for a complete year</span>
+biomass &lt;-<span class="st"> </span><span class="kw">rbind</span>(biomass, biomass[<span class="dv">1</span>, ])
+
+<span class="co"># Create actual dates</span>
+biomass$month_num &lt;-<span class="st"> </span><span class="kw">match</span>(biomass$month_of, month.abb)
+biomass$date_of &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span class="kw">paste</span>(<span class="st">&quot;2011&quot;</span>, biomass$month_num, <span class="st">&quot;1&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;-&quot;</span>))
+biomass$day_of_year &lt;-<span class="st"> </span><span class="kw">yday</span>(biomass$date_of)
+
+<span class="co"># Change last day_of_year to 366 and rearrange</span>
+biomass[<span class="dv">13</span>, ]$day_of_year &lt;-<span class="st"> </span><span class="dv">366</span>
+biomass &lt;-<span class="st"> </span>biomass[, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span>, <span class="dv">5</span>, <span class="dv">2</span>)]
+
+<span class="co"># Spline</span>
+biomass_daily &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">day_of_year =</span> <span class="kw">seq</span>(<span class="dv">1</span>:<span class="dv">366</span>))
+biomass_daily$spline &lt;-<span class="st"> </span><span class="kw">spline</span>(<span class="dt">x =</span> biomass$day_of_year, 
+                               <span class="dt">y =</span> biomass$combined_monthly_kg, <span class="dt">n =</span> <span class="dv">366</span>)$y
+
+<span class="co"># Spline plot</span>
+<span class="kw">plot</span>(<span class="kw">spline</span>(<span class="dt">x =</span> biomass$day_of_year, 
+            <span class="dt">y =</span> biomass$combined_monthly_kg, <span class="dt">n =</span> <span class="dv">366</span>))
+<span class="kw">points</span>(<span class="dt">x =</span> biomass$day_of_year, 
+       <span class="dt">y =</span> biomass$combined_monthly_kg, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/calculate_fruit-1.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extend over complete range of study dates</span>
+start_date &lt;-<span class="st"> </span><span class="kw">as.Date</span>(<span class="kw">min</span>(<span class="kw">int_start</span>(ob$ints)))
+end_date &lt;-<span class="st"> </span><span class="kw">as.Date</span>(<span class="kw">max</span>(<span class="kw">int_end</span>(ob$ints)))
+biomass_dates &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">date_of =</span> <span class="kw">seq</span>(start_date, end_date, <span class="dt">by =</span> <span class="dv">1</span>))
+biomass_dates$day_of_year &lt;-<span class="st"> </span><span class="kw">yday</span>(biomass_dates$date_of)
+biomass_dates &lt;-<span class="st"> </span><span class="kw">merge</span>(biomass_dates, biomass_daily, 
+                       <span class="dt">by.x =</span> <span class="st">&quot;day_of_year&quot;</span>, 
+                       <span class="dt">by.y =</span> <span class="st">&quot;day_of_year&quot;</span>)[, <span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">1</span>,<span class="dv">3</span>)]
+biomass_dates &lt;-<span class="st"> </span>biomass_dates[<span class="kw">with</span>(biomass_dates, <span class="kw">order</span>(date_of)), ]
+
+biomass_daily$date_of &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(<span class="kw">as.Date</span>(biomass_daily$day_of_year -<span class="st"> </span><span class="dv">1</span>, <span class="dt">origin =</span> <span class="st">&quot;2011-01-01&quot;</span>))
+biomass[<span class="dv">13</span>, ]$date_of &lt;-<span class="st"> </span>biomass[<span class="dv">13</span>, ]$date_of +<span class="st"> </span><span class="kw">years</span>(<span class="dv">1</span>)
+
+biomass_dates$date_of &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span class="kw">as.character</span>(biomass_dates$date_of))
+
+<span class="co"># Calculate mean fruit biomass values for each HR interval</span>
+ob$mean_fruit &lt;-<span class="st"> </span><span class="dv">0</span>
+for (i in <span class="dv">1</span>:<span class="kw">nrow</span>(ob)) {
+  ob[i, ]$mean_fruit &lt;-<span class="st"> </span><span class="kw">mean</span>(biomass_dates[<span class="kw">which</span>(biomass_dates$date_of %within%<span class="st"> </span>
+<span class="st">                                                   </span>ob$ints[i]), ]$spline)
+}</code></pre></div>
+<p><br></p>
+</div>
+<div id="weather-data" class="section level2">
+<h2>Weather data</h2>
+<p>Full details here: <a href="http://people.ucalgary.ca/~facampos/data/weather/" class="uri">http://people.ucalgary.ca/~facampos/data/weather/</a></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">wea &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;_data/capuchin-home-ranges/filled-filtered-weather.csv&quot;</span>)
+wea$date_of &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span class="kw">as.character</span>(wea$date_of))
+
+ob$mean_tmax &lt;-<span class="st"> </span><span class="dv">0</span>
+ob$mean_tmin &lt;-<span class="st"> </span><span class="dv">0</span>
+ob$mean_rainfall &lt;-<span class="st"> </span><span class="dv">0</span>
+
+<span class="co"># get mean max temperature for each HR interval</span>
+for (i in <span class="dv">1</span>:<span class="kw">nrow</span>(ob)) {
+  ob[i, ]$mean_tmax &lt;-<span class="st"> </span><span class="kw">mean</span>(wea[<span class="kw">which</span>(wea$date_of %within%<span class="st"> </span>
+<span class="st">                                        </span>ob$ints[i]), ]$tmax, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+  ob[i, ]$mean_tmin &lt;-<span class="st"> </span><span class="kw">mean</span>(wea[<span class="kw">which</span>(wea$date_of %within%<span class="st"> </span>
+<span class="st">                                        </span>ob$ints[i]), ]$tmin, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+  ob[i, ]$mean_rainfall &lt;-<span class="st"> </span><span class="kw">mean</span>(wea[<span class="kw">which</span>(wea$date_of %within%<span class="st"> </span>
+<span class="st">                                            </span>ob$ints[i]), ]$rain, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+}</code></pre></div>
+<p><br></p>
+</div>
+<div id="habitat-maps" class="section level2">
+<h2>Habitat maps</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">lc &lt;-<span class="st"> </span><span class="kw">readGDAL</span>(<span class="dt">fname =</span> <span class="st">&quot;_data/capuchin-home-ranges/LC-2011-03-06.tif&quot;</span>)
+<span class="kw">fullgrid</span>(lc) &lt;-<span class="st"> </span><span class="ot">FALSE</span>
+<span class="kw">names</span>(lc) &lt;-<span class="st"> &quot;habitat&quot;</span>
+
+ndvi &lt;-<span class="st"> </span><span class="kw">readGDAL</span>(<span class="dt">fname =</span> <span class="st">&quot;_data/capuchin-home-ranges/NDVI-2011-03-06.tif&quot;</span>)
+<span class="kw">fullgrid</span>(ndvi) &lt;-<span class="st"> </span><span class="ot">FALSE</span>
+<span class="kw">names</span>(ndvi) &lt;-<span class="st"> &quot;ndvi&quot;</span>
+
+bounds &lt;-<span class="st"> </span><span class="kw">ddply</span>(ran_df, 
+                <span class="st">&quot;id&quot;</span>, 
+                function(df) <span class="kw">c</span>(<span class="kw">min</span>(df$x) -<span class="st"> </span><span class="dv">100</span>, 
+                               <span class="kw">max</span>(df$x) +<span class="st"> </span><span class="dv">100</span>, 
+                               <span class="kw">min</span>(df$y) -<span class="st"> </span><span class="dv">100</span>, 
+                               <span class="kw">max</span>(df$y) +<span class="st"> </span><span class="dv">100</span>))
+<span class="kw">names</span>(bounds) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;id&quot;</span>,<span class="st">&quot;xmin&quot;</span>,<span class="st">&quot;xmax&quot;</span>,<span class="st">&quot;ymin&quot;</span>,<span class="st">&quot;ymax&quot;</span>)
+
+xym &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">rbind</span>(
+  <span class="kw">c</span>(<span class="kw">min</span>(bounds$xmin), <span class="kw">max</span>(bounds$ymax)),
+  <span class="kw">c</span>(<span class="kw">max</span>(bounds$xmax), <span class="kw">max</span>(bounds$ymax)),
+  <span class="kw">c</span>(<span class="kw">max</span>(bounds$xmax), <span class="kw">min</span>(bounds$ymin)),
+  <span class="kw">c</span>(<span class="kw">min</span>(bounds$xmin), <span class="kw">min</span>(bounds$ymin)),
+  <span class="kw">c</span>(<span class="kw">min</span>(bounds$xmin), <span class="kw">max</span>(bounds$ymax))))
+
+p &lt;-<span class="st"> </span><span class="kw">Polygon</span>(xym)
+ps &lt;-<span class="st"> </span><span class="kw">Polygons</span>(<span class="kw">list</span>(p),<span class="dv">1</span>)
+clip_rect &lt;-<span class="st"> </span><span class="kw">SpatialPolygons</span>(<span class="kw">list</span>(ps))
+<span class="kw">proj4string</span>(clip_rect) &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+proj=utm +zone=16 +datum=WGS84 +units=m +no_defs +ellps=WGS84 +towgs84=0,0,0&quot;</span>)
+
+hab &lt;-<span class="st"> </span>lc[clip_rect, drop =<span class="st"> </span><span class="ot">TRUE</span>]
+age &lt;-<span class="st"> </span>ndvi[clip_rect, drop =<span class="st"> </span><span class="ot">TRUE</span>]
+
+<span class="co"># Create HCL color palette for land cover maps</span>
+lc_grad &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<span class="dt">colors =</span> <span class="kw">rev</span>(<span class="kw">heat_hcl</span>(<span class="dv">4</span>, <span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">130</span>, <span class="dv">70</span>), 
+                                                  <span class="dt">c =</span> <span class="kw">c</span>(<span class="dv">80</span>, <span class="dv">30</span>), 
+                                                  <span class="dt">l =</span> <span class="kw">c</span>(<span class="dv">45</span>, <span class="dv">95</span>), 
+                                                  <span class="dt">power =</span> <span class="kw">c</span>(<span class="dv">1</span>/<span class="dv">5</span>, <span class="dv">2</span>))))(<span class="dv">4</span>)
+
+<span class="co"># image(hab, col = brewer.pal(4, &quot;YlGn&quot;))</span>
+<span class="kw">image</span>(hab, <span class="dt">col =</span> lc_grad)</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/load_habitat_maps-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+</div>
+<div id="calculate-home-ranges" class="section level1">
+<h1>Calculate home ranges</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ob$area_core &lt;-<span class="st"> </span><span class="dv">0</span>
+ob$area_primary &lt;-<span class="st"> </span><span class="dv">0</span>
+ob$area_total &lt;-<span class="st"> </span><span class="dv">0</span>
+ob$ndvi_core &lt;-<span class="st"> </span><span class="dv">0</span>
+ob$ndvi_primary &lt;-<span class="st"> </span><span class="dv">0</span>
+ob$ndvi_total &lt;-<span class="st"> </span><span class="dv">0</span>
+ob$ndvi_high &lt;-<span class="st"> </span><span class="dv">0</span>
+ob$ndvi_medium &lt;-<span class="st"> </span><span class="dv">0</span>
+ob$ndvi_low &lt;-<span class="st"> </span><span class="dv">0</span>
+
+ud &lt;-<span class="st"> </span><span class="kw">list</span>()
+vv &lt;-<span class="st"> </span><span class="kw">list</span>()
+
+<span class="co"># Calculate diffusion values</span>
+for(i in <span class="dv">1</span>:<span class="kw">length</span>(<span class="kw">levels</span>(ran_df$id)))
+{
+  vv_id &lt;-<span class="st"> </span><span class="kw">levels</span>(ran_df$id)[i]
+  vv[[i]] &lt;-<span class="st"> </span><span class="kw">BRB.D</span>(ran[<span class="dt">id =</span> vv_id], 
+                   <span class="dt">Tmax =</span> <span class="dv">90</span>*<span class="dv">60</span>, 
+                   <span class="dt">Lmin =</span> <span class="dv">5</span>, 
+                   <span class="dt">habitat =</span> hab, 
+                   <span class="dt">activity =</span> <span class="ot">NULL</span>)
+  <span class="kw">names</span>(vv[[i]]) &lt;-<span class="st"> </span><span class="kw">levels</span>(ran_df$id)[i]
+}
+
+<span class="co"># Warning: VERY SLOW!!!!</span>
+<span class="co"># Takes about 25 minutes on my laptop (2.10 GHz Core2 Duo CPU w/ 4 GB ram)</span>
+<span class="co"># Can repeat for recursion / intensity distributions (t = &quot;RD&quot; or t = &quot;ID&quot;)</span>
+for(i in <span class="dv">1</span>:<span class="kw">nrow</span>(ob)){
+  temp &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">area.BRB</span>(
+    <span class="dt">x =</span> ran[<span class="dt">id =</span> ob[i, ]$id],
+    <span class="dt">start.date =</span> <span class="kw">as.POSIXct</span>(<span class="kw">as.Date</span>(<span class="kw">int_start</span>(ob[i, ]$ints))), 
+    <span class="dt">end.date =</span> <span class="kw">as.POSIXct</span>(<span class="kw">as.Date</span>(<span class="kw">int_end</span>(ob[i, ]$ints)) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">1</span>)), 
+    <span class="dt">hab =</span> hab,    
+    <span class="dt">iso =</span> <span class="kw">c</span>(<span class="dv">50</span>, <span class="dv">70</span>, <span class="dv">95</span>),
+    <span class="dt">t =</span> <span class="st">&quot;UD&quot;</span>,
+    <span class="dt">vv =</span> vv[[ob[i, ]$id]]
+  ))
+  
+  ob[i, ]$area_core &lt;-<span class="st"> </span>temp$hr$hr50$area
+  ob[i, ]$area_primary &lt;-<span class="st"> </span>temp$hr$hr70$area
+  ob[i, ]$area_total &lt;-<span class="st"> </span>temp$hr$hr95$area
+  
+  ob[i, ]$ndvi_core &lt;-<span class="st"> </span>temp$ndvi$ndvi50
+  ob[i, ]$ndvi_primary &lt;-<span class="st"> </span>temp$ndvi$ndvi70
+  ob[i, ]$ndvi_total &lt;-<span class="st"> </span>temp$ndvi$ndvi95
+  
+  ob[i, ]$ndvi_high &lt;-<span class="st"> </span>temp$ndvi$ndvi50
+  ob[i, ]$ndvi_medium &lt;-<span class="st"> </span><span class="kw">mean</span>(ndvi[<span class="kw">gDifference</span>(temp$hr$hr70, 
+                                               temp$hr$hr50), ]$ndvi, 
+                              <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+  ob[i, ]$ndvi_low &lt;-<span class="st"> </span><span class="kw">mean</span>(ndvi[<span class="kw">gDifference</span>(temp$hr$hr95, 
+                                            temp$hr$hr70), ]$ndvi, 
+                           <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+  
+  ud[[i]] &lt;-<span class="st"> </span>temp$ud 
+}</code></pre></div>
+<p><br></p>
+<div id="write-ud-data" class="section level2">
+<h2>Write UD data</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create directory to hold output files</span>
+mainDir &lt;-<span class="st"> </span><span class="kw">getwd</span>()
+subDir1 &lt;-<span class="st"> &quot;HomeRanges&quot;</span>
+subDir2 &lt;-<span class="st"> &quot;ud&quot;</span>
+<span class="kw">dir.create</span>(<span class="kw">file.path</span>(mainDir, subDir1), <span class="dt">showWarnings =</span> <span class="ot">FALSE</span>)
+<span class="kw">dir.create</span>(<span class="kw">file.path</span>(mainDir, subDir1, subDir2), <span class="dt">showWarnings =</span> <span class="ot">FALSE</span>)
+
+<span class="co"># Repeat for each type of distribution</span>
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(ud)) {  
+  <span class="kw">writeGDAL</span>(ud[[i]][<span class="dv">1</span>],
+            <span class="dt">fname =</span> <span class="kw">paste</span>(<span class="st">&quot;HomeRanges/ud/&quot;</span>, 
+                          <span class="kw">sprintf</span>(<span class="st">&#39;%03d&#39;</span>, i), 
+                          <span class="st">&quot;_&quot;</span>,ob[i,]$id,<span class="st">&quot;_&quot;</span>, 
+                          ob[i,]$block_type, <span class="st">&quot;_&quot;</span>, 
+                          <span class="kw">as.Date</span>(<span class="kw">int_start</span>(ob[i, ]$ints)), <span class="st">&quot;_&quot;</span>, 
+                          <span class="kw">as.Date</span>(<span class="kw">int_end</span>(ob[i, ]$ints)), <span class="st">&quot;.tif&quot;</span>, 
+                          <span class="dt">sep =</span> <span class="st">&quot;&quot;</span>))
+}</code></pre></div>
+<p><br></p>
+</div>
+<div id="write-other-hr-data" class="section level2">
+<h2>Write other HR data</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ob$mean_tmax_s &lt;-<span class="st"> </span><span class="kw">scale</span>(ob$mean_tmax)
+ob$mean_fruit_s &lt;-<span class="st"> </span><span class="kw">scale</span>(ob$mean_fruit)
+ob$adult_mass_s &lt;-<span class="st"> </span><span class="kw">scale</span>(ob$adult_mass)
+
+ob$start &lt;-<span class="st"> </span><span class="kw">int_start</span>(ob$ints)
+ob$end &lt;-<span class="st"> </span><span class="kw">int_end</span>(ob$ints)
+
+ob$rowid &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">rownames</span>(ob))
+
+<span class="co"># Fix problem wiht Sept. 2008 weather gap</span>
+ob[<span class="kw">is.na</span>(ob$mean_tmax) &amp;<span class="st"> </span>ob$block_type ==<span class="st"> &quot;month&quot;</span> &amp;<span class="st"> </span>(<span class="kw">yday</span>(ob$start) ==<span class="st"> </span><span class="dv">245</span> |<span class="st"> </span><span class="kw">yday</span>(ob$start) ==<span class="st"> </span><span class="dv">244</span>), ]$mean_tmax &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">subset</span>(ob, block_type ==<span class="st"> &quot;month&quot;</span> &amp;<span class="st"> </span>(<span class="kw">yday</span>(start) ==<span class="st"> </span><span class="dv">245</span> |<span class="st"> </span><span class="kw">yday</span>(start) ==<span class="st"> </span><span class="dv">244</span>))$mean_tmax, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+
+ob[<span class="kw">is.na</span>(ob$mean_tmin) &amp;<span class="st"> </span>ob$block_type ==<span class="st"> &quot;month&quot;</span> &amp;<span class="st"> </span>(<span class="kw">yday</span>(ob$start) ==<span class="st"> </span><span class="dv">245</span> |<span class="st"> </span><span class="kw">yday</span>(ob$start) ==<span class="st"> </span><span class="dv">244</span>), ]$mean_tmin &lt;-<span class="st"> </span><span class="kw">mean</span>(<span class="kw">subset</span>(ob, block_type ==<span class="st"> &quot;month&quot;</span> &amp;<span class="st"> </span>(<span class="kw">yday</span>(start) ==<span class="st"> </span><span class="dv">245</span> |<span class="st"> </span><span class="kw">yday</span>(start) ==<span class="st"> </span><span class="dv">244</span>))$mean_tmin, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+
+<span class="co"># Write to csv for later use</span>
+<span class="kw">write.csv</span>(ob, <span class="st">&quot;ob.csv&quot;</span>, <span class="dt">row.names =</span> <span class="ot">FALSE</span>)</code></pre></div>
+<p><br></p>
+<hr />
+<p><br></p>
+</div>
+</div>
+<div id="models" class="section level1">
+<h1>Models</h1>
+<p>Linear mixed models of home range size and composition</p>
+<p><br></p>
+<div id="prepare-model-workspace" class="section level2">
+<h2>Prepare model workspace</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Sys.setenv</span>(<span class="dt">TZ =</span> <span class="st">&#39;UTC&#39;</span>)
+list.of.packages &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="st">&quot;lme4&quot;</span>, <span class="st">&quot;plyr&quot;</span>, <span class="st">&quot;lubridate&quot;</span>, <span class="st">&quot;scales&quot;</span>, <span class="st">&quot;reshape2&quot;</span>,  
+                         <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, <span class="st">&quot;MuMIn&quot;</span>, <span class="st">&quot;multcomp&quot;</span>,
+                         <span class="st">&quot;colorspace&quot;</span>)
+new.packages &lt;-<span class="st"> </span>list.of.packages[!(list.of.packages %in%<span class="st"> </span><span class="kw">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>])]
+if (<span class="kw">length</span>(new.packages)) <span class="kw">install.packages</span>(<span class="kw">unlist</span>(new.packages))
+<span class="kw">lapply</span>(list.of.packages, require, <span class="dt">character.only =</span> T)
+
+<span class="kw">options</span>(<span class="dt">na.action =</span> <span class="st">&quot;na.fail&quot;</span>)</code></pre></div>
+</div>
+<div id="load-home-range-data" class="section level2">
+<h2>Load home range data</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Read hr data from csv file created 2013-10-09</span>
+<span class="co"># Skips the entire home range calculation step</span>
+<span class="co"># Must redo if new data are added</span>
+ob &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;_data/capuchin-home-ranges/ob.csv&quot;</span>)
+ob$ints &lt;-<span class="st"> </span><span class="kw">interval</span>(<span class="dt">start =</span> ob$start, <span class="dt">end =</span> ob$end)
+
+### Subset
+mon &lt;-<span class="st"> </span><span class="kw">subset</span>(ob, block_type ==<span class="st"> &quot;month&quot;</span>)
+qua &lt;-<span class="st"> </span><span class="kw">subset</span>(ob, block_type ==<span class="st"> &quot;quarter&quot;</span>)
+hal &lt;-<span class="st"> </span><span class="kw">subset</span>(ob, block_type ==<span class="st"> &quot;half&quot;</span>)
+yea &lt;-<span class="st"> </span><span class="kw">subset</span>(ob, block_type ==<span class="st"> &quot;year&quot;</span>)</code></pre></div>
+<p><br></p>
+</div>
+<div id="models-of-home-range-area" class="section level2">
+<h2>Models of home range area</h2>
+<div id="fit-models" class="section level3">
+<h3>Fit models</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Loop over scale/zone combinations and apply model selection</span>
+<span class="co"># Not a very elegant solution, but whatevs..</span>
+df_set &lt;-<span class="st"> </span><span class="kw">list</span>(mon, qua, hal)
+df_set_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mon&quot;</span>, <span class="st">&quot;qua&quot;</span>, <span class="st">&quot;hal&quot;</span>)
+y_set &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;area_core&quot;</span>, <span class="st">&quot;area_primary&quot;</span>, <span class="st">&quot;area_total&quot;</span>)
+
+<span class="co"># Blank dfs for storing results</span>
+area_model_results &lt;-<span class="st"> </span><span class="ot">NULL</span>
+area_selection_table &lt;-<span class="st"> </span><span class="ot">NULL</span>
+
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(df_set)) {
+  for (j in <span class="dv">1</span>:<span class="kw">length</span>(y_set)) {
+    
+    <span class="co"># Run models</span>
+    m1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span><span class="kw">sqrt</span>(nb_reloc) +<span class="st"> </span>
+<span class="st">                 </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m2 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span><span class="kw">sqrt</span>(nb_reloc) +<span class="st"> </span>
+<span class="st">                 </span>mean_tmax_s +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m3 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span><span class="kw">sqrt</span>(nb_reloc) +<span class="st"> </span>
+<span class="st">                 </span>mean_fruit_s +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m4 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span><span class="kw">sqrt</span>(nb_reloc) +<span class="st"> </span>
+<span class="st">                 </span>adult_mass_s +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m5 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span><span class="kw">sqrt</span>(nb_reloc) +<span class="st"> </span>
+<span class="st">                 </span>mean_tmax_s +<span class="st"> </span>mean_fruit_s +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m6 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span><span class="kw">sqrt</span>(nb_reloc) +<span class="st"> </span>
+<span class="st">                 </span>mean_tmax_s +<span class="st"> </span>adult_mass_s +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m7 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span><span class="kw">sqrt</span>(nb_reloc) +<span class="st"> </span>
+<span class="st">                 </span>mean_fruit_s +<span class="st"> </span>adult_mass_s +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m8 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span><span class="kw">sqrt</span>(nb_reloc) +<span class="st"> </span>
+<span class="st">                 </span>mean_tmax_s +<span class="st"> </span>mean_fruit_s +<span class="st"> </span>adult_mass_s +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    <span class="co"># Create model selection table dataframe</span>
+    temp &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">model.sel</span>(<span class="kw">list</span>(m1, m2, m3, m4, m5, m6, m7, m8)))
+    temp$m_name &lt;-<span class="st"> </span><span class="kw">row.names</span>(temp)
+    temp$data_set &lt;-<span class="st"> </span><span class="kw">rep</span>(df_set_names[i], <span class="dt">times =</span> <span class="kw">nrow</span>(temp))
+    temp$zone &lt;-<span class="st"> </span><span class="kw">rep</span>(y_set[j], <span class="dt">times =</span> <span class="kw">nrow</span>(temp))
+    
+    <span class="co"># Add to area_selection_table</span>
+    area_selection_table &lt;-<span class="st"> </span><span class="kw">rbind</span>(area_selection_table, <span class="kw">data.frame</span>(temp))
+    
+    <span class="co"># Obtain average model</span>
+    fma &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">model.avg</span>(temp, <span class="dt">fit =</span> <span class="ot">TRUE</span>))
+    avg_model &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">summary</span>(fma)[[<span class="st">&quot;coefmat.subset&quot;</span>]])
+    avg_model &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">term =</span> <span class="kw">rownames</span>(avg_model), avg_model)
+    avg_model$term &lt;-<span class="st"> </span><span class="kw">rownames</span>(avg_model)
+    <span class="kw">rownames</span>(avg_model) &lt;-<span class="st"> </span><span class="ot">NULL</span>
+    ci &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">confint</span>(fma))
+    ci$term &lt;-<span class="st"> </span><span class="kw">rownames</span>(ci)
+    <span class="kw">rownames</span>(ci) &lt;-<span class="st"> </span><span class="ot">NULL</span>
+    avg_model &lt;-<span class="st"> </span><span class="kw">inner_join</span>(avg_model, ci, <span class="dt">by =</span> <span class="st">&quot;term&quot;</span>)
+    imp &lt;-<span class="st"> </span><span class="kw">melt</span>(fma$importance)
+    imp$term &lt;-<span class="st"> </span><span class="kw">rownames</span>(imp)
+    <span class="kw">rownames</span>(imp) &lt;-<span class="st"> </span><span class="ot">NULL</span>
+    avg_model &lt;-<span class="st"> </span><span class="kw">inner_join</span>(avg_model, imp, <span class="dt">by =</span> <span class="st">&quot;term&quot;</span>)
+    <span class="kw">names</span>(avg_model) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;term&quot;</span>, <span class="st">&quot;estimate&quot;</span>, <span class="st">&quot;std_error&quot;</span>, <span class="st">&quot;adjusted_se&quot;</span>, <span class="st">&quot;Z Value&quot;</span>,
+                          <span class="st">&quot;P Value&quot;</span>, <span class="st">&quot;lower_ci&quot;</span>, <span class="st">&quot;upper_ci&quot;</span>, <span class="st">&quot;importance&quot;</span>)
+    
+    <span class="co"># Add to area_model_results</span>
+    avg_model$response &lt;-<span class="st"> </span>y_set[j]
+    avg_model$scale &lt;-<span class="st"> </span>df_set_names[i]
+    area_model_results &lt;-<span class="st"> </span><span class="kw">rbind</span>(area_model_results, avg_model)
+  }
+}</code></pre></div>
+<p><br></p>
+</div>
+<div id="clean-up-model-results-for-plotting" class="section level3">
+<h3>Clean up model results for plotting</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">area_model_results$response &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">factor</span>(<span class="kw">revalue</span>(area_model_results$response, 
+                 <span class="kw">c</span>(<span class="st">&quot;area_core&quot;</span> =<span class="st"> &quot;Core&quot;</span>,
+                   <span class="st">&quot;area_primary&quot;</span> =<span class="st"> &quot;Primary&quot;</span>,
+                   <span class="st">&quot;area_total&quot;</span> =<span class="st"> &quot;Total&quot;</span>)),
+         <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Core&quot;</span>,
+                    <span class="st">&quot;Primary&quot;</span>,
+                    <span class="st">&quot;Total&quot;</span>))
+
+area_model_results$scale &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">factor</span>(<span class="kw">revalue</span>(area_model_results$scale, 
+                 <span class="kw">c</span>(<span class="st">&quot;mon&quot;</span> =<span class="st"> &quot;Monthly&quot;</span>,
+                   <span class="st">&quot;qua&quot;</span> =<span class="st"> &quot;Quarterly&quot;</span>,
+                   <span class="st">&quot;hal&quot;</span> =<span class="st"> &quot;Half-yearly&quot;</span>)),
+         <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Monthly&quot;</span>,
+                    <span class="st">&quot;Quarterly&quot;</span>,
+                    <span class="st">&quot;Half-yearly&quot;</span>))
+
+area_model_results$term &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">factor</span>(<span class="kw">revalue</span>(area_model_results$term, 
+                 <span class="kw">c</span>(<span class="st">&quot;adult_mass_s&quot;</span> =<span class="st"> &quot;Group mass&quot;</span>,
+                   <span class="st">&quot;mean_fruit_s&quot;</span> =<span class="st"> &quot;Fruit biomass&quot;</span>,
+                   <span class="st">&quot;mean_tmax_s&quot;</span> =<span class="st"> &quot;Mean max temperature&quot;</span>,
+                   <span class="st">&quot;sqrt(nb_reloc)&quot;</span> =<span class="st"> &quot;Sqrt num locations&quot;</span>)),
+         <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Sqrt num locations&quot;</span>,
+                    <span class="st">&quot;Mean max temperature&quot;</span>, 
+                    <span class="st">&quot;Fruit biomass&quot;</span>, 
+                    <span class="st">&quot;Group mass&quot;</span>))</code></pre></div>
+<p><br></p>
+</div>
+<div id="plot-results-for-home-range-area" class="section level3">
+<h3>Plot results for home range area</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Exclude half-year</span>
+<span class="kw">ggplot</span>(<span class="kw">subset</span>(area_model_results, scale !=<span class="st"> &quot;Half-yearly&quot;</span> &amp;<span class="st"> </span>
+<span class="st">                </span>term !=<span class="st"> &quot;Sqrt num locations&quot;</span>), 
+       <span class="kw">aes</span>(<span class="dt">x =</span> term, <span class="dt">color =</span> importance)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymax =</span> lower_ci, 
+                    <span class="dt">ymin =</span> upper_ci),
+                <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">y =</span> estimate +<span class="st"> </span>std_error, 
+                   <span class="dt">yend =</span> estimate -<span class="st"> </span>std_error, 
+                   <span class="dt">xend =</span> term), 
+               <span class="dt">size =</span> <span class="fl">1.5</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> estimate), 
+             <span class="dt">size =</span> <span class="fl">1.5</span>, 
+             <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Regression estimates&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_color_gradientn</span>(<span class="dt">name =</span> <span class="st">&quot;Importance&quot;</span>, 
+                        <span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">heat_hcl</span>(<span class="dv">12</span>, 
+                                             <span class="dt">c =</span> <span class="kw">c</span>(<span class="dv">80</span>, <span class="dv">30</span>), 
+                                             <span class="dt">l =</span> <span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">90</span>), 
+                                             <span class="dt">power =</span> <span class="kw">c</span>(<span class="dv">1</span>/<span class="dv">5</span>, <span class="dv">2</span>))), 
+                        <span class="dt">values =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="dv">12</span>), 
+                        <span class="dt">rescaler =</span> function(x, ...) x, 
+                        <span class="dt">oob =</span> identity, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) +
+<span class="st">  </span><span class="kw">theme_bw</span>() +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>, 
+        <span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;grey50&quot;</span>),
+        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">8</span>),
+        <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">8</span>)) +
+<span class="st">  </span><span class="kw">facet_grid</span>(scale ~<span class="st"> </span>response) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/plot_area_results-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+</div>
+<div id="models-of-home-range-composition" class="section level2">
+<h2>Models of home range composition</h2>
+<div id="fit-models-1" class="section level3">
+<h3>Fit models</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_set &lt;-<span class="st"> </span><span class="kw">list</span>(mon, qua, hal)
+df_set_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mon&quot;</span>, <span class="st">&quot;qua&quot;</span>, <span class="st">&quot;hal&quot;</span>)
+y_set &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;ndvi_high&quot;</span>, <span class="st">&quot;ndvi_medium&quot;</span>, <span class="st">&quot;ndvi_low&quot;</span>)
+
+<span class="co"># Blank dfs for storing results</span>
+ndvi_model_results &lt;-<span class="st"> </span><span class="ot">NULL</span>
+ndvi_selection_table &lt;-<span class="st"> </span><span class="ot">NULL</span>
+
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(df_set)) {
+  for (j in <span class="dv">1</span>:<span class="kw">length</span>(y_set)) {
+    
+    <span class="co"># Run models</span>
+    m1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span><span class="dv">1</span> +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m2 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span>mean_tmax_s +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m3 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span>mean_fruit_s +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m4 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span>adult_mass_s +<span class="st"> </span>(<span class="dv">1</span>|id), 
+               <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m5 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span>mean_tmax_s +<span class="st"> </span>mean_fruit_s +<span class="st"> </span>
+<span class="st">                 </span>(<span class="dv">1</span>|id), <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m6 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span>mean_tmax_s +<span class="st"> </span>adult_mass_s +<span class="st"> </span>
+<span class="st">                 </span>(<span class="dv">1</span>|id), <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m7 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span>mean_fruit_s +<span class="st"> </span>adult_mass_s +<span class="st"> </span>
+<span class="st">                 </span>(<span class="dv">1</span>|id), <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    m8 &lt;-<span class="st"> </span><span class="kw">lmer</span>(<span class="kw">log</span>(df_set[[i]][, y_set[j]]) ~<span class="st"> </span>mean_tmax_s +<span class="st"> </span>mean_fruit_s +<span class="st"> </span>
+<span class="st">                 </span>adult_mass_s +<span class="st"> </span>(<span class="dv">1</span>|id), <span class="dt">REML =</span> <span class="ot">FALSE</span>, <span class="dt">data =</span> df_set[[i]])
+    
+    <span class="co"># Create model selection table dataframe</span>
+    temp &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">model.sel</span>(<span class="kw">list</span>(m1, m2, m3, m4, m5, m6, m7, m8)))
+    temp$m_name &lt;-<span class="st"> </span><span class="kw">row.names</span>(temp)
+    temp$data_set &lt;-<span class="st"> </span><span class="kw">rep</span>(df_set_names[i], <span class="dt">times =</span> <span class="kw">nrow</span>(temp))
+    temp$zone &lt;-<span class="st"> </span><span class="kw">rep</span>(y_set[j], <span class="dt">times =</span> <span class="kw">nrow</span>(temp))
+    
+    <span class="co"># Add to ndvi_selection_table</span>
+    ndvi_selection_table &lt;-<span class="st"> </span><span class="kw">rbind</span>(ndvi_selection_table, <span class="kw">data.frame</span>(temp))
+    
+    <span class="co"># Obtain average model</span>
+    fma &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">model.avg</span>(temp, <span class="dt">fit =</span> <span class="ot">TRUE</span>))
+    avg_model &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">summary</span>(fma)[[<span class="st">&quot;coefmat.subset&quot;</span>]])
+    avg_model &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">term =</span> <span class="kw">rownames</span>(avg_model), avg_model)
+    avg_model$term &lt;-<span class="st"> </span><span class="kw">rownames</span>(avg_model)
+    <span class="kw">rownames</span>(avg_model) &lt;-<span class="st"> </span><span class="ot">NULL</span>
+    ci &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">confint</span>(fma))
+    ci$term &lt;-<span class="st"> </span><span class="kw">rownames</span>(ci)
+    <span class="kw">rownames</span>(ci) &lt;-<span class="st"> </span><span class="ot">NULL</span>
+    avg_model &lt;-<span class="st"> </span><span class="kw">inner_join</span>(avg_model, ci, <span class="dt">by =</span> <span class="st">&quot;term&quot;</span>)
+    imp &lt;-<span class="st"> </span><span class="kw">melt</span>(fma$importance)
+    imp$term &lt;-<span class="st"> </span><span class="kw">rownames</span>(imp)
+    <span class="kw">rownames</span>(imp) &lt;-<span class="st"> </span><span class="ot">NULL</span>
+    avg_model &lt;-<span class="st"> </span><span class="kw">inner_join</span>(avg_model, imp, <span class="dt">by =</span> <span class="st">&quot;term&quot;</span>)
+    <span class="kw">names</span>(avg_model) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;term&quot;</span>, <span class="st">&quot;estimate&quot;</span>, <span class="st">&quot;std_error&quot;</span>, <span class="st">&quot;adjusted_se&quot;</span>, <span class="st">&quot;Z Value&quot;</span>,
+                          <span class="st">&quot;P Value&quot;</span>, <span class="st">&quot;lower_ci&quot;</span>, <span class="st">&quot;upper_ci&quot;</span>, <span class="st">&quot;importance&quot;</span>)
+    
+    <span class="co"># Add to area_model_results</span>
+    avg_model$response &lt;-<span class="st"> </span>y_set[j]
+    avg_model$scale &lt;-<span class="st"> </span>df_set_names[i]
+    ndvi_model_results &lt;-<span class="st"> </span><span class="kw">rbind</span>(ndvi_model_results, avg_model)
+  }
+}</code></pre></div>
+<p><br></p>
+</div>
+<div id="clean-up-model-results-for-plotting-1" class="section level3">
+<h3>Clean up model results for plotting</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">ndvi_model_results$response &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">factor</span>(<span class="kw">revalue</span>(ndvi_model_results$response, 
+                 <span class="kw">c</span>(<span class="st">&quot;ndvi_high&quot;</span> =<span class="st"> &quot;High Use&quot;</span>,
+                   <span class="st">&quot;ndvi_medium&quot;</span> =<span class="st"> &quot;Medium Use&quot;</span>,
+                   <span class="st">&quot;ndvi_low&quot;</span> =<span class="st"> &quot;Low Use&quot;</span>)),
+         <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;High Use&quot;</span>,
+                    <span class="st">&quot;Medium Use&quot;</span>,
+                    <span class="st">&quot;Low Use&quot;</span>))
+
+ndvi_model_results$scale &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">factor</span>(<span class="kw">revalue</span>(ndvi_model_results$scale, 
+                 <span class="kw">c</span>(<span class="st">&quot;mon&quot;</span> =<span class="st"> &quot;Monthly&quot;</span>,
+                   <span class="st">&quot;qua&quot;</span> =<span class="st"> &quot;Quarterly&quot;</span>,
+                   <span class="st">&quot;hal&quot;</span> =<span class="st"> &quot;Half-yearly&quot;</span>)),
+         <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Monthly&quot;</span>,
+                    <span class="st">&quot;Quarterly&quot;</span>,
+                    <span class="st">&quot;Half-yearly&quot;</span>))
+
+ndvi_model_results$term &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">factor</span>(<span class="kw">revalue</span>(ndvi_model_results$term, 
+                 <span class="kw">c</span>(<span class="st">&quot;adult_mass_s&quot;</span> =<span class="st"> &quot;Group mass&quot;</span>,
+                   <span class="st">&quot;mean_fruit_s&quot;</span> =<span class="st"> &quot;Fruit biomass&quot;</span>,
+                   <span class="st">&quot;mean_tmax_s&quot;</span> =<span class="st"> &quot;Mean max temperature&quot;</span>)), 
+         <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Mean max temperature&quot;</span>, 
+                    <span class="st">&quot;Fruit biomass&quot;</span>, 
+                    <span class="st">&quot;Group mass&quot;</span>))</code></pre></div>
+<p><br></p>
+</div>
+<div id="plot-results-for-home-range-composition" class="section level3">
+<h3>Plot results for home range composition</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Exclude half-year</span>
+<span class="kw">ggplot</span>(<span class="kw">subset</span>(ndvi_model_results, scale !=<span class="st"> &quot;Half-yearly&quot;</span>), 
+       <span class="kw">aes</span>(<span class="dt">x =</span> term, <span class="dt">color =</span> importance)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymax =</span> lower_ci, 
+                    <span class="dt">ymin =</span> upper_ci),
+                <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">size =</span> <span class="fl">0.75</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">y =</span> estimate +<span class="st"> </span>std_error, 
+                   <span class="dt">yend =</span> estimate -<span class="st"> </span>std_error, 
+                   <span class="dt">xend =</span> term), 
+               <span class="dt">size =</span> <span class="fl">1.5</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> estimate), 
+             <span class="dt">size =</span> <span class="fl">1.5</span>, 
+             <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Regression estimates&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_color_gradientn</span>(<span class="dt">name =</span> <span class="st">&quot;Importance&quot;</span>, 
+                        <span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">heat_hcl</span>(<span class="dv">12</span>, 
+                                             <span class="dt">h =</span> <span class="kw">c</span>(<span class="dv">130</span>, <span class="dv">70</span>),
+                                             <span class="dt">c =</span> <span class="kw">c</span>(<span class="dv">80</span>, <span class="dv">30</span>), 
+                                             <span class="dt">l =</span> <span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">90</span>), 
+                                             <span class="dt">power =</span> <span class="kw">c</span>(<span class="dv">1</span>/<span class="dv">5</span>, <span class="dv">2</span>))), 
+                        <span class="dt">values =</span> <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">1</span>, <span class="dt">length.out =</span> <span class="dv">12</span>), 
+                        <span class="dt">rescaler =</span> function(x, ...) x, 
+                        <span class="dt">oob =</span> identity, <span class="dt">limits =</span> <span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1</span>)) +
+<span class="st">  </span><span class="kw">theme_bw</span>() +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>, 
+        <span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;grey50&quot;</span>),
+        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">8</span>),
+        <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">8</span>)) +
+<span class="st">  </span><span class="kw">facet_grid</span>(scale ~<span class="st"> </span>response) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/plot_ndvi_results-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+</div>
+<div id="models-comparing-home-range-zones" class="section level2">
+<h2>Models comparing home range zones</h2>
+<div id="fit-models-2" class="section level3">
+<h3>Fit models</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_set &lt;-<span class="st"> </span><span class="kw">list</span>(mon, qua, hal, yea)
+df_set_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mon&quot;</span>, <span class="st">&quot;qua&quot;</span>, <span class="st">&quot;hal&quot;</span>, <span class="st">&quot;yea&quot;</span>)
+
+<span class="co"># Blank dfs for storing results</span>
+zones_model_results &lt;-<span class="st"> </span><span class="ot">NULL</span>
+zones_selection_table &lt;-<span class="st"> </span><span class="ot">NULL</span>
+
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(df_set)) {
+  zones &lt;-<span class="st"> </span><span class="kw">melt</span>(df_set[[i]], 
+                <span class="dt">id.vars =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;block_type&quot;</span>, <span class="st">&quot;rowid&quot;</span>), 
+                <span class="dt">measure.vars =</span> <span class="kw">c</span>(<span class="st">&quot;ndvi_high&quot;</span>, <span class="st">&quot;ndvi_medium&quot;</span>, <span class="st">&quot;ndvi_low&quot;</span>))
+  
+  zones$variable &lt;-<span class="st"> </span><span class="kw">factor</span>(zones$variable, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;ndvi_medium&quot;</span>,
+                                                      <span class="st">&quot;ndvi_low&quot;</span>,
+                                                      <span class="st">&quot;ndvi_high&quot;</span>))
+  
+  m1 &lt;-<span class="st"> </span><span class="kw">lmer</span>(value ~<span class="st"> </span>variable +<span class="st"> </span>(<span class="dv">1</span>|rowid) +<span class="st"> </span>(<span class="dv">1</span>|id), <span class="dt">data =</span> zones)
+  temp &lt;-<span class="st"> </span><span class="kw">dredge</span>(m1, <span class="dt">REML =</span> <span class="ot">FALSE</span>)
+  
+  <span class="co"># Multiple Comparisons of Means: Tukey Contrasts</span>
+  <span class="kw">summary</span>(<span class="kw">glht</span>(m1, <span class="dt">linfct =</span> <span class="kw">mcp</span>(<span class="dt">variable =</span> <span class="st">&quot;Tukey&quot;</span>)))
+  
+  <span class="co"># Create model selection table dataframe</span>
+  temp$m_name &lt;-<span class="st"> </span><span class="kw">row.names</span>(temp)
+  temp$data_set &lt;-<span class="st"> </span><span class="kw">rep</span>(df_set_names[i], <span class="dt">times =</span> <span class="kw">nrow</span>(temp))
+  
+  <span class="co"># Add to zones_selection_table</span>
+  zones_selection_table &lt;-<span class="st"> </span><span class="kw">rbind</span>(zones_selection_table, <span class="kw">data.frame</span>(temp))
+  
+  <span class="co"># Obtain average model</span>
+  fma &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">model.avg</span>(temp, <span class="dt">fit =</span> <span class="ot">TRUE</span>))
+  avg_model &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">summary</span>(fma)[[<span class="st">&quot;coefmat.subset&quot;</span>]])
+  avg_model &lt;-<span class="st"> </span><span class="kw">cbind</span>(<span class="dt">term =</span> <span class="kw">rownames</span>(avg_model), avg_model)
+  avg_model$term &lt;-<span class="st"> </span><span class="kw">rownames</span>(avg_model)
+  <span class="kw">rownames</span>(avg_model) &lt;-<span class="st"> </span><span class="ot">NULL</span>
+  ci &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">confint</span>(fma))
+  ci$term &lt;-<span class="st"> </span><span class="kw">rownames</span>(ci)
+  <span class="kw">rownames</span>(ci) &lt;-<span class="st"> </span><span class="ot">NULL</span>
+  avg_model &lt;-<span class="st"> </span><span class="kw">inner_join</span>(avg_model, ci, <span class="dt">by =</span> <span class="st">&quot;term&quot;</span>)
+  <span class="kw">names</span>(avg_model) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;term&quot;</span>, <span class="st">&quot;estimate&quot;</span>, <span class="st">&quot;std_error&quot;</span>, <span class="st">&quot;adjusted_se&quot;</span>, <span class="st">&quot;Z Value&quot;</span>,
+                        <span class="st">&quot;P Value&quot;</span>, <span class="st">&quot;lower_ci&quot;</span>, <span class="st">&quot;upper_ci&quot;</span>)
+  
+  <span class="co"># Add to zones_model_results</span>
+  avg_model$scale &lt;-<span class="st"> </span>df_set_names[i]
+  zones_model_results &lt;-<span class="st"> </span><span class="kw">rbind</span>(zones_model_results, avg_model)
+}</code></pre></div>
+<pre><code>## Fixed term is &quot;(Intercept)&quot;
+## Fixed term is &quot;(Intercept)&quot;
+## Fixed term is &quot;(Intercept)&quot;
+## Fixed term is &quot;(Intercept)&quot;</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Remove intercept</span>
+zones_model_results &lt;-<span class="st"> </span><span class="kw">subset</span>(zones_model_results, term !=<span class="st"> &quot;(Intercept)&quot;</span>)</code></pre></div>
+<p><br></p>
+</div>
+<div id="clean-up-model-results-for-plotting-2" class="section level3">
+<h3>Clean up model results for plotting</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">zones_model_results$scale &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">factor</span>(<span class="kw">revalue</span>(zones_model_results$scale, 
+                 <span class="kw">c</span>(<span class="st">&quot;mon&quot;</span> =<span class="st"> &quot;Monthly&quot;</span>,
+                   <span class="st">&quot;qua&quot;</span> =<span class="st"> &quot;Quarterly&quot;</span>,
+                   <span class="st">&quot;hal&quot;</span> =<span class="st"> &quot;Half-yearly&quot;</span>,
+                   <span class="st">&quot;yea&quot;</span> =<span class="st"> &quot;Yearly&quot;</span>)),
+         <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Monthly&quot;</span>,
+                    <span class="st">&quot;Quarterly&quot;</span>,
+                    <span class="st">&quot;Half-yearly&quot;</span>,
+                    <span class="st">&quot;Yearly&quot;</span>))
+
+zones_model_results$term &lt;-<span class="st"> </span>
+<span class="st">  </span><span class="kw">factor</span>(<span class="kw">revalue</span>(zones_model_results$term, 
+                 <span class="kw">c</span>(<span class="st">&quot;variablendvi_low&quot;</span> =<span class="st"> &quot;Low Use&quot;</span>, 
+                   <span class="st">&quot;variablendvi_high&quot;</span> =<span class="st"> &quot;High Use&quot;</span>)), 
+         <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Low Use&quot;</span>, 
+                    <span class="st">&quot;High Use&quot;</span>))</code></pre></div>
+<p><br></p>
+</div>
+<div id="plot-results-comparing-home-range-zones" class="section level3">
+<h3>Plot results comparing home range zones</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(zones_model_results, <span class="kw">aes</span>(<span class="dt">x =</span> term)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_errorbar</span>(<span class="kw">aes</span>(<span class="dt">ymax =</span> lower_ci, <span class="dt">ymin =</span> upper_ci),
+                <span class="dt">width =</span> <span class="fl">0.2</span>, <span class="dt">size =</span> <span class="fl">0.75</span>, <span class="dt">color =</span> <span class="st">&quot;gray10&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_segment</span>(<span class="kw">aes</span>(<span class="dt">y =</span> estimate +<span class="st"> </span>std_error, 
+                   <span class="dt">yend =</span> estimate -<span class="st"> </span>std_error, 
+                   <span class="dt">xend =</span> term), 
+               <span class="dt">size =</span> <span class="fl">1.5</span>, <span class="dt">color =</span> <span class="st">&quot;gray10&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="kw">aes</span>(<span class="dt">y =</span> estimate), 
+             <span class="dt">size =</span> <span class="fl">1.5</span>, 
+             <span class="dt">color =</span> <span class="st">&quot;white&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_y_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(-<span class="fl">0.027</span>, <span class="fl">0.027</span>)) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">y =</span> <span class="st">&quot;Regression estimates&quot;</span>, <span class="dt">x =</span> <span class="st">&quot;&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>, 
+        <span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;grey50&quot;</span>)) +
+<span class="st">  </span><span class="kw">facet_grid</span>(scale ~<span class="st"> </span>.) +
+<span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
+<p><img src="figures/capuchin-home-ranges/plot_zones_results-1.png" /><!-- --></p>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,215 @@
+---
+title: "Capuchin Home Ranges"
+author: "Fernando Campos"
+date: "April 9, 2016"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+******
+
+Source files available on [Github](https://github.com/camposfa/HomeRanges)
+
+[Contact me](mailto:camposfa@gmail.com) if you are interested in the raw data
+
+```{r echo=FALSE}
+knitr::opts_chunk$set(fig.path = 'figures/capuchin-home-ranges/', 
+               fig.height = 6, 
+               fig.width = 12, 
+               tidy = FALSE, 
+               warning = FALSE,
+               cache = TRUE)
+knitr::read_chunk('_source/capuchin-home-ranges.R')
+knitr::read_chunk('_source/capuchin-hr-models.R')
+```
+
+<br>
+
+# Data Prep
+
+## Load Packages
+```{r prepare_workspace, message = FALSE, results = 'hide'}
+```
+
+<br>
+
+## Location data
+We first read the tracking data stored in the file `ranging-waypoints.csv`. This file is not made available here because some of the data belong to other reserchers.
+```{r load_data}
+```
+
+<br>
+
+Check data and plot researcher contributions
+```{r review_data}
+```
+
+<br>
+
+Number of points by group and observer
+```{r plot_contributions2}
+```
+
+<br>
+
+# Home ranges scales
+
+## Time intervals
+```{r calculate_intervals}
+```
+
+<br>
+
+## Number of locations
+```{r calculate_num_locs}
+```
+
+<br>
+
+## Filters
+Here we remove periods with few locations
+```{r apply_num_locs_threshold}
+```
+
+<br>
+
+## HR Interval Plots
+Plots of seasonal ranges to be included in the study
+```{r plot_times, fig.height = 9}
+```
+
+<br>
+******
+<br>
+
+# Predictor variables
+
+<br>
+
+## Group mass
+```{r calculate_group_size}
+```
+
+<br>
+
+## Available fruit biomass
+Full details here: http://people.ucalgary.ca/~facampos/data/fruit/
+```{r calculate_fruit}
+```
+
+<br>
+
+## Weather data
+Full details here: http://people.ucalgary.ca/~facampos/data/weather/
+```{r calculate_weather}
+```
+
+<br>
+
+## Habitat maps
+```{r load_habitat_maps, message = FALSE, results = 'hide'}
+```
+
+<br>
+
+# Calculate home ranges
+```{r calculate_hr, eval = FALSE}
+```
+
+<br>
+
+## Write UD data
+```{r write_ud, eval = FALSE}
+```
+
+<br>
+
+## Write other HR data
+```{r write_hr_data, eval = FALSE}
+```
+
+<br>
+
+**********
+
+<br>
+
+
+# Models
+Linear mixed models of home range size and composition
+
+<br>
+
+## Prepare model workspace
+```{r prepare_model_workspace, message = FALSE, results = 'hide'}
+```
+
+
+## Load home range data
+```{r load_hr_data}
+```
+
+<br>
+
+## Models of home range area
+
+### Fit models
+```{r area_models}
+```
+
+<br>
+
+### Clean up model results for plotting
+```{r rename_area_vars}
+```
+
+<br>
+
+### Plot results for home range area
+```{r plot_area_results}
+```
+
+<br>
+
+## Models of home range composition
+
+### Fit models
+```{r ndvi_models}
+```
+
+<br>
+
+### Clean up model results for plotting
+```{r rename_ndvi_vars}
+```
+
+<br>
+
+### Plot results for home range composition
+```{r plot_ndvi_results}
+```
+
+<br>
+
+## Models comparing home range zones
+
+### Fit models
+```{r zones_model}
+```
+
+<br>
+
+### Clean up model results for plotting
+```{r rename_zones_vars}
+```
+
+<br>
+
+### Plot results comparing home range zones
+```{r plot_zones_results, fig.width = 6}
+```
+
+```{r model_cleanup, echo=FALSE, message = FALSE, results = 'hide'}
+```

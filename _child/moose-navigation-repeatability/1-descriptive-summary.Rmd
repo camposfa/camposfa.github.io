@@ -1,0 +1,86 @@
+<br>
+<hr>
+<br>
+
+# Data Preparation
+
+## Load packages and helper functions
+```{r prepare_workspace, message = FALSE, echo = TRUE, results = 'hide'}
+```
+
+<br>
+
+## Read and prepare data 
+```{r load_data, message = FALSE}
+```
+
+<br>
+
+## Convert points to trajectories
+```{r make_annual_tracks, message = FALSE}
+```
+
+<br>
+
+## Cleanup
+Here, we convert to a data frame to obtain movement metrics. We also round the relocation interval to the nearest day. This is useful later for filtering out long steps, e.g., when we want to visualize daily step lengths.
+```{r annual_movement_metrics, message = FALSE, warning = FALSE}
+```
+
+<br>
+
+<!-- ## Clustering -->
+<!-- This chunk applies several clusting algorigthms to the data and determines the optimal method and number of clusters based on BIC of each algorithm and N. The clustering is based on location and NSD for both summer and winter months for each animal. The idea is to find groups of individuals who show similar migration patterns. The trajectories of the different clusters are plotted at the bottom of the page. -->
+<!-- ```{r clustering, message = FALSE, warning = FALSE} -->
+<!-- ``` -->
+
+<br>
+
+<hr>
+
+# Movement metric plots
+<br>
+
+## Relative turn angle plots
+0 is same direction as previous step
+```{r rel_angle_plot_combined, message = FALSE}
+```
+```{r rel_angle_plot_monthly, fig.height = 12, fig.width = 12, message = FALSE}
+```
+
+<br>
+
+## Absolute turn angle plots
+Up is North
+```{r abs_angle_plot_combined, message = FALSE}
+```
+```{r abs_angle_plot_monthly, fig.height = 12, fig.width = 12, message = FALSE}
+```
+
+<br>
+
+## Step length distributions
+```{r step_length_plot, message = FALSE}
+```
+
+<br>
+
+## Density of step lengths
+```{r step_density_plot, message = FALSE}
+```
+
+<br>
+
+## NSD plot
+Against day of year (as if all occurred in same year)
+```{r nsd_density_plot, message = FALSE, echo = FALSE}
+```
+
+<br>
+
+# Map
+```{r prep_moose_map, message = FALSE}
+```
+```{r create_moose_map, fig.height = 12, fig.width = 12, message = FALSE}
+```
+

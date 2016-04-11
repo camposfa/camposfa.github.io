@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Fernando Campos" />
+
+<meta name="date" content="2015-03-26" />
+
+<title>ssr-environmental-change</title>
+
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="libs/tocify-1.9.1/jquery.tocify.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="libs/navigation-1.0/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<script src="libs/navigation-1.0/codefolding.js"></script>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<nav class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Code</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">R Packages <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="r-packages-plhdbR.html">plhdbR</a></li>
+            <li><a href="r-packages-paceR.html">paceR</a></li>
+            <li><a href="r-packages-ClimGrid.html">ClimGrid</a></li>
+          </ul>
+        </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reproducible Analysis <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="moose-migration-repeatability.html">Moose Navigation</a></li>
+            <li><a href="capuchin-home-ranges.html">Capuchin Home Ranges</a></li>
+          </ul>
+        </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PACE Tutorials <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Fruit Biomass</a></li>
+            <li><a href="#">Leaf Seasonality</a></li>
+            <li><a href="#">Weather Data</a></li>
+          </ul>
+        </li>
+      </ul>
+        
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="https://github.com/camposfa"><i class="fa fa-github fa-lg"></i></a></li>
+      </ul>
+      
+      
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</nav><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text-muted">Code</span> <span class="text-muted caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All</a></li>
+</ul>
+</div>
+
+
+<h1 class="title toc-ignore">ssr-environmental-change</h1>
+<h4 class="author"><em>Fernando Campos</em></h4>
+<h4 class="date"><em>March 26, 2015</em></h4>
+
+</div>
+
+
+<br>
+<hr>
+<p><br></p>
+<div id="a-multi-decade-investigation-of-tropial-dry-forest-regeneration-and-its-effects-on-primate-population-dynamics" class="section level1">
+<h1>A multi-decade investigation of tropial dry forest regeneration and its effects on primate population dynamics</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Sys.setenv</span>(<span class="dt">TZ =</span> <span class="st">&#39;UTC&#39;</span>)
+list.of.packages &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;plyr&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;lubridate&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, 
+                      <span class="st">&quot;scales&quot;</span>, <span class="st">&quot;colorspace&quot;</span>, <span class="st">&quot;stringr&quot;</span>, <span class="st">&quot;gridExtra&quot;</span>, 
+                      <span class="st">&quot;zoo&quot;</span>, <span class="st">&quot;RcppRoll&quot;</span>, <span class="st">&quot;xtable&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;tidyr&quot;</span>,
+                      <span class="st">&quot;reshape2&quot;</span>)
+new.packages &lt;-<span class="st"> </span>list.of.packages[!(list.of.packages %in%<span class="st"> </span><span class="kw">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>])]
+if(<span class="kw">length</span>(new.packages)) <span class="kw">install.packages</span>(<span class="kw">unlist</span>(new.packages))
+<span class="kw">lapply</span>(list.of.packages, require, <span class="dt">character.only =</span> T)</code></pre></div>
+<pre><code>## [[1]]
+## [1] TRUE
+## 
+## [[2]]
+## [1] TRUE
+## 
+## [[3]]
+## [1] TRUE
+## 
+## [[4]]
+## [1] TRUE
+## 
+## [[5]]
+## [1] TRUE
+## 
+## [[6]]
+## [1] TRUE
+## 
+## [[7]]
+## [1] TRUE
+## 
+## [[8]]
+## [1] TRUE
+## 
+## [[9]]
+## [1] TRUE
+## 
+## [[10]]
+## [1] TRUE
+## 
+## [[11]]
+## [1] TRUE
+## 
+## [[12]]
+## [1] TRUE
+## 
+## [[13]]
+## [1] TRUE
+## 
+## [[14]]
+## [1] TRUE</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;~/Dropbox/R/SSRChange_Climate/.RData&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">census &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;CensusSummary.csv&quot;</span>)
+
+census$DateOf &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(census$DateOf)
+census$GroupNumber &lt;-<span class="st"> </span><span class="kw">factor</span>(census$GroupNumber)
+<span class="kw">names</span>(census)[<span class="dv">29</span>] &lt;-<span class="st"> &quot;Infant&quot;</span>
+census$c_male &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">21</span>, <span class="dv">23</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+census$c_female &lt;-<span class="st"> </span>census$Fem
+census$c_juvenile &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">24</span>:<span class="dv">26</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+census$c_infant &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">27</span>:<span class="dv">30</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+census$c_simm &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">27</span>:<span class="dv">30</span>, <span class="dv">25</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+census$c_unk &lt;-<span class="st"> </span>census$Unk
+census[<span class="kw">is.na</span>(census$c_female),]$c_female &lt;-<span class="st"> </span><span class="dv">0</span>
+census[<span class="kw">is.na</span>(census$c_unk),]$c_unk &lt;-<span class="st"> </span><span class="dv">0</span>
+census$c_total &lt;-<span class="st"> </span>census$Total
+census[<span class="kw">is.na</span>(census$Total),]$c_total &lt;-<span class="st"> </span><span class="dv">0</span>
+
+heat_grad &lt;-<span class="st"> </span><span class="kw">heat_hcl</span>(<span class="dv">12</span>, <span class="dt">c =</span> <span class="kw">c</span>(<span class="dv">80</span>, <span class="dv">30</span>), <span class="dt">l =</span> <span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">90</span>), <span class="dt">power =</span> <span class="kw">c</span>(<span class="dv">1</span>/<span class="dv">5</span>, <span class="dv">2</span>))</code></pre></div>
+<div id="udated-census-results" class="section level2">
+<h2>Udated Census Results</h2>
+<p>The first set of results here are basically a continuation of previous census results. This mostly rehashes the results from your 2012 book chapter, with a few notable changes: - I have added the two final years (2011 and 2013) - I have included all the recent minor changes made to the 2003 and 2007 censuses - I have recalculated summary stats for past years using the same rules as recent years.</p>
+<p>As I mentioned in an email to you a while back, I wasn’t able to perfectly reproduce the numbers from the book chaper, but they are fairly close. I don’t know if it’s worth explaining in the manuscript, but it’s probably just due to slight differenes in how the “replacement” counts were handeled. Regardless, it seems that small discrepancies are not unusual, because the numbers also differ slightly between the 2001 and 2012 census papers.</p>
+<p>First is a plot of total estimated population size. This plot is also broken up by age/sex class. The “Unknown” category shows the supplemental animals added to the estimate to correct for sampling effort (i.e., the replacements for very poor counts or not-found groups).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c_total &lt;-<span class="st"> </span>census %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(c_total &gt;<span class="st"> </span><span class="dv">0</span> &amp;<span class="st"> </span>GroupLetter !=<span class="st"> &quot;&quot;</span> &amp;<span class="st"> </span>Year !=<span class="st"> </span><span class="dv">1993</span> &amp;<span class="st"> </span>
+<span class="st">           </span>UseForTotalEstimate ==<span class="st"> &quot;Yes&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Year) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Males =</span> <span class="kw">sum</span>(c_male),
+            <span class="dt">Females =</span> <span class="kw">sum</span>(c_female),
+            <span class="dt">Juveniles =</span> <span class="kw">sum</span>(c_juvenile),
+            <span class="dt">Infants =</span> <span class="kw">sum</span>(c_infant),
+            <span class="dt">Unknown =</span> <span class="kw">sum</span>(c_unk),
+            <span class="dt">Total =</span> <span class="kw">sum</span>(c_total)) %&gt;%
+<span class="st">  </span><span class="kw">gather</span>(variable, count, -Year) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(variable !=<span class="st"> &quot;Total&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Year) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n_total =</span> <span class="kw">sum</span>(count, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
+
+smooth_all &lt;-<span class="st"> </span>c_total</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c_demog &lt;-<span class="st"> </span>census %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(c_total &gt;<span class="st"> </span><span class="dv">0</span> &amp;<span class="st"> </span>GroupLetter !=<span class="st"> &quot;&quot;</span> &amp;<span class="st"> </span>Year !=<span class="st"> </span><span class="dv">1993</span> &amp;
+<span class="st">           </span>UseForDemography ==<span class="st"> &quot;Yes&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Year)
+
+c_groups &lt;-<span class="st"> </span>c_demog %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n_total =</span> <span class="kw">sum</span>(c_male, c_female, c_juvenile, 
+                          c_infant, c_unk, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
+            <span class="dt">n_group =</span> <span class="kw">length</span>(Year),
+            <span class="dt">mean_g =</span> <span class="kw">mean</span>(c_total, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
+            <span class="dt">med_g =</span> <span class="kw">median</span>(c_total, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
+
+c_ifr &lt;-<span class="st"> </span>c_demog %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Males =</span> <span class="kw">sum</span>(c_male),
+            <span class="dt">Females =</span> <span class="kw">sum</span>(c_female),
+            <span class="dt">Juveniles =</span> <span class="kw">sum</span>(c_juvenile),
+            <span class="dt">SImm =</span> <span class="kw">sum</span>(c_simm),
+            <span class="dt">Infants =</span> <span class="kw">sum</span>(c_infant),
+            <span class="dt">Unknown =</span> <span class="kw">sum</span>(c_unk),
+            <span class="dt">mf_ratio =</span> Males /<span class="st"> </span>Females, 
+            <span class="dt">if_ratio =</span> SImm /<span class="st"> </span>Females,
+            <span class="dt">jf_ratio =</span> Juveniles /<span class="st"> </span>Females, 
+            <span class="dt">immf_ratio =</span> (Infants +<span class="st"> </span>Juveniles) /<span class="st"> </span>Females) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(Year, <span class="dv">8</span>:<span class="dv">11</span>)
+
+smooth_all &lt;-<span class="st"> </span><span class="kw">cbind</span>(smooth_all, c_groups[, <span class="st">&quot;mean_g&quot;</span>], 
+                    c_ifr[, <span class="st">&quot;if_ratio&quot;</span>])
+<span class="kw">names</span>(smooth_all)[<span class="dv">3</span>:<span class="dv">4</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mean_g&quot;</span>, <span class="st">&quot;if_ratio&quot;</span>)</code></pre></div>
+<p><br> For interest’s sake, here is a stacked area percentage plot of group compositions over time. The data here only include <strong>high quality</strong> counts, as poor / fair counts are unreliable for determining group compositions. <em>This will probably be left out of the paper.</em></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c_ngroups &lt;-<span class="st"> </span>census %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(c_total &gt;<span class="st"> </span><span class="dv">0</span> &amp;<span class="st"> </span>Year !=<span class="st"> </span><span class="dv">1993</span> &amp;<span class="st"> </span>UseForTotalEstimate ==<span class="st"> &quot;Yes&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Year, CensusGroupName) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n_animals =</span> <span class="kw">sum</span>(c_total)) %&gt;%
+<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(Year) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">g_mean =</span> <span class="kw">round</span>(<span class="kw">mean</span>(n_animals, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dv">1</span>),
+            <span class="dt">n_groups =</span> <span class="kw">length</span>(Year))
+
+smooth_all &lt;-<span class="st"> </span><span class="kw">cbind</span>(smooth_all, c_ngroups[, <span class="st">&quot;n_groups&quot;</span>])
+<span class="kw">names</span>(smooth_all)[<span class="dv">5</span>] &lt;-<span class="st"> &quot;num_groups&quot;</span></code></pre></div>
+<p><br> Finally, this plot shows how three major population parameters changed over time. Loess smoothers are added to aid visual interpretation of the trend.</p>
+<div id="some-important-take-aways-for-this-section" class="section level4">
+<h4>Some important take-aways for this section: <br></h4>
+<ol style="list-style-type: decimal">
+<li>Total population size for the capuchins finally appears to be leveling off after decades of growth. <br></li>
+<li>Both mean group size and total number of groups have remained relatively constant over the last decade. <br></li>
+<li>Mean group size peaked in the early 90s, whereas total number of groups appears to be at its peak now. <br></li>
+</ol>
+<hr />
+<p><br> <br></p>
+</div>
+</div>
+<div id="quantifying-forest-habitat-regeneration-in-ssr" class="section level2">
+<h2>Quantifying Forest Habitat Regeneration in SSR</h2>
+<p>I used a set of 11 satellite images spanning 1985 to 2011 to quantify changes in the degree of forest evergreenness in SSR. I’ll spare you the details in this summary; suffice to say now that it’s similar to what I wrote in the home range paper, only with 11 images rather than one. All the images were acquired within two weeks of March 20.</p>
+<p>Despite my best efforts to normalize the images to one another, quite a lot of unexpected variablity remains. For example, as you can see in the plots below, things are greening-up nicely until 1992-1993, when it suddenly bottoms out. It happens again in 1998. I believe that this is due to the variable timing of leaf shedding, which is probably affected by the strength of the preceeding late wet season. As I discuss below, these extreme years may be linked to the ENSO phenomenon. Despite the ups and downs, there does appear to be a clear “greening” trend as younger forest classes are replaced by more mature ones. Here is a plot of land cover; the categories refer to the degree of evergreenness.</p>
+<p>As I mentioned above, there are some really unusual years that deviate from the overall greening trend, specifically the images for 1992, 1993, and 1998. These appear to have been exceptionally dry periods in SSR. Here is are two plots that show rainfall patterns in the park, and how they might relate to ENSO phases.</p>
+<p>The top plot shows total yearly rainfall at the site. The dashed line is the annual median and the dotted line is the annual mean. The bottom plot shows a monthly time series of Southern Oscillation Index values during the same period. Sustained negative values below -8 indicate El Niño episodes, while sustained positive values above +8 indicate La Niña episodes. The former are associated with dry conditions in SSR, while the latter are associated with wet conditions. The squiggly line is a 5-month weighted mean smoother of monthly SOI values over the entire period.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Use PACE DB for most recent data from SSR</span>
+
+<span class="co"># Pull latest weather</span>
+<span class="co"># Probably a good idea to check data to make sure it&#39;s still valid</span>
+<span class="co"># ssr &lt;- collect(tbl(pace_db, &quot;tblWeather&quot;))</span>
+<span class="co"># ssr &lt;- select(ssr, DateOf, Rainfall)</span>
+<span class="co"># names(ssr) &lt;- c(&quot;date_of&quot;, &quot;rainfall&quot;)</span>
+<span class="co"># ssr &lt;- ssr %&gt;% </span>
+<span class="co">#   filter(!is.na(rainfall)) %&gt;%</span>
+<span class="co">#   mutate(type = &quot;daily&quot;,</span>
+<span class="co">#          year_of = year(date_of),</span>
+<span class="co">#          site = &quot;ssr&quot;) %&gt;%</span>
+<span class="co">#   arrange(date_of) %&gt;%</span>
+<span class="co">#   select(year_of, rainfall, date_of, type, site)</span>
+<span class="co"># </span>
+<span class="co"># write.csv(ssr, file = &quot;ssr_rain.csv&quot;, row.names = FALSE)</span>
+
+daily_rain &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;ssr_rain.csv&quot;</span>)
+daily_rain$date_of &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(daily_rain$date_of)
+
+yearly_rain &lt;-<span class="st"> </span>daily_rain %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(year_of &lt;<span class="st"> </span><span class="dv">2015</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(year_of) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">total_rain =</span> <span class="kw">sum</span>(rainfall))
+
+y_rain_median &lt;-<span class="st"> </span><span class="kw">median</span>(yearly_rain$total_rain)
+y_rain_mean &lt;-<span class="st"> </span><span class="kw">mean</span>(yearly_rain$total_rain)
+yearly_rain &lt;-<span class="st"> </span><span class="kw">mutate</span>(yearly_rain, 
+                      <span class="dt">date_of =</span> <span class="kw">as.POSIXct</span>(<span class="kw">paste</span>(year_of, <span class="st">&quot;07-01&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;-&quot;</span>)))
+
+y_rain_plot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(yearly_rain, 
+                      <span class="kw">aes</span>(<span class="dt">x =</span> date_of, <span class="dt">y =</span> total_rain, <span class="dt">fill =</span> total_rain,
+                          <span class="dt">group =</span> year_of)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_fill_gradient2</span>(<span class="dt">name =</span> <span class="st">&quot;Total Rain (mm)&quot;</span>, 
+                       <span class="dt">midpoint =</span> y_rain_median, 
+                       <span class="dt">low =</span> <span class="st">&quot;#8C510A&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;#01665E&quot;</span>, <span class="dt">mid =</span> <span class="st">&quot;#F5F5F5&quot;</span>,
+                       <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">min</span>(yearly_rain$total_rain), 
+                                  <span class="kw">max</span>(yearly_rain$total_rain)),
+                       <span class="dt">guide =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Year&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Total rainfall (mm)&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> y_rain_median),
+             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> y_rain_mean),
+             <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>, 
+        <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid.major.x=</span> <span class="kw">element_blank</span>()) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">date_labels =</span> <span class="st">&quot;%Y&quot;</span>,
+                   <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">ymd</span>(<span class="st">&quot;1978-05-01&quot;</span>, <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>), 
+                              <span class="kw">ymd</span>(<span class="st">&quot;2014-05-01&quot;</span>, <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>)),
+                   <span class="dt">date_minor_breaks =</span> <span class="st">&quot;1 year&quot;</span>)</code></pre></div>
+<p>As you can see, 1991 and 1992 are two of the lowest rainfall years on record, and not only that, but they’re consecutive. It must have been a brutal time for the trees and monkeys. This was during an unusually prolonged El Niño period. In fact, you can see that the driest years correspond pretty well with strong El Niño episodes, like in 1983, 1991-1994, and 1997. Here’s another plot that shows when exactly the rain fell in 91 and 92 years compared to normal years.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dd &lt;-<span class="st"> </span>daily_rain %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(year_of !=<span class="st"> </span><span class="dv">1979</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(year_of) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cs =</span> <span class="kw">cumsum</span>(rainfall))
+
+mm &lt;-<span class="st"> </span>dd %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">month</span>(date_of) ==<span class="st"> </span><span class="dv">12</span> &amp;<span class="st"> </span><span class="kw">day</span>(date_of) ==<span class="st"> </span><span class="dv">31</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(date_of, cs)
+
+<span class="kw">names</span>(mm)[<span class="dv">3</span>] &lt;-<span class="st"> &quot;year_total&quot;</span>
+
+r_cum &lt;-<span class="st"> </span><span class="kw">left_join</span>(dd, <span class="kw">select</span>(mm, year_of, year_total))
+
+r_cum &lt;-<span class="st"> </span><span class="kw">left_join</span>(r_cum, <span class="kw">select</span>(mei_yearly, year_of, mei_mean))
+
+r_cum$date_of &lt;-<span class="st"> </span><span class="kw">ymd</span>(r_cum$date_of, <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>)
+r_cum$month_of &lt;-<span class="st"> </span><span class="kw">month</span>(r_cum$date_of)
+
+temp &lt;-<span class="st"> </span>mei %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">month_of =</span> <span class="kw">month</span>(date_of)) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(mei, year_of, month_of, mei)
+
+r_cum &lt;-<span class="st"> </span><span class="kw">left_join</span>(r_cum, temp, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;year_of&quot;</span>, <span class="st">&quot;month_of&quot;</span>))
+
+mm &lt;-<span class="st"> </span><span class="kw">inner_join</span>(mm, <span class="kw">select</span>(r_cum, date_of, mei_mean))
+
+<span class="kw">ggplot</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_step</span>(<span class="dt">data =</span> r_cum, 
+            <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)), 
+                <span class="dt">y =</span> cs, <span class="dt">group =</span> year_of, <span class="dt">color =</span> mei_mean), 
+            <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> mm, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">10</span>), 
+                           <span class="dt">y =</span> year_total, <span class="dt">color =</span> mei_mean,
+                           <span class="dt">group =</span> year_of, <span class="dt">label =</span> year_of), 
+            <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>) +
+<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;months&quot;</span>), <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%b&quot;</span>)) +
+<span class="st">  </span><span class="kw">scale_color_gradientn</span>(<span class="dt">name =</span> <span class="st">&quot;MEI Annual Mean&quot;</span>, 
+                        <span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">11</span>, <span class="st">&quot;RdYlBu&quot;</span>)),
+                        <span class="dt">limits =</span> <span class="kw">c</span>(-<span class="fl">1.65</span>, <span class="fl">1.65</span>)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_classic</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
+        <span class="dt">legend.key.width=</span><span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>),
+        <span class="dt">legend.key.height=</span><span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Cummulative rainfall (mm)&quot;</span>)</code></pre></div>
+<p><img src="figures/ssr-environmental-change/rain_cumsum-1.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r_2014 &lt;-<span class="st"> </span>dd %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(year_of ==<span class="st"> </span><span class="dv">2014</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(date_of, cs)
+
+r_2014_t &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">year_of =</span> <span class="dv">2014</span>, 
+                       <span class="dt">date_of =</span> <span class="kw">max</span>(<span class="kw">as.Date</span>(r_2014$date_of)),
+                       <span class="dt">year_total =</span> <span class="kw">max</span>(r_2014$cs))
+
+<span class="kw">ggplot</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_step</span>(<span class="dt">data =</span> r_cum, 
+            <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)), 
+                <span class="dt">y =</span> cs, <span class="dt">group =</span> year_of), 
+            <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> mm, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">10</span>), 
+                           <span class="dt">y =</span> year_total,
+                           <span class="dt">group =</span> year_of, <span class="dt">label =</span> year_of), 
+            <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_step</span>(<span class="dt">data =</span> r_2014,
+            <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)),
+                <span class="dt">y =</span> cs),
+            <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> r_2014_t, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">10</span>), 
+                           <span class="dt">y =</span> year_total,
+                           <span class="dt">label =</span> year_of), 
+            <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;months&quot;</span>), <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%b&quot;</span>)) +
+<span class="co">#   scale_color_gradientn(name = &quot;MEI Annual Mean&quot;, </span>
+<span class="co">#                         colours = rev(brewer.pal(11, &quot;RdYlBu&quot;)),</span>
+<span class="co">#                         limits = c(-1.65, 1.65)) + </span>
+<span class="st">  </span><span class="kw">theme_classic</span>() +<span class="st"> </span>
+<span class="co">#   theme(legend.position = &quot;bottom&quot;,</span>
+<span class="co">#         legend.key.width=unit(2, &quot;cm&quot;),</span>
+<span class="co">#         legend.key.height=unit(0.2, &quot;cm&quot;)) + </span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Cummulative rainfall (mm)&quot;</span>)</code></pre></div>
+<p><img src="figures/ssr-environmental-change/rain_cumsum-2.png" /><!-- --></p>
+<p>My point is that these two wet seasons were exceptionally bad, and so it follows leaf-shedding phenology was probably affected as the trees suffered during this time. This probably explains the much less green images for the years following these weak wet seasons: 1992, 1993, and 1998.</p>
+<p><br><br></p>
+<p>Here’s another plot showing the relationship between the Southern Oscillation Index and the rainfall trend. The thin blue line is a seasonally decomposed trend of monthly rainfall totals over the entire study period, i.e., it’s the remaining pattern in rainfall values <em>after</em> accounting for the very strong season pattern. The thick blue line is a LOESS smoother of this trend. The thin orange line is the 5-month moving weighted average of the SOI values, as plotted above, while the thick orange line is another LOESS smoother. As you can see, the patterns match up pretty well. Since the values differed in magnitude quite a lot, I applied a z-transofmation for this plot to improve visual interpretation. The cross-correlation between the two time series 0.605, and the lag which results in maximum correlation is 1.67 months (i.e., SOI leads rainfall, and above-average SOI is likely to lead to above-average rainfall about 1.67 months later).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp &lt;-<span class="st"> </span><span class="kw">zoo</span>(w_month$rain_sum, w_month$date_of, <span class="dt">frequency =</span> <span class="dv">12</span>)
+
+rain_ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">coredata</span>(temp), <span class="dt">freq =</span> <span class="kw">frequency</span>(temp), 
+              <span class="dt">start =</span> <span class="kw">c</span>(<span class="kw">year</span>(<span class="kw">start</span>(temp)), <span class="kw">month</span>(<span class="kw">start</span>(temp))), 
+              <span class="dt">end =</span> <span class="kw">c</span>(<span class="kw">year</span>(<span class="kw">end</span>(temp)), <span class="kw">month</span>(<span class="kw">end</span>(temp))))
+
+stl_dates &lt;-<span class="st"> </span><span class="kw">floor_date</span>(<span class="kw">ymd</span>(<span class="kw">rownames</span>(<span class="kw">data.frame</span>(temp)), <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>), 
+                        <span class="dt">unit =</span> <span class="st">&quot;month&quot;</span>) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">14</span>)
+
+rain_stl &lt;-<span class="st"> </span><span class="kw">data.frame</span>(stl_dates)
+
+for(i in <span class="dv">4</span>:<span class="dv">37</span>){
+  temp &lt;-<span class="st"> </span><span class="kw">stl</span>(rain_ts, <span class="dt">s.window =</span> <span class="st">&quot;periodic&quot;</span>, 
+              <span class="dt">t.window =</span> i, <span class="dt">t.degree =</span> <span class="dv">0</span>)
+  rain_stl &lt;-<span class="st"> </span><span class="kw">cbind</span>(rain_stl, <span class="kw">data.frame</span>(temp$time.series)$trend)
+  <span class="kw">names</span>(rain_stl)[i -<span class="st"> </span><span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">paste</span>(i, <span class="st">&quot;months&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>)
+}
+
+rain_stl &lt;-<span class="st"> </span><span class="kw">gather</span>(rain_stl, window, value, -stl_dates)
+
+rain_stl &lt;-<span class="st"> </span><span class="kw">mutate</span>(rain_stl, <span class="dt">n_months =</span> <span class="kw">as.numeric</span>(<span class="kw">as.character</span>(<span class="kw">str_extract</span>(rain_stl$window, <span class="dt">pattern =</span> <span class="st">&quot;[0-9]+&quot;</span>))))
+
+<span class="kw">ggplot</span>(rain_stl, <span class="kw">aes</span>(<span class="dt">x =</span> stl_dates, <span class="dt">y =</span> value, 
+                     <span class="dt">color =</span> n_months, <span class="dt">group =</span> window)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_color_gradientn</span>(<span class="dt">colours =</span> <span class="kw">rev</span>(heat_grad),
+                        <span class="dt">name =</span> <span class="st">&quot;Sliding window </span><span class="ch">\n</span><span class="st">length (months)&quot;</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_classic</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> <span class="kw">filter</span>(rain_stl, n_months ==<span class="st"> </span><span class="dv">18</span>),
+            <span class="kw">aes</span>(<span class="dt">x =</span> stl_dates, <span class="dt">y =</span> value, <span class="dt">group =</span> window),
+            <span class="dt">color =</span> <span class="st">&quot;#00AAFF&quot;</span>, <span class="dt">size =</span> <span class="fl">0.8</span>) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="dt">width =</span> <span class="st">&quot;2 years&quot;</span>),
+                   <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%Y&quot;</span>)) +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">vjust =</span> <span class="fl">0.5</span>)) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Rainfall trend&quot;</span>)</code></pre></div>
+<p><img src="figures/ssr-environmental-change/rain_stl-1.png" /><!-- --></p>
+<hr />
+<p><br></p>
+<div id="class-level-analysis" class="section level3">
+<h3>Class-level analysis</h3>
+<p>To analyze land cover change, I calculated a variety of metrics that quantify different aspects of landscape spatial pattern. There are literally hundreds of metrics out there that people use, and many of them are redundant. I followed some recently published guidelines for selecting a core set of “consistent and universal” metrics. Here are some descriptions, taken verbatim from <a href="http://dx.doi.org/10.1016/j.ecolind.2007.12.002">the paper</a>:</p>
+<p>The plots below show trends in these metrics (plus proportion of landscape) from 1985 to 2011 for each habitat class (i.e., “Class level” metrics in table above).</p>
+<div id="things-to-notice" class="section level4">
+<h4>Things to notice: <br></h4>
+<ol style="list-style-type: decimal">
+<li>Marked decrease in highly deciduous shrubland and replacement by more evergreen land cover. <br></li>
+<li>Major decrease in large patch dominance for “none” class. <br></li>
+<li>Across the board increase in patch shape complexity. <br></li>
+<li>Nothing much going on with neighborhood similarity. <br></li>
+<li>Substantial decrease in nearest neighbor distance for more evergreen classes <br></li>
+<li>Corresponding decrease in patch dispersion among evergreen classes <br></li>
+<li>Not much noteworthy about edge contrast. <br></li>
+<li>Opposing trends for highly deciduous and highly evergreen classes.</li>
+</ol>
+<p><br></p>
+</div>
+</div>
+<div id="landscape-level-analysis" class="section level3">
+<h3>Landscape-level analysis</h3>
+<p>I also looked at a variety of metrics for the landscape as a whole (i.e., “Landscape level” metrics). These are obtained by summing or averaging over all class types, and describe changes in the landscape as a whole.</p>
+<div id="take-aways" class="section level4">
+<h4>Take-aways: <br></h4>
+<ol style="list-style-type: decimal">
+<li>The results here tell a pretty consistent story, which is that the landscape is becoming more diverse, patchy, and mixed over time. This may seem weird until you consider that in the early 80s, it was largely dominated by relatively expansive areas of very young regenerating pasture that were highly deciduous. Over time, these areas have been broken up a and converted (patchily) to secondary forest stages that show varying levels of evergreenness. All this makes good intuitive sense with what we can observe on the ground.</li>
+</ol>
+<hr />
+<p><br> <br></p>
+</div>
+</div>
+</div>
+<div id="sub-regional-analysis-of-monkeyforest-growth-dynamics" class="section level2">
+<h2>Sub-regional analysis of monkey–forest growth dynamics</h2>
+<p>Finally, I carried out a “sub-regional” analysis to see if and how the patterns of monkey population and landscape change differed spatially among regions of the park.</p>
+<p>I created sub-regions of interest based on the GPS locations of all capuchin groups found during the 2003, 2007, 2011, and 2013 censuses. <strong>Linda</strong>: I changed the method for how the regions were defined because the old ones looked weird and lumpy. Here’s the new descripion: I created networks of proximate groups by linking each pair of points separated by less than 1 km with a straight line segment. I then buffered these line segments by 500 m on both sides and dissolved the boundaries among overlapping buffers. After removing small lacunae and bridging trivial gaps, each disjoint set of merged buffers was defined as a sub-region of interest (Figure X). All sub-regions are therefore separated by areas that are evidently used very infrequently, if at all, by capuchin groups. Here’s what the regions look like:</p>
+<p>[RegionsMap][RegionsMap.png]</p>
+<p>After assigning each known group to one of these sub-regions, I carried out some of the same analyses as described above for each sub-region. However, rather than calculating the full suite of population summary stats and landscape metrics, I focused on total sub-population size and proportion of landscape for each habitat class in each sub-region.</p>
+<p>Here’s a plot of population size over time in each subregion.</p>
+<p>As you can see, there are two primary foci of capuchin density in the park: - the Plateau area, which includes the admin area, the La Penca stuff, and the valleys that drain off to the east (Duende, Puercos, Guapote, etc.) - the Naranjo primary forest + a few large tributaries that are continuous with this forest.</p>
+<p>Perhaps more interestingly, it is only in the Plateau sub-region that we see population continuing to increase steadily. In all other sub-regions, population growth appears to have leveled off decades ago. Why might that be?</p>
+<p>We can remove Nancite and Santa Elena because they only consist of a single group, or at most two groups. Here is a plot of capuchin population density in each region, using the total area of the region (ignoring habitat types). It’s interesting that all the densities appear to be converging at around 12 animals / km^2, and again, it’s only the Plateau that seems to be still increasing (albeit slowly).</p>
+<p>Here’s a plot forest cover change in each sub-region:</p>
+<p>I think perhaps the thing that stands out most here (with respect to the Plateau sub-region) is the relatively large gain in moderately evergreen forest compared to the other sub-regions. There were also large gains in highly evergreen forest, but the same can be said for various other regions of the park. The drop in totally deciduous land cover also seems to be the most precipitous and absolute in the plateau region such that there is practically zero completely open shrubland in the present day.</p>
+<p>Some wild speculation: I suggest that the continued population growth in the Plateau region might be due to greater gains in moderately deciduous intermediate-stage forest compared to other areas of the park. Soil type could be an important factor, as the Plateau region is relatively flat and probably has greater soil depth than the other regions.</p>
+<hr />
+<p><br> <br></p>
+</div>
+<div id="major-conclusions" class="section level2">
+<h2>Major Conclusions</h2>
+<ol style="list-style-type: decimal">
+<li>After decades of increase, the capuchin population’s growth has slowed and may now be close to zero.</li>
+<li>As we already knew, there has been a gradual greening trend in the SSR that has accompanied a shift in the habitat composition as old pastures and disturbed areas regenerate.</li>
+<li>These patterns are spatially heterogeneous. The Plateau has experienced the greatest gains in intermediate-stage forest, and it also contains the only still-increasing sub-population of capuchins.</li>
+<li>These patterns are also influenced by rainfall, and thus by the ENSO cycle. We have seen extreme dry years trigger extensive early leaf-shedding.</li>
+<li>Some more wild speculation here, but the timing of some major changes in the capuchin population dynamics coincides with the prolonged ENSO episode of the early to mid 90s. During this time, population growth slowed considerably, mean group size decreased, and the total number of groups increased, perhaps as a result of large groups dissolving. Since then, these parameters have remained fairly constant.</li>
+<li>I’m sure this has a variety of conservation and management implications, but I’ll leave those for the manuscript.</li>
+</ol>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

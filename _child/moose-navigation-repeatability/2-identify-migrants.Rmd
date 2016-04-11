@@ -1,0 +1,109 @@
+<br>
+<hr>
+<br>
+
+```{r prepare_workspace, message = FALSE, echo = FALSE, results = 'hide'}
+```
+
+# Identification of Migrants: Overview
+
+The objective of this section is to identify individual migration events in the set of moose movement data using a semi-automated method based on the animal's net squared displacement (NSD) over one annual cycle. Individual moose that show migratory behavior will have an NSD pattern that differs from resident, nomadic, or dispersing individuals. We also want to calculate various parameters for each migration event (spring and fall).
+
+<br>
+
+<hr>
+
+<br>
+
+# Prepare data
+
+## Smooth NSD
+We first apply a rolling mean function to get a smoothed NSD. This is modified slightly from Singh et al. 2016 in that I'm using a center-aligned rolling mean rather than a right-aligned rolling mean.
+```{r apply_roll_mean, message = FALSE, eval = FALSE}
+```
+
+<br>
+
+We can compare the two different rolling-mean methods for first 16 animals. This figure shows that the right-aligned rolling mean gives estimates for xmidA and xmidB that are shifted forward in time. The drawback of the center-aligned rolling mean is that it estimates an earlier start date for when the animal first leaves its seasonal range to embark on migration, but the model parameters do not depend on this and should be better estimated by the center-aligned rolling mean.
+```{r roll_mean_comparison, message = FALSE}
+```
+
+<br>
+
+# Model smoothed NSD
+
+## Fit models to smoothed NSD
+```{r roll_mean_model_fitting, message = FALSE, eval = FALSE}
+```
+
+<br>
+
+```{r roll_mean_list_converged, message = FALSE, eval = FALSE}
+```
+
+## Evaluate model fit
+This bit modified from script provided in Singh et al 2016.
+
+- We first define a new function `cc_fun` that takes as arguments a single animal's data, the model to evaluate, and the column of interest.
+
+- The we use dplyr to split the df by individual, apply the function to each animal and for all models, and combine the results
+
+```{r roll_mean_GOF, message = FALSE, eval = FALSE}
+```
+
+<br>
+
+We can now plot the smoothed NSDs for each category of moose. Here, they are color coded by the concordance criterion. The poor-fitting models are darker.
+```{r plot_all_nsd_models, message = FALSE}
+```
+
+<br>
+
+# Remove non-migrants
+
+Now, we must discard the non-migratory animals as well as those that are incorrectly identified as migrants (i.e., their NSD pattern does not show the exepcted "hump" pattern). This is necessary before fitting the final models. There is a fair bit of manual exploration involved here. To ease this, I created an NSD plotting function for examining individual NSD patterns in a given set of animals.
+```{r plot_migration_models, message = FALSE}
+```
+
+<br>
+
+## Perform the filtering
+```{r migration_nsd_filtering, message = FALSE}
+```
+
+<br>
+
+# Model raw NSD
+
+## Fit models to raw NSD
+```{r nsd_model_fitting, message = FALSE, eval = FALSE}
+```
+
+<br>
+
+```{r nsd_model_GOF, message = FALSE, eval = FALSE}
+```
+
+<br>
+
+```{r plot_nsd_model_params, message = FALSE}
+```
+
+<br>
+
+```{r plot_nsd_model_fits, message = FALSE}
+```
+
+<br>
+
+# Plots of model fit
+
+## Individual examples of good-fitting models
+```{r plot_individual_fitted_curves_good, message = FALSE}
+```
+
+<br>
+ 
+## Individual examples of poor-fitting models
+```{r plot_individual_fitted_curves_bad, message = FALSE}
+```

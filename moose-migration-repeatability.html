@@ -1,0 +1,1951 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+<meta name="author" content="Fernando Campos" />
+
+<meta name="date" content="2016-04-11" />
+
+<title>Repeatability of Migration Routes in Moose</title>
+
+<script src="libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="libs/tocify-1.9.1/jquery.tocify.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; background-color: #f8f8f8; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+pre, code { background-color: #f8f8f8; }
+code > span.kw { color: #204a87; font-weight: bold; } /* Keyword */
+code > span.dt { color: #204a87; } /* DataType */
+code > span.dv { color: #0000cf; } /* DecVal */
+code > span.bn { color: #0000cf; } /* BaseN */
+code > span.fl { color: #0000cf; } /* Float */
+code > span.ch { color: #4e9a06; } /* Char */
+code > span.st { color: #4e9a06; } /* String */
+code > span.co { color: #8f5902; font-style: italic; } /* Comment */
+code > span.ot { color: #8f5902; } /* Other */
+code > span.al { color: #ef2929; } /* Alert */
+code > span.fu { color: #000000; } /* Function */
+code > span.er { color: #a40000; font-weight: bold; } /* Error */
+code > span.wa { color: #8f5902; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #000000; } /* Constant */
+code > span.sc { color: #000000; } /* SpecialChar */
+code > span.vs { color: #4e9a06; } /* VerbatimString */
+code > span.ss { color: #4e9a06; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #000000; } /* Variable */
+code > span.cf { color: #204a87; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #ce5c00; font-weight: bold; } /* Operator */
+code > span.pp { color: #8f5902; font-style: italic; } /* Preprocessor */
+code > span.ex { } /* Extension */
+code > span.at { color: #c4a000; } /* Attribute */
+code > span.do { color: #8f5902; font-weight: bold; font-style: italic; } /* Documentation */
+code > span.an { color: #8f5902; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #8f5902; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #8f5902; font-weight: bold; font-style: italic; } /* Information */
+div.sourceCode {
+  overflow-x: visible;
+}
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+</style>
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script src="libs/navigation-1.0/tabsets.js"></script>
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+<script src="libs/navigation-1.0/codefolding.js"></script>
+<script>
+$(document).ready(function () {
+  window.initializeCodeFolding("show" === "show");
+});
+</script>
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.9em;
+  padding-left: 5px;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<nav class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">Code</a>
+    </div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+      <ul class="nav navbar-nav">
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">R Packages <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="r-packages-plhdbR.html">plhdbR</a></li>
+            <li><a href="r-packages-paceR.html">paceR</a></li>
+            <li><a href="r-packages-ClimGrid.html">ClimGrid</a></li>
+          </ul>
+        </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reproducible Analysis <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="moose-migration-repeatability.html">Moose Navigation</a></li>
+            <li><a href="capuchin-home-ranges.html">Capuchin Home Ranges</a></li>
+          </ul>
+        </li>
+        
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PACE Tutorials <span class="caret"></span></a>
+          <ul class="dropdown-menu">
+            <li><a href="#">Fruit Biomass</a></li>
+            <li><a href="#">Leaf Seasonality</a></li>
+            <li><a href="#">Weather Data</a></li>
+          </ul>
+        </li>
+      </ul>
+        
+      <ul class="nav navbar-nav navbar-right">
+        <li><a href="https://github.com/camposfa"><i class="fa fa-github fa-lg"></i></a></li>
+      </ul>
+      
+      
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</nav><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+<div class="btn-group pull-right">
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text-muted">Code</span> <span class="text-muted caret"></span></button>
+<ul class="dropdown-menu" style="min-width: 50px;">
+<li><a id="rmd-show-all-code" href="#">Show All</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All</a></li>
+</ul>
+</div>
+
+
+<h1 class="title toc-ignore">Repeatability of Migration Routes in Moose</h1>
+<h4 class="author"><em>Fernando Campos</em></h4>
+<h4 class="date"><em>2016-04-11</em></h4>
+
+</div>
+
+
+<br>
+<hr>
+<p><br></p>
+<div id="study-objectives" class="section level1">
+<h1>Study Objectives</h1>
+<ol style="list-style-type: decimal">
+<li><p>Make a descriptive statistical assessment of moose motion during migration.</p>
+<ul>
+<li><p>How does the orientation of daily movement steps change change over the annual cycle and in relation to the seasonal migrations?</p></li>
+<li><p>How do step lengths change over the annual cycle and in relation to the seasonal migrations?</p></li>
+</ul></li>
+<li><p>Quantify repeatibility in the migration paths of moose, focusing on within-individual vs. between-individual variation.</p></li>
+</ol>
+<br>
+<hr>
+<p><br></p>
+</div>
+<div id="data-preparation" class="section level1">
+<h1>Data Preparation</h1>
+<div id="load-packages-and-helper-functions" class="section level2">
+<h2>Load packages and helper functions</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load packages</span>
+<span class="kw">Sys.setenv</span>(<span class="dt">TZ =</span> <span class="st">&#39;UTC&#39;</span>)
+list.of.packages &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;zoo&quot;</span>, <span class="st">&quot;plyr&quot;</span>, <span class="st">&quot;raster&quot;</span>, <span class="st">&quot;rgeos&quot;</span>, <span class="st">&quot;rgdal&quot;</span>, <span class="st">&quot;maptools&quot;</span>,
+                      <span class="st">&quot;adehabitatLT&quot;</span>, <span class="st">&quot;readr&quot;</span>, <span class="st">&quot;RColorBrewer&quot;</span>, <span class="st">&quot;tidyr&quot;</span>,
+                      <span class="st">&quot;lubridate&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;ggplot2&quot;</span>, <span class="st">&quot;scales&quot;</span>, <span class="st">&quot;viridis&quot;</span>,
+                      <span class="st">&quot;mclust&quot;</span>, <span class="st">&quot;adehabitatHR&quot;</span>, <span class="st">&quot;gridExtra&quot;</span>, <span class="st">&quot;stringr&quot;</span>,
+                      <span class="st">&quot;nlme&quot;</span>)
+new.packages &lt;-<span class="st"> </span>list.of.packages[!(list.of.packages %in%<span class="st"> </span><span class="kw">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>])]
+if (<span class="kw">length</span>(new.packages)) <span class="kw">install.packages</span>(<span class="kw">unlist</span>(new.packages))
+<span class="kw">lapply</span>(list.of.packages, require, <span class="dt">character.only =</span> T)
+
+<span class="kw">source</span>(<span class="st">&quot;code/plotting-functions.R&quot;</span>)
+
+<span class="kw">setwd</span>(<span class="st">&quot;~/Dropbox/MooseNavigation&quot;</span>)
+
+<span class="co"># If reloading workspace</span>
+<span class="co"># Getting very large, so moved out of Dropbox</span>
+<span class="kw">load</span>(<span class="st">&quot;~/Documents/Projects/MooseNavigation/MooseNavigation.RData&quot;</span>)</code></pre></div>
+<p><br></p>
+</div>
+<div id="read-and-prepare-data" class="section level2">
+<h2>Read and prepare data</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Load data and parse sex and date/time columns</span>
+moose &lt;-<span class="st"> </span><span class="kw">read_tsv</span>(<span class="st">&quot;data/AA_AC by year.txt&quot;</span>,
+                  <span class="dt">col_types =</span> <span class="kw">cols</span>(<span class="dt">Sex =</span> readr::<span class="kw">col_factor</span>(<span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;F&quot;</span>, <span class="st">&quot;M&quot;</span>)),
+                                   <span class="dt">GMT_date =</span> <span class="kw">col_datetime</span>(<span class="st">&quot;%d/%m/%Y %H:%M:%S&quot;</span>)))
+
+<span class="co"># Ensure points sorted by animal and timestamp</span>
+moose &lt;-<span class="st"> </span>moose %&gt;%
+<span class="st">  </span><span class="kw">arrange</span>(Object_ID, GMT_date)
+
+moose$year_animal &lt;-<span class="st"> </span><span class="kw">paste</span>(moose$Year, moose$Object_ID, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>)
+
+<span class="co"># Convert to spatial points data frame</span>
+coords &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">cbind</span>(moose$Locale_E, moose$Locale_N))
+points &lt;-<span class="st"> </span><span class="kw">SpatialPoints</span>(coords)
+<span class="kw">proj4string</span>(points) &lt;-<span class="st"> </span><span class="kw">CRS</span>(<span class="st">&quot;+init=epsg:3021&quot;</span>)
+moose_spdf &lt;-<span class="st"> </span><span class="kw">SpatialPointsDataFrame</span>(points, <span class="kw">data.frame</span>(<span class="kw">select</span>(moose, -<span class="kw">matches</span>(<span class="st">&quot;Locale&quot;</span>))))</code></pre></div>
+<p><br></p>
+</div>
+<div id="convert-points-to-trajectories" class="section level2">
+<h2>Convert points to trajectories</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Based on &quot;moose-year&quot; start date of Mar. 21</span>
+<span class="co"># Re-assign points to the relevant moose year (each one starts on Mar. 21)</span>
+
+<span class="co"># Create ltraj object of annual tracks</span>
+moose_annual &lt;-<span class="st"> </span><span class="kw">as.ltraj</span>(<span class="dt">xy =</span> <span class="kw">as.data.frame</span>(moose[, <span class="kw">c</span>(<span class="st">&quot;Locale_E&quot;</span>, <span class="st">&quot;Locale_N&quot;</span>)]),
+                         <span class="dt">date =</span> moose$GMT_date, <span class="dt">id =</span> moose$yrMooseID,
+                         <span class="dt">infolocs =</span> <span class="kw">as.data.frame</span>(moose[, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">7</span>:<span class="dv">15</span>)]))</code></pre></div>
+<p><br></p>
+</div>
+<div id="cleanup" class="section level2">
+<h2>Cleanup</h2>
+<p>Here, we convert to a data frame to obtain movement metrics. We also round the relocation interval to the nearest day. This is useful later for filtering out long steps, e.g., when we want to visualize daily step lengths.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mma &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(<span class="kw">ld</span>(moose_annual))
+
+mma &lt;-<span class="st"> </span>mma %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(id) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">start_date =</span> <span class="kw">min</span>(date),
+         <span class="dt">dt_days =</span> <span class="kw">round_any</span>(dt, <span class="dv">86400</span>) /<span class="st"> </span><span class="dv">86400</span>,
+         <span class="dt">month_of =</span> <span class="kw">month</span>(date, <span class="dt">label =</span> <span class="ot">TRUE</span>),
+         <span class="dt">year_of =</span> <span class="kw">year</span>(date)) %&gt;%
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">nsd =</span> R2n)
+
+<span class="co"># Create a &quot;plot date&quot; (all in the same year) for easy visualization</span>
+mma$plot_date &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span class="kw">paste</span>(<span class="st">&quot;2000&quot;</span>, <span class="kw">month</span>(mma$start_date), <span class="kw">day</span>(mma$start_date), <span class="dt">sep =</span> <span class="st">&quot;-&quot;</span>)) +<span class="st"> </span><span class="kw">days</span>(mma$nDaysYr)</code></pre></div>
+<p><br></p>
+<!-- ## Clustering -->
+<!-- This chunk applies several clusting algorigthms to the data and determines the optimal method and number of clusters based on BIC of each algorithm and N. The clustering is based on location and NSD for both summer and winter months for each animal. The idea is to find groups of individuals who show similar migration patterns. The trajectories of the different clusters are plotted at the bottom of the page. -->
+<!-- ```{r clustering, message = FALSE, warning = FALSE} -->
+<!-- ``` -->
+<p><br></p>
+<hr>
+</div>
+</div>
+<div id="movement-metric-plots" class="section level1">
+<h1>Movement metric plots</h1>
+<p><br></p>
+<div id="relative-turn-angle-plots" class="section level2">
+<h2>Relative turn angle plots</h2>
+<p>0 is same direction as previous step</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot circular histogram of relative turn angles for each animal</span>
+<span class="kw">ggplot</span>(<span class="kw">filter</span>(mma, dt_days ==<span class="st"> </span><span class="dv">1</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(rel.angle)), <span class="kw">aes</span>(<span class="dt">x =</span> rel.angle)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">24</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(-pi, pi),
+                     <span class="dt">breaks =</span> <span class="kw">seq</span>(-pi, pi -<span class="st"> </span>pi/<span class="dv">12</span>, <span class="dt">by =</span> pi/<span class="dv">6</span>),
+                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">180</span>, <span class="dv">330</span>, <span class="dt">by =</span> <span class="dv">30</span>), <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">150</span>, <span class="dt">by =</span> <span class="dv">30</span>))) +
+<span class="st">  </span><span class="kw">coord_polar</span>(<span class="dt">start =</span> -pi) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Relative Turn Angle&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>()</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/rel_angle_plot_combined-1.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">filter</span>(mma, dt_days ==<span class="st"> </span><span class="dv">1</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(rel.angle)),
+       <span class="kw">aes</span>(<span class="dt">x =</span> rel.angle)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">24</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(-pi, pi),
+                     <span class="dt">breaks =</span> <span class="kw">seq</span>(-pi, pi -<span class="st"> </span>pi/<span class="dv">12</span>, <span class="dt">by =</span> pi/<span class="dv">6</span>),
+                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="kw">seq</span>(<span class="dv">180</span>, <span class="dv">330</span>, <span class="dt">by =</span> <span class="dv">30</span>), <span class="kw">seq</span>(<span class="dv">0</span>, <span class="dv">150</span>, <span class="dt">by =</span> <span class="dv">30</span>))) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~month_of) +
+<span class="st">  </span><span class="kw">coord_polar</span>(<span class="dt">start =</span> -pi) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Relative Turn Angle&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>()</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/rel_angle_plot_monthly-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+<div id="absolute-turn-angle-plots" class="section level2">
+<h2>Absolute turn angle plots</h2>
+<p>Up is North</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">filter</span>(mma, dt_days ==<span class="st"> </span><span class="dv">1</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(abs.angle)), <span class="kw">aes</span>(<span class="dt">x =</span> abs.angle)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">24</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(-pi, pi),
+                     <span class="dt">breaks =</span> <span class="kw">seq</span>(-pi, pi -<span class="st"> </span>pi/<span class="dv">4</span>, <span class="dt">by =</span> pi/<span class="dv">4</span>),
+                     <span class="dt">minor_breaks =</span> <span class="kw">seq</span>(-pi, pi -<span class="st"> </span>pi/<span class="dv">12</span>, <span class="dt">by =</span> pi/<span class="dv">12</span>),
+                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;N&quot;</span>, <span class="st">&quot;NE&quot;</span>, <span class="st">&quot;E&quot;</span>, <span class="st">&quot;SE&quot;</span>, <span class="st">&quot;S&quot;</span>, <span class="st">&quot;SW&quot;</span>, <span class="st">&quot;W&quot;</span>, <span class="st">&quot;NW&quot;</span>)) +
+<span class="st">  </span><span class="kw">coord_polar</span>() +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Absolute Turn Angle&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>()</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/abs_angle_plot_combined-1.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">filter</span>(mma, dt_days ==<span class="st"> </span><span class="dv">1</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(abs.angle)),
+       <span class="kw">aes</span>(<span class="dt">x =</span> abs.angle)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">24</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">scale_x_continuous</span>(<span class="dt">limits =</span> <span class="kw">c</span>(-pi, pi),
+                     <span class="dt">breaks =</span> <span class="kw">seq</span>(-pi, pi -<span class="st"> </span>pi/<span class="dv">4</span>, <span class="dt">by =</span> pi/<span class="dv">4</span>),
+                     <span class="dt">minor_breaks =</span> <span class="kw">seq</span>(-pi, pi -<span class="st"> </span>pi/<span class="dv">12</span>, <span class="dt">by =</span> pi/<span class="dv">12</span>),
+                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;N&quot;</span>, <span class="st">&quot;NE&quot;</span>, <span class="st">&quot;E&quot;</span>, <span class="st">&quot;SE&quot;</span>, <span class="st">&quot;S&quot;</span>, <span class="st">&quot;SW&quot;</span>, <span class="st">&quot;W&quot;</span>, <span class="st">&quot;NW&quot;</span>)) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~month_of) +
+<span class="st">  </span><span class="kw">coord_polar</span>() +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Absolute Turn Angle&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>()</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/abs_angle_plot_monthly-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+<div id="step-length-distributions" class="section level2">
+<h2>Step length distributions</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot histogram of step lengths for each animal</span>
+<span class="kw">ggplot</span>(<span class="kw">filter</span>(mma, dt_days ==<span class="st"> </span><span class="dv">1</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(dist)),
+       <span class="kw">aes</span>(<span class="dt">x =</span> dist)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">50</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Step Length (m)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>() +
+<span class="st">  </span><span class="kw">facet_grid</span>(month_of ~<span class="st"> </span>., <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_x_sqrt</span>() +
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">20000</span>))</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/step_length_plot-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+<div id="density-of-step-lengths" class="section level2">
+<h2>Density of step lengths</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mma$plot_date &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(mma$plot_date)
+
+<span class="kw">ggplot</span>(<span class="kw">filter</span>(mma, dt_days ==<span class="st"> </span><span class="dv">1</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(dist)),
+       <span class="kw">aes</span>(<span class="dt">x =</span> plot_date, <span class="dt">y =</span> dist/<span class="dv">1000</span>)) +
+<span class="st">  </span><span class="kw">stat_density_2d</span>(<span class="dt">geom =</span> <span class="st">&quot;raster&quot;</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> ..density..),
+                  <span class="dt">contour =</span> <span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="dv">200</span>) +
+<span class="st">  </span><span class="kw">scale_fill_gradientn</span>(<span class="dt">colours =</span> <span class="kw">c</span>(<span class="st">&quot;#FFFFFF&quot;</span>, <span class="kw">rev</span>(<span class="kw">viridis</span>(<span class="dv">9</span>, <span class="dt">option =</span> <span class="st">&quot;magma&quot;</span>))),
+                       <span class="dt">trans =</span> <span class="kw">sqrt_trans</span>(),
+                       <span class="dt">name =</span> <span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Julian Day&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Step Length (km)</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_y_sqrt</span>() +
+<span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">date_breaks =</span> <span class="st">&quot;1 month&quot;</span>, <span class="dt">date_labels =</span> <span class="st">&quot;%d-%b&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>() +
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">expand =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.ontop =</span> <span class="ot">TRUE</span>,
+        <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+        <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/step_density_plot-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+<div id="nsd-plot" class="section level2">
+<h2>NSD plot</h2>
+<p>Against day of year (as if all occurred in same year) <img src="figures/moose-migration-repeatability/nsd_density_plot-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+</div>
+<div id="map" class="section level1">
+<h1>Map</h1>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Maps of tracks</span>
+<span class="co"># High-res map of Sweden (need to download once, then can reload from file)</span>
+swe &lt;-<span class="st"> </span>raster::<span class="kw">getData</span>(<span class="dt">name =</span> <span class="st">&quot;GADM&quot;</span>, <span class="dt">country =</span> <span class="st">&quot;SWE&quot;</span>, <span class="dt">path =</span> <span class="st">&quot;data&quot;</span>,
+               <span class="dt">download =</span> <span class="ot">FALSE</span>, <span class="dt">level =</span> <span class="dv">0</span>)
+nor &lt;-<span class="st"> </span>raster::<span class="kw">getData</span>(<span class="dt">name =</span> <span class="st">&quot;GADM&quot;</span>, <span class="dt">country =</span> <span class="st">&quot;NOR&quot;</span>, <span class="dt">path =</span> <span class="st">&quot;data&quot;</span>,
+               <span class="dt">download =</span> <span class="ot">FALSE</span>, <span class="dt">level =</span> <span class="dv">0</span>)
+lan &lt;-<span class="st"> </span>raster::<span class="kw">getData</span>(<span class="dt">name =</span> <span class="st">&quot;GADM&quot;</span>, <span class="dt">country =</span> <span class="st">&quot;SWE&quot;</span>, <span class="dt">path =</span> <span class="st">&quot;data&quot;</span>,
+               <span class="dt">download =</span> <span class="ot">FALSE</span>, <span class="dt">level =</span> <span class="dv">1</span>)
+nor_lan &lt;-<span class="st"> </span>raster::<span class="kw">getData</span>(<span class="dt">name =</span> <span class="st">&quot;GADM&quot;</span>, <span class="dt">country =</span> <span class="st">&quot;NOR&quot;</span>, <span class="dt">path =</span> <span class="st">&quot;data&quot;</span>,
+                   <span class="dt">download =</span> <span class="ot">FALSE</span>, <span class="dt">level =</span> <span class="dv">1</span>)
+vb &lt;-<span class="st"> </span>lan[lan$NAME_1 ==<span class="st"> &quot;Västerbotten&quot;</span>, ]
+
+cities &lt;-<span class="st"> </span><span class="kw">readShapePoints</span>(<span class="st">&quot;~/Documents/Projects/MooseNavigation/ne_10m_populated_places/ne_10m_populated_places.shp&quot;</span>,
+                          <span class="dt">proj4string =</span> <span class="kw">CRS</span>(<span class="kw">proj4string</span>(swe)))
+cities_swe &lt;-<span class="st"> </span>cities[swe, ]
+cities_nor &lt;-<span class="st"> </span>cities[nor, ]
+
+<span class="co"># Project to RT90</span>
+swe &lt;-<span class="st"> </span><span class="kw">spTransform</span>(swe, <span class="kw">CRS</span>(<span class="kw">proj4string</span>(points)))
+nor &lt;-<span class="st"> </span><span class="kw">spTransform</span>(nor, <span class="kw">CRS</span>(<span class="kw">proj4string</span>(points)))
+lan &lt;-<span class="st">  </span><span class="kw">spTransform</span>(lan, <span class="kw">CRS</span>(<span class="kw">proj4string</span>(points)))
+nor_lan &lt;-<span class="st">  </span><span class="kw">spTransform</span>(nor_lan, <span class="kw">CRS</span>(<span class="kw">proj4string</span>(points)))
+vb &lt;-<span class="st">  </span><span class="kw">spTransform</span>(vb, <span class="kw">CRS</span>(<span class="kw">proj4string</span>(points)))
+cities_swe &lt;-<span class="st"> </span><span class="kw">spTransform</span>(cities_swe, <span class="kw">CRS</span>(<span class="kw">proj4string</span>(points)))
+cities_nor &lt;-<span class="st"> </span><span class="kw">spTransform</span>(cities_nor, <span class="kw">CRS</span>(<span class="kw">proj4string</span>(points)))
+
+<span class="co"># Convert to data frame for plotting</span>
+swe_df &lt;-<span class="st"> </span><span class="kw">fortify</span>(swe)
+nor_df &lt;-<span class="st"> </span><span class="kw">fortify</span>(nor)
+lan_df &lt;-<span class="st"> </span><span class="kw">fortify</span>(lan)
+nor_lan_df &lt;-<span class="st"> </span><span class="kw">fortify</span>(nor_lan)
+cities_swe &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(cities_swe)
+cities_nor &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(cities_nor)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create map</span>
+<span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> swe_df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),
+               <span class="dt">size =</span> <span class="fl">0.5</span>, <span class="dt">fill =</span> <span class="st">&quot;gray95&quot;</span>, <span class="dt">color =</span> <span class="ot">NA</span>) +
+<span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> nor_df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),
+               <span class="dt">size =</span> <span class="fl">0.5</span>, <span class="dt">fill =</span> <span class="st">&quot;gray95&quot;</span>, <span class="dt">color =</span> <span class="ot">NA</span>) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> lan_df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),
+            <span class="dt">size =</span> <span class="fl">0.1</span>) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> nor_lan_df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),
+            <span class="dt">size =</span> <span class="fl">0.1</span>) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> swe_df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),
+            <span class="dt">size =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> nor_df, <span class="kw">aes</span>(<span class="dt">x =</span> long, <span class="dt">y =</span> lat, <span class="dt">group =</span> group),
+            <span class="dt">size =</span> <span class="fl">0.5</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> cities_swe, <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y =</span> coords.x2)) +
+<span class="st">  </span><span class="kw">geom_label</span>(<span class="dt">data =</span> cities_swe, <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y =</span> coords.x2,
+                                    <span class="dt">label =</span> NAMEASCII), <span class="dt">nudge_y =</span> <span class="dv">8000</span>) +
+<span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">data =</span> cities_nor, <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y =</span> coords.x2)) +
+<span class="st">  </span><span class="kw">geom_label</span>(<span class="dt">data =</span> cities_nor, <span class="kw">aes</span>(<span class="dt">x =</span> coords.x1, <span class="dt">y =</span> coords.x2,
+                                    <span class="dt">label =</span> NAMEASCII), <span class="dt">nudge_y =</span> <span class="dv">8000</span>) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> mma, <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">group =</span> burst),
+            <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
+<span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">xlim =</span> <span class="kw">bbox</span>(moose_spdf)[<span class="dv">1</span>, ], <span class="dt">ylim =</span> <span class="kw">bbox</span>(moose_spdf)[<span class="dv">2</span>, ]) +
+<span class="st">  </span><span class="kw">theme_osa</span>() +
+<span class="st">  </span><span class="kw">scale_colour_discrete</span>(<span class="dt">guide =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Easting&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Northing</span><span class="ch">\n</span><span class="st">&quot;</span>)</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/create_moose_map-1.png" /><!-- --></p>
+<br>
+<hr>
+<p><br></p>
+</div>
+<div id="identification-of-migrants-overview" class="section level1">
+<h1>Identification of Migrants: Overview</h1>
+<p>The objective of this section is to identify individual migration events in the set of moose movement data using a semi-automated method based on the animal’s net squared displacement (NSD) over one annual cycle. Individual moose that show migratory behavior will have an NSD pattern that differs from resident, nomadic, or dispersing individuals. We also want to calculate various parameters for each migration event (spring and fall).</p>
+<p><br></p>
+<hr>
+<p><br></p>
+</div>
+<div id="prepare-data" class="section level1">
+<h1>Prepare data</h1>
+<div id="smooth-nsd" class="section level2">
+<h2>Smooth NSD</h2>
+<p>We first apply a rolling mean function to get a smoothed NSD. This is modified slightly from Singh et al. 2016 in that I’m using a center-aligned rolling mean rather than a right-aligned rolling mean.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">mma$plot_date &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(mma$plot_date)
+df &lt;-<span class="st"> </span>mma
+df$NSDm &lt;-<span class="st"> </span>df$nsd /<span class="st"> </span><span class="dv">1000000</span>
+
+<span class="co"># Now estimate MSD using 30 time steps)</span>
+apply_rollmean &lt;-<span class="st"> </span>function(df) {
+
+  z &lt;-<span class="st"> </span><span class="kw">zoo</span>(df$NSDm, df$nDaysYr)
+
+  <span class="co"># The rolling mean was right-aligned in Singh, Allen and Ericsson 2016</span>
+  df$rollmean_r &lt;-<span class="st"> </span><span class="kw">rollapply</span>(z, <span class="dt">width =</span> <span class="dv">30</span>, <span class="dt">align =</span> <span class="st">&quot;right&quot;</span>, <span class="dt">partial =</span> <span class="ot">TRUE</span>,
+                             <span class="dt">FUN =</span> mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+
+  <span class="co"># Proceeding here with center-aligned rolling mean</span>
+  df$rollmean_c &lt;-<span class="st"> </span><span class="kw">rollapply</span>(z, <span class="dt">width =</span> <span class="dv">30</span>, <span class="dt">align =</span> <span class="st">&quot;center&quot;</span>, <span class="dt">partial =</span> <span class="ot">TRUE</span>,
+                             <span class="dt">FUN =</span> mean, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+
+  <span class="kw">return</span>(df)
+}
+
+<span class="co"># Apply the rolling-mean functions</span>
+df &lt;-<span class="st"> </span>df %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(id) %&gt;%
+<span class="st">  </span><span class="kw">do</span>(<span class="kw">apply_rollmean</span>(.)) %&gt;%
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">MSD =</span> rollmean_c,
+         <span class="dt">MSD_r =</span> rollmean_r,
+         <span class="dt">MooseYrID =</span> id)</code></pre></div>
+<p><br></p>
+<p>We can compare the two different rolling-mean methods for first 16 animals. This figure shows that the right-aligned rolling mean gives estimates for xmidA and xmidB that are shifted forward in time. The drawback of the center-aligned rolling mean is that it estimates an earlier start date for when the animal first leaves its seasonal range to embark on migration, but the model parameters do not depend on this and should be better estimated by the center-aligned rolling mean.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp &lt;-<span class="st"> </span><span class="kw">filter</span>(df, MooseYrID %in%<span class="st"> </span><span class="kw">levels</span>(df$MooseYrID)[<span class="dv">1</span>:<span class="dv">16</span>])
+temp &lt;-<span class="st"> </span><span class="kw">gather</span>(temp, var, value, NSDm, MSD, MSD_r)
+temp$var &lt;-<span class="st"> </span><span class="kw">factor</span>(temp$var, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;NSDm&quot;</span>, <span class="st">&quot;MSD_r&quot;</span>, <span class="st">&quot;MSD&quot;</span>))
+
+<span class="kw">ggplot</span>(temp) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">x =</span> plot_date, <span class="dt">y =</span> <span class="kw">sqrt</span>(value), <span class="dt">color =</span> var),
+            <span class="dt">size =</span> <span class="fl">0.7</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Net displacement (km)</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y =</span> <span class="dv">0</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~MooseYrID, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>, <span class="dt">ncol =</span> <span class="dv">4</span>) +
+<span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">date_labels =</span> <span class="st">&quot;%b&quot;</span>, <span class="dt">date_breaks =</span> <span class="st">&quot;1 month&quot;</span>,
+                   <span class="dt">date_minor_breaks =</span> <span class="st">&quot;1 month&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>() +
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray80&quot;</span>, <span class="st">&quot;lightblue&quot;</span>, <span class="st">&quot;dodgerblue4&quot;</span>),
+                     <span class="dt">name =</span> <span class="st">&quot;&quot;</span>,
+                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Actual&quot;</span>, <span class="st">&quot;Right-aligned rolling mean&quot;</span>,
+                                <span class="st">&quot;Center-aligned rolling mean&quot;</span>)) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">legend.key.width =</span> grid::<span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>)) +
+<span class="st">  </span><span class="kw">coord_cartesian</span>()</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/roll_mean_comparison-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+</div>
+<div id="model-smoothed-nsd" class="section level1">
+<h1>Model smoothed NSD</h1>
+<div id="fit-models-to-smoothed-nsd" class="section level2">
+<h2>Fit models to smoothed NSD</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now we fit each of the models described in Bunnefeld et al. 2011 and Singh et al. 2012</span>
+<span class="co"># Change starting values if no conv (=mean), such as a specific value, or median etc.</span>
+<span class="co"># Providing a start improve model convergence, which can also be obtained by using parameters from previously estimated models</span>
+
+<span class="co"># First a null model</span>
+null.HRmod &lt;-<span class="st"> </span><span class="kw">nlme</span>(MSD ~<span class="st"> </span>A,
+                   <span class="dt">data =</span> df,
+                   <span class="dt">fixed =</span> A ~<span class="st"> </span><span class="dv">1</span>,
+                   <span class="dt">random =</span> A ~<span class="st"> </span><span class="dv">1</span>,
+                   <span class="dt">groups =</span> ~MooseYrID,
+                   <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">A =</span> <span class="kw">mean</span>(df$MSD)))
+
+<span class="co"># Sedentary HR model</span>
+asym.HRmod &lt;-<span class="st"> </span><span class="kw">nlme</span>(MSD ~<span class="st"> </span>Asym*(<span class="dv">1</span> -<span class="st"> </span><span class="kw">exp</span>(lrc *<span class="st"> </span>nDaysYr)),
+                   <span class="dt">data =</span> df,
+                   <span class="dt">fixed =</span> Asym +<span class="st"> </span>lrc ~<span class="st"> </span><span class="dv">1</span>,
+                   <span class="dt">random =</span> Asym ~<span class="st"> </span><span class="dv">1</span>,
+                   <span class="dt">groups =</span> ~MooseYrID,
+                   <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">Asym =</span> <span class="kw">summary</span>(null.HRmod)$tTable[<span class="dv">1</span>],
+                             <span class="dt">lrc =</span> -<span class="fl">0.002</span>))
+
+<span class="co"># Dispersal model with distance (Asym) and timing (xmid) varying between individuals.</span>
+ranef.Dispmod &lt;-<span class="st"> </span><span class="kw">nlme</span>(MSD ~<span class="st"> </span>Asym /<span class="st"> </span>(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmid -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scal)),
+                      <span class="dt">data =</span> df,
+                      <span class="dt">fixed =</span> Asym +<span class="st"> </span>xmid +<span class="st"> </span>scal ~<span class="st"> </span><span class="dv">1</span>,
+                      <span class="dt">random =</span> Asym +<span class="st"> </span>xmid ~<span class="st"> </span><span class="dv">1</span>,
+                      <span class="dt">groups =</span> ~MooseYrID,
+                      <span class="dt">na.action =</span> na.exclude,
+                      <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">Asym =</span> <span class="kw">summary</span>(asym.HRmod)$tTable[<span class="dv">1</span>],
+                                <span class="dt">xmid =</span> <span class="dv">30</span>, <span class="dt">scal =</span> <span class="dv">2</span>))
+
+<span class="co"># Dispersal model with Distance, timing and duration (scal) varying between individuals.</span>
+full.Dispmod &lt;-<span class="st"> </span><span class="kw">nlme</span>(MSD ~<span class="st"> </span>Asym /<span class="st"> </span>(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmid -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scal)),
+                     <span class="dt">data =</span> df,
+                     <span class="dt">fixed =</span> Asym +<span class="st"> </span>xmid +<span class="st"> </span>scal ~<span class="st"> </span><span class="dv">1</span>,
+                     <span class="dt">random =</span> Asym +<span class="st"> </span>xmid +<span class="st"> </span>scal ~<span class="st"> </span><span class="dv">1</span>,
+                     <span class="dt">groups =</span> ~MooseYrID,
+                     <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">Asym =</span> <span class="kw">summary</span>(ranef.Dispmod)$tTable[<span class="dv">1</span>],
+                               <span class="dt">xmid =</span> <span class="kw">summary</span>(ranef.Dispmod)$tTable[<span class="dv">2</span>],
+                               <span class="dt">scal =</span> <span class="kw">summary</span>(ranef.Dispmod)$tTable[<span class="dv">3</span>]),
+                     <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">pnlsTol =</span> <span class="dv">10</span>))
+
+<span class="co"># Simple Migration model with only distance varying between individuals</span>
+asym.Migrmod &lt;-<span class="st"> </span><span class="kw">nlme</span>(MSD ~<span class="st"> </span>asym/(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmidA -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scale1)) +
+<span class="st">                       </span>(-asym /(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmidB -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scale2))),
+                     <span class="dt">data =</span> df,
+                     <span class="dt">fixed =</span> asym +<span class="st"> </span>xmidA +<span class="st"> </span>xmidB +<span class="st"> </span>scale1 +<span class="st"> </span>scale2 ~<span class="st"> </span><span class="dv">1</span>,
+                     <span class="dt">random =</span> asym ~<span class="st"> </span><span class="dv">1</span>,
+                     <span class="dt">groups =</span> ~MooseYrID,
+                     <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">asym =</span> <span class="dv">5515</span>,<span class="dt">xmidA =</span> <span class="dv">90</span>, <span class="dt">xmidB =</span> <span class="dv">242</span>,
+                               <span class="dt">scale1 =</span> <span class="dv">4</span>, <span class="dt">scale2 =</span> <span class="dv">4</span>))
+
+<span class="co"># More complex migration model with distance, timing of Migration 1 (xmidA) and timing of migration 2 (xmidB)</span>
+ranef2.Migrmod &lt;-<span class="st"> </span><span class="kw">nlme</span>(MSD ~<span class="st"> </span>asym/(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmidA -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scale1)) +
+<span class="st">                         </span>(-asym /(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmidB -<span class="st"> </span>nDaysYr)/scale2))),
+                       <span class="dt">data =</span> df,
+                       <span class="dt">fixed =</span> asym +<span class="st"> </span>xmidA +<span class="st"> </span>xmidB +<span class="st"> </span>scale1 +<span class="st"> </span>scale2 ~<span class="st"> </span><span class="dv">1</span>,
+                       <span class="dt">random =</span> asym +<span class="st"> </span>xmidA +<span class="st"> </span>xmidB ~<span class="st"> </span><span class="dv">1</span> |<span class="st"> </span>MooseYrID,
+                       <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">asym =</span> <span class="dv">2200</span>, <span class="dt">xmidA =</span> <span class="dv">100</span>,
+                                 <span class="dt">xmidB =</span> <span class="dv">295</span>, <span class="dt">scale1 =</span> <span class="dv">10</span>, <span class="dt">scale2 =</span> <span class="dv">15</span>),
+                       <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">tolerance =</span> <span class="fl">0.1</span>))
+<span class="kw">summary</span>(ranef2.Migrmod)
+
+<span class="co"># Complete migration model with all parameters varying between individuals. Normally this will struggle to converge in a dataset</span>
+<span class="co"># that contain a mix of migrants and non-migrants, and is more important in later stages when estimating timing of movements for</span>
+<span class="co"># migratory individuals only using the NSD rather than the MSD</span>
+
+<span class="co"># I COULD NOT GET THIS ONE TO CONVERGE DESPITE A LOT OF TINKERING, SO COMMENTED OUT HERE</span>
+
+<span class="co"># ranef4.Migrmod &lt;- nlme(MSD ~ asym / (1 + exp((xmidA - nDaysYr) / scale1)) +</span>
+<span class="co">#                          (-asym /(1 + exp((xmidB - nDaysYr) / scale2))),</span>
+<span class="co">#                        data = df,</span>
+<span class="co">#                        fixed = list(asym + xmidA + xmidB + scale1 + scale2 ~ 1),</span>
+<span class="co">#                        random = asym + xmidA + xmidB + scale1 + scale2 ~ 1 | MooseYrID,</span>
+<span class="co">#                        start = c(asym = summary(ranef2.Migrmod)$tTable[1],</span>
+<span class="co">#                                  xmidA = summary(ranef2.Migrmod)$tTable[2],</span>
+<span class="co">#                                  xmidB = summary(ranef2.Migrmod)$tTable[3],</span>
+<span class="co">#                                  scale1 = 5,</span>
+<span class="co">#                                  scale2 = 10))</span>
+
+<span class="co"># Mixed Migratory Model with distance and timing of Migration 1, and distance and timing of Migration 2, varying between individuals.</span>
+mix.Migrmod &lt;-<span class="st"> </span><span class="kw">nlme</span>(MSD ~<span class="st"> </span>asymA/(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmidA -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scale1)) +
+<span class="st">                      </span>(-asymB /(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmidB -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scale2))),
+                    <span class="dt">data =</span> df,
+                    <span class="dt">fixed =</span> asymA +<span class="st"> </span>asymB +<span class="st"> </span>xmidA +<span class="st"> </span>xmidB +<span class="st"> </span>scale1 +<span class="st"> </span>scale2 ~<span class="st"> </span><span class="dv">1</span>,
+                    <span class="dt">random =</span> asymA +<span class="st"> </span>asymB +<span class="st"> </span>xmidA +<span class="st"> </span>xmidB ~<span class="st"> </span><span class="dv">1</span>,
+                    <span class="dt">groups =</span> ~MooseYrID,
+                    <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">asymA =</span> <span class="dv">10000</span>, <span class="dt">asymB =</span> <span class="dv">8000</span>, <span class="dt">xmidA =</span> <span class="dv">110</span>, <span class="dt">xmidB =</span> <span class="dv">300</span>, <span class="dt">scale1 =</span> <span class="dv">8</span>, <span class="dt">scale2 =</span> <span class="dv">12</span>))
+
+<span class="co"># Nomad model</span>
+linear &lt;-<span class="st"> </span><span class="kw">nlme</span>(MSD ~<span class="st"> </span><span class="dv">4</span> *<span class="st"> </span>D *<span class="st"> </span>nDaysYr,
+               <span class="dt">data =</span> df,
+               <span class="dt">fixed =</span> D ~<span class="st"> </span><span class="dv">1</span>,
+               <span class="dt">random =</span> D ~<span class="st"> </span><span class="dv">1</span>,
+               <span class="dt">groups =</span> ~MooseYrID,
+               <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">D =</span> <span class="dv">3</span>))</code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># GOF indiv level</span>
+<span class="co"># change this list below to include the model that fitted (with highest number of random effects) for each movement type</span>
+HRMod &lt;-<span class="st"> </span>asym.HRmod
+NullMod &lt;-<span class="st"> </span>null.HRmod
+DispMod &lt;-<span class="st"> </span>full.Dispmod
+MigrMod &lt;-<span class="st"> </span>ranef2.Migrmod
+MigrModC &lt;-<span class="st"> </span>mix.Migrmod
+NomadMod &lt;-<span class="st"> </span>linear</code></pre></div>
+</div>
+<div id="evaluate-model-fit" class="section level2">
+<h2>Evaluate model fit</h2>
+<p>This bit modified from script provided in Singh et al 2016.</p>
+<ul>
+<li><p>We first define a new function <code>cc_fun</code> that takes as arguments a single animal’s data, the model to evaluate, and the column of interest.</p></li>
+<li><p>The we use dplyr to split the df by individual, apply the function to each animal and for all models, and combine the results</p></li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now perform the calculations for the goodness of fit (i.e. concordance criterion).</span>
+
+<span class="co"># Define a concordance criterion function that takes in:</span>
+<span class="co"># a subsetted df (for an individual animal), a fitted model, and the column</span>
+cc_fun &lt;-<span class="st"> </span>function(df_sub, mod, col) {
+
+  tmp_id &lt;-<span class="st"> </span>df_sub[<span class="dv">1</span>, ]$MooseYrID
+  tmp_msd &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">as.matrix</span>(df_sub[, col]))
+  tmp_mod &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">fitted</span>(mod)[<span class="kw">which</span>(<span class="kw">names</span>(<span class="kw">fitted</span>(mod)) ==<span class="st"> </span>tmp_id)])
+
+  res &lt;-<span class="st"> </span><span class="dv">1</span> -<span class="st"> </span>(<span class="kw">sum</span>((tmp_msd -<span class="st"> </span>tmp_mod) ^<span class="st"> </span><span class="dv">2</span>)) /
+<span class="st">    </span>((<span class="kw">sum</span>((tmp_msd -<span class="st"> </span><span class="kw">mean</span>(tmp_msd)) ^<span class="st"> </span><span class="dv">2</span>)) +
+<span class="st">       </span>(<span class="kw">sum</span>((tmp_mod -<span class="st"> </span><span class="kw">mean</span>(tmp_mod)) ^<span class="st"> </span><span class="dv">2</span>)) +
+<span class="st">       </span>(<span class="kw">length</span>(tmp_msd) *<span class="st"> </span>((<span class="kw">mean</span>(tmp_msd) -<span class="st"> </span><span class="kw">mean</span>(tmp_mod)) ^<span class="st"> </span><span class="dv">2</span>)))
+
+  <span class="kw">return</span>(res)
+
+}
+
+<span class="co"># Apply the CC function for each MooseYrID and model class</span>
+moveClass &lt;-<span class="st"> </span>df %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">do</span>(<span class="dt">cc_HRMod =</span> <span class="kw">cc_fun</span>(., HRMod, <span class="st">&quot;MSD&quot;</span>),
+     <span class="dt">cc_NullMod =</span> <span class="kw">cc_fun</span>(., NullMod, <span class="st">&quot;MSD&quot;</span>),
+     <span class="dt">cc_DispMod =</span> <span class="kw">cc_fun</span>(., DispMod, <span class="st">&quot;MSD&quot;</span>),
+     <span class="dt">cc_MigrMod =</span> <span class="kw">cc_fun</span>(., MigrMod, <span class="st">&quot;MSD&quot;</span>),
+     <span class="dt">cc_MigrModC =</span> <span class="kw">cc_fun</span>(., MigrModC, <span class="st">&quot;MSD&quot;</span>),
+     <span class="dt">cc_NomadMod =</span> <span class="kw">cc_fun</span>(., NomadMod, <span class="st">&quot;MSD&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">unnest</span>()
+
+<span class="co"># Determine which model has the max CC for each animal</span>
+maxcc1ID &lt;-<span class="st"> </span>(<span class="kw">apply</span>(moveClass[, <span class="dv">2</span>:<span class="dv">7</span>], <span class="dv">1</span>, which.max))
+
+<span class="co"># Replace column index with model name</span>
+moveClass$bestMod.cc1ID &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">ifelse</span>(maxcc1ID ==<span class="st"> </span><span class="dv">1</span>, <span class="st">&quot;HRmod&quot;</span>,
+                                         <span class="kw">ifelse</span>(maxcc1ID ==<span class="st"> </span><span class="dv">2</span>, <span class="st">&quot;NullMod&quot;</span>,
+                                                <span class="kw">ifelse</span>(maxcc1ID ==<span class="st"> </span><span class="dv">3</span>, <span class="st">&quot;Dispmod&quot;</span>,
+                                                       <span class="kw">ifelse</span>(maxcc1ID ==<span class="st"> </span><span class="dv">4</span>, <span class="st">&quot;MigrMod&quot;</span>,
+                                                              <span class="kw">ifelse</span>(maxcc1ID ==<span class="st"> </span><span class="dv">5</span>, <span class="st">&quot;MigrModC&quot;</span>,
+                                                                     <span class="kw">ifelse</span>(maxcc1ID ==<span class="st"> </span><span class="dv">6</span>, <span class="st">&quot;nomadMod&quot;</span>, <span class="ot">NA</span>)))))))
+
+<span class="co"># Also get the max CC value</span>
+temp &lt;-<span class="st"> </span><span class="kw">numeric</span>(<span class="kw">nrow</span>(moveClass))
+for (i in <span class="dv">1</span>:<span class="kw">nrow</span>(moveClass)) {
+  temp[i] &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(moveClass[i, maxcc1ID[i] +<span class="st"> </span><span class="dv">1</span>])
+}
+moveClass$bestMod.cc1 &lt;-<span class="st"> </span>temp
+
+<span class="co"># Also obtain the parameter estimates for the mixed migration model</span>
+<span class="co"># Used below for filtering out bad fits and non-migratory animals</span>
+coeffs &lt;-<span class="st"> </span><span class="kw">coef</span>(MigrModC)
+params &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(moveClass, coeffs)
+
+<span class="co"># Join this back to original df</span>
+df_smooth_fitted &lt;-<span class="st"> </span><span class="kw">inner_join</span>(df, params)</code></pre></div>
+<p><br></p>
+<p>We can now plot the smoothed NSDs for each category of moose. Here, they are color coded by the concordance criterion. The poor-fitting models are darker.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot all models</span>
+<span class="kw">ggplot</span>(df_smooth_fitted,
+       <span class="kw">aes</span>(<span class="dt">x =</span> plot_date, <span class="dt">y =</span> <span class="kw">sqrt</span>(MSD), <span class="dt">color =</span> bestMod.cc1)) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">group =</span> burst), <span class="dt">alpha =</span> <span class="fl">0.25</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Net displacement (km)</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y =</span> <span class="dv">0</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~bestMod.cc1ID, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_color_gradientn</span>(<span class="dt">colours =</span> <span class="kw">viridis</span>(<span class="dv">10</span>)) +
+<span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">date_labels =</span> <span class="st">&quot;%b&quot;</span>, <span class="dt">date_breaks =</span> <span class="st">&quot;1 month&quot;</span>,
+                   <span class="dt">date_minor_breaks =</span> <span class="st">&quot;1 month&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>() +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/plot_all_nsd_models-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+</div>
+<div id="remove-non-migrants" class="section level1">
+<h1>Remove non-migrants</h1>
+<p>Now, we must discard the non-migratory animals as well as those that are incorrectly identified as migrants (i.e., their NSD pattern does not show the exepcted “hump” pattern). This is necessary before fitting the final models. There is a fair bit of manual exploration involved here. To ease this, I created an NSD plotting function for examining individual NSD patterns in a given set of animals.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Function for obtaining plot labels</span>
+get_labs &lt;-<span class="st"> </span>function(df, fil) {
+  labs &lt;-<span class="st"> </span>df %&gt;%
+<span class="st">    </span><span class="kw">ungroup</span>() %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(MooseYrID) %&gt;%
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">label =</span> <span class="kw">round</span>(<span class="kw">mean</span>(bestMod.cc1), <span class="dv">3</span>),
+              <span class="dt">y_lab =</span> (<span class="kw">max</span>(<span class="kw">sqrt</span>(NSDm)) -<span class="st"> </span><span class="kw">min</span>(<span class="kw">sqrt</span>(NSDm))) /<span class="st"> </span><span class="dv">2</span>) %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">p_date =</span> <span class="kw">ymd</span>(<span class="st">&quot;2000-09-01&quot;</span>)) %&gt;%
+<span class="st">    </span><span class="kw">semi_join</span>(<span class="kw">filter_</span>(df, fil), <span class="dt">by =</span> <span class="st">&quot;MooseYrID&quot;</span>)
+}
+
+<span class="co"># Function for plotting individual NSDs with CC labels and migration timing</span>
+plot_mig &lt;-<span class="st"> </span>function(df, lab) {
+
+  df_lines &lt;-<span class="st"> </span>df %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(MooseYrID) %&gt;%
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">xmidA_d =</span> <span class="kw">as.POSIXct</span>(<span class="kw">ymd</span>(<span class="st">&quot;2000-03-01&quot;</span>) +<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(<span class="kw">first</span>(xmidA), <span class="dv">0</span>))),
+              <span class="dt">xmidB_d =</span> <span class="kw">as.POSIXct</span>(<span class="kw">ymd</span>(<span class="st">&quot;2000-03-01&quot;</span>) +<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(<span class="kw">first</span>(xmidB), <span class="dv">0</span>))))
+
+  lab$p_date &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(lab$p_date)
+
+  p &lt;-<span class="st"> </span><span class="kw">ggplot</span>() +
+<span class="st">    </span><span class="kw">geom_path</span>(<span class="dt">data =</span> df,
+              <span class="kw">aes</span>(<span class="dt">x =</span> plot_date, <span class="dt">y =</span> <span class="kw">sqrt</span>(NSDm), <span class="dt">group =</span> burst),
+              <span class="dt">color =</span> <span class="st">&quot;gray80&quot;</span>, <span class="dt">size =</span> <span class="fl">0.7</span>) +
+<span class="st">    </span><span class="kw">geom_path</span>(<span class="dt">data =</span> df,
+              <span class="kw">aes</span>(<span class="dt">x =</span> plot_date, <span class="dt">y =</span> <span class="kw">sqrt</span>(MSD), <span class="dt">group =</span> burst),
+              <span class="dt">size =</span> <span class="fl">0.7</span>, <span class="dt">color =</span> <span class="st">&quot;dodgerblue4&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>) +
+<span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Net displacement (km)</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">    </span><span class="kw">expand_limits</span>(<span class="dt">y =</span> <span class="dv">0</span>) +
+<span class="st">    </span><span class="kw">geom_label</span>(<span class="dt">data =</span> lab, <span class="kw">aes</span>(<span class="dt">x =</span> p_date, <span class="dt">y =</span> y_lab, <span class="dt">label =</span> label),
+               <span class="dt">size =</span> <span class="dv">2</span>) +
+<span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> df_lines, <span class="kw">aes</span>(<span class="dt">xintercept =</span> <span class="kw">as.numeric</span>(xmidA_d)), <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">size =</span> <span class="fl">0.3</span>) +
+<span class="st">    </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> df_lines, <span class="kw">aes</span>(<span class="dt">xintercept =</span> <span class="kw">as.numeric</span>(xmidB_d)), <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">size =</span> <span class="fl">0.3</span>) +
+<span class="st">    </span><span class="kw">facet_wrap</span>(~MooseYrID, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
+<span class="st">    </span><span class="kw">scale_x_datetime</span>(<span class="dt">date_labels =</span> <span class="st">&quot;%b&quot;</span>, <span class="dt">date_breaks =</span> <span class="st">&quot;1 month&quot;</span>,
+                     <span class="dt">date_minor_breaks =</span> <span class="st">&quot;1 month&quot;</span>) +
+<span class="st">    </span><span class="kw">theme_fc</span>() +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),
+          <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>),
+          <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>()) +
+<span class="st">    </span><span class="kw">coord_cartesian</span>()
+
+  <span class="kw">return</span>(p)
+}</code></pre></div>
+<p><br></p>
+<div id="perform-the-filtering" class="section level2">
+<h2>Perform the filtering</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Focus on migration models</span>
+df_smooth_mig &lt;-<span class="st"> </span><span class="kw">filter</span>(df_smooth_fitted,
+                        bestMod.cc1ID %in%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;MigrMod&quot;</span>, <span class="st">&quot;MigrModC&quot;</span>))
+
+<span class="co"># See if any good models exist with cc below 0.85</span>
+<span class="co"># Not really</span>
+fil &lt;-<span class="st"> </span><span class="kw">quote</span>(bestMod.cc1 &lt;<span class="st"> </span><span class="fl">0.85</span>)
+plot_labs &lt;-<span class="st"> </span><span class="kw">get_labs</span>(df_smooth_mig, fil)
+plot_df &lt;-<span class="st"> </span><span class="kw">filter_</span>(df_smooth_mig, fil)
+<span class="kw">plot_mig</span>(plot_df, plot_labs)</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/migration_nsd_filtering-1.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_smooth_mig &lt;-<span class="st"> </span><span class="kw">filter</span>(df_smooth_mig, bestMod.cc1 &gt;=<span class="st"> </span><span class="fl">0.85</span>)
+
+
+<span class="co"># Check for bad migration timing dates</span>
+<span class="co"># All of these are dispersal rather than migration</span>
+fil &lt;-<span class="st"> </span><span class="kw">quote</span>(xmidB &gt;<span class="st"> </span><span class="dv">360</span> |<span class="st"> </span>xmidA &lt;<span class="st"> </span><span class="dv">50</span> |<span class="st"> </span>xmidA &gt;<span class="st"> </span><span class="dv">260</span>)
+plot_labs &lt;-<span class="st"> </span><span class="kw">get_labs</span>(df_smooth_mig, fil)
+plot_df &lt;-<span class="st"> </span><span class="kw">filter_</span>(df_smooth_mig, fil)
+<span class="kw">plot_mig</span>(plot_df, plot_labs)</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/migration_nsd_filtering-2.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_smooth_mig &lt;-<span class="st"> </span><span class="kw">filter</span>(df_smooth_mig, xmidB &lt;=<span class="st"> </span><span class="dv">360</span> &amp;<span class="st"> </span>xmidA &gt;=<span class="st"> </span><span class="dv">50</span> &amp;<span class="st"> </span>xmidA &lt;=<span class="st"> </span><span class="dv">260</span>)
+
+
+<span class="co"># Check asymptote B</span>
+<span class="co"># These are also bad</span>
+fil &lt;-<span class="st"> </span><span class="kw">quote</span>(asymB &lt;<span class="st"> </span><span class="dv">90</span>)
+plot_labs &lt;-<span class="st"> </span><span class="kw">get_labs</span>(df_smooth_mig, fil)
+plot_df &lt;-<span class="st"> </span><span class="kw">filter_</span>(df_smooth_mig, fil)
+<span class="kw">plot_mig</span>(plot_df, plot_labs)</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/migration_nsd_filtering-3.png" /><!-- --></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_smooth_mig &lt;-<span class="st"> </span><span class="kw">filter</span>(df_smooth_mig, asymB &gt;=<span class="st"> </span><span class="dv">90</span>)
+
+
+<span class="co"># Remove a few more cases of dispersal that weren&#39;t captured by these filters</span>
+df_smooth_mig &lt;-<span class="st"> </span><span class="kw">filter</span>(df_smooth_mig, MooseYrID %ni%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;aa_ac_04_030.yr2&quot;</span>,
+                                    <span class="st">&quot;aa_ac_05_007.yr1&quot;</span>,
+                                    <span class="st">&quot;aa_ac_05_079.yr3&quot;</span>))
+
+<span class="co"># Finalize migratory set for next stage of models</span>
+df_smooth_mig &lt;-<span class="st"> </span>df_smooth_mig %&gt;%
+<span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span>:<span class="dv">29</span>) %&gt;%
+<span class="st">  </span><span class="kw">droplevels</span>()</code></pre></div>
+<p><br></p>
+</div>
+</div>
+<div id="model-raw-nsd" class="section level1">
+<h1>Model raw NSD</h1>
+<div id="fit-models-to-raw-nsd" class="section level2">
+<h2>Fit models to raw NSD</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Now reapply models using the NSD</span>
+
+<span class="co"># First a simpler model to obtain starting values for the sampled dataset (i.e. it now only contains migrators)</span>
+ranef.MigrmodLD &lt;-<span class="st"> </span><span class="kw">nlme</span>(NSDm ~<span class="st"> </span>asymA /<span class="st"> </span>(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmidA -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scale1)) +
+<span class="st">                          </span>(-asymB /<span class="st"> </span>(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmidB -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scale2))),
+                        <span class="dt">data =</span> df_smooth_mig,
+                        <span class="dt">fixed =</span> asymA +<span class="st"> </span>asymB +<span class="st"> </span>xmidA +<span class="st"> </span>xmidB +<span class="st"> </span>scale1 +<span class="st"> </span>scale2 ~<span class="st"> </span><span class="dv">1</span>,
+                        <span class="dt">random =</span> asymA +<span class="st"> </span>asymB +<span class="st"> </span>xmidA +<span class="st"> </span>xmidB ~<span class="st"> </span><span class="dv">1</span> |<span class="st"> </span>MooseYrID,
+                        <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">asymA =</span> <span class="kw">summary</span>(mix.Migrmod)$tTable[<span class="dv">1</span>],
+                                  <span class="dt">asymB =</span> <span class="kw">summary</span>(mix.Migrmod)$tTable[<span class="dv">2</span>],
+                                  <span class="dt">xmidA =</span> <span class="kw">summary</span>(mix.Migrmod)$tTable[<span class="dv">3</span>],
+                                  <span class="dt">xmidB =</span> <span class="kw">summary</span>(mix.Migrmod)$tTable[<span class="dv">4</span>],
+                                  <span class="dt">scale1 =</span> <span class="kw">summary</span>(mix.Migrmod)$tTable[<span class="dv">5</span>],
+                                  <span class="dt">scale2 =</span> <span class="kw">summary</span>(mix.Migrmod)$tTable[<span class="dv">6</span>]),
+                        <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">tolerance =</span> <span class="fl">0.1</span>))
+<span class="kw">summary</span>(ranef.MigrmodLD)
+
+<span class="co"># Then a complex model that hopefully converges. This step may still prove a challenge. Here we have two versions, the second uses results from the above</span>
+<span class="co"># model as starting values, whereas the first I manually manipulate to try improve model convergence. Viewing plots of the movement trajecotry may assist</span>
+<span class="co"># in identifying appropriate starting values for the model. If convergence continues to fail, it may be necessary</span>
+<span class="co"># to sub-sample the dataset, or remove individuals with abnormal NSD patterns.</span>
+ranef4.MigrmodLD &lt;-<span class="st"> </span><span class="kw">nlme</span>(NSDm ~<span class="st"> </span>asymA /<span class="st"> </span>(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmidA -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scale1)) +
+<span class="st">                           </span>(-asymB /<span class="st"> </span>(<span class="dv">1</span> +<span class="st"> </span><span class="kw">exp</span>((xmidB -<span class="st"> </span>nDaysYr) /<span class="st"> </span>scale2))),
+                         <span class="dt">data =</span> df_smooth_mig,
+                         <span class="dt">fixed =</span> asymA +<span class="st"> </span>asymB +<span class="st"> </span>xmidA +<span class="st"> </span>xmidB +<span class="st"> </span>scale1 +<span class="st"> </span>scale2 ~<span class="st"> </span><span class="dv">1</span>,
+                         <span class="dt">random =</span> asymA +<span class="st"> </span>asymB +<span class="st"> </span>xmidA +<span class="st"> </span>xmidB +<span class="st"> </span>scale1 +<span class="st"> </span>scale2 ~<span class="st"> </span><span class="dv">1</span>,
+                         <span class="dt">groups =</span> ~MooseYrID,
+                         <span class="dt">start =</span> <span class="kw">c</span>(<span class="dt">asymA =</span> <span class="kw">summary</span>(ranef.MigrmodLD)$tTable[<span class="dv">1</span>],
+                                   <span class="dt">asymB =</span> <span class="kw">summary</span>(ranef.MigrmodLD)$tTable[<span class="dv">2</span>],
+                                   <span class="dt">xmidA =</span> <span class="kw">summary</span>(ranef.MigrmodLD)$tTable[<span class="dv">3</span>],
+                                   <span class="dt">xmidB =</span> <span class="kw">summary</span>(ranef.MigrmodLD)$tTable[<span class="dv">4</span>],
+                                   <span class="dt">scale1 =</span> <span class="kw">summary</span>(ranef.MigrmodLD)$tTable[<span class="dv">5</span>],
+                                   <span class="dt">scale2 =</span> <span class="kw">summary</span>(ranef.MigrmodLD)$tTable[<span class="dv">6</span>]),
+                         <span class="dt">control =</span> <span class="kw">list</span>(<span class="dt">pnlsTol =</span> <span class="dv">10</span>))
+<span class="kw">summary</span>(ranef4.MigrmodLD)</code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Obtain GOF for new model</span>
+MigrModLD &lt;-<span class="st"> </span>ranef4.MigrmodLD
+
+moveClassLD &lt;-<span class="st"> </span>df_smooth_mig %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">do</span>(<span class="dt">cc_MigrModLD =</span> <span class="kw">cc_fun</span>(., MigrModLD, <span class="st">&quot;NSDm&quot;</span>)) %&gt;%
+<span class="st">  </span><span class="kw">unnest</span>()
+
+migrant_params &lt;-<span class="st"> </span><span class="kw">bind_cols</span>(moveClassLD, <span class="kw">coef</span>(ranef4.MigrmodLD))
+df_nsd_fitted &lt;-<span class="st"> </span><span class="kw">inner_join</span>(df_smooth_mig, migrant_params)</code></pre></div>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Plot distribution of parameters</span>
+temp &lt;-<span class="st"> </span><span class="kw">gather</span>(migrant_params, var, value, -MooseYrID, -cc_MigrModLD)
+temp_sum &lt;-<span class="st"> </span>temp %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(var) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">med_val =</span> <span class="kw">median</span>(value))
+
+temp_sum &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">fixed =</span> <span class="kw">fixed.effects</span>(MigrModLD))
+temp_sum$var &lt;-<span class="st"> </span><span class="kw">row.names</span>(temp_sum)
+
+
+<span class="co"># Plot histograms of migration parameters</span>
+<span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">data =</span> temp, <span class="kw">aes</span>(<span class="dt">x =</span> value)) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> temp_sum, <span class="kw">aes</span>(<span class="dt">xintercept =</span> fixed),
+             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">lty =</span> <span class="dv">2</span>) +
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> temp_sum, <span class="kw">aes</span>(<span class="dt">x =</span> fixed, <span class="dt">y =</span> <span class="dv">40</span>, <span class="dt">label =</span> <span class="kw">round</span>(fixed, <span class="dv">0</span>)),
+            <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~var, <span class="dt">scales =</span> <span class="st">&quot;free_x&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>()</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/plot_nsd_model_params-1.png" /><!-- --></p>
+<p><br></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp_wide &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">fixed.effects</span>(MigrModLD)))
+
+temp_wide &lt;-<span class="st"> </span>temp_wide %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">base_d =</span> <span class="kw">as.POSIXct</span>(<span class="st">&quot;2000-03-01&quot;</span>),
+         <span class="dt">xmidA_d =</span> base_d +<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(xmidA, <span class="dv">0</span>)),
+         <span class="dt">xmidB_d =</span> base_d +<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(xmidB, <span class="dv">0</span>)),
+         <span class="dt">scale1_rs =</span> xmidA_d -<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(scale1, <span class="dv">0</span>)),
+         <span class="dt">scale1_re =</span> xmidA_d +<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(scale1, <span class="dv">0</span>)),
+         <span class="dt">scale2_rs =</span> xmidB_d -<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(scale2, <span class="dv">0</span>)),
+         <span class="dt">scale2_re =</span> xmidB_d +<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(scale2, <span class="dv">0</span>))) %&gt;%
+<span class="st">  </span><span class="kw">mutate_each</span>(<span class="kw">funs</span>(as.numeric), <span class="kw">matches</span>(<span class="st">&quot;_d&quot;</span>))
+
+<span class="co"># Plot all models color coded by CC</span>
+<span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="dt">data =</span> temp_wide, <span class="kw">aes</span>(<span class="dt">xmin =</span> scale1_rs, <span class="dt">xmax =</span> scale1_re,
+                                  <span class="dt">ymin =</span> -<span class="ot">Inf</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.1</span>) +
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="dt">data =</span> temp_wide, <span class="kw">aes</span>(<span class="dt">xmin =</span> scale2_rs, <span class="dt">xmax =</span> scale2_re,
+                                  <span class="dt">ymin =</span> -<span class="ot">Inf</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.1</span>) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> df_nsd_fitted, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.POSIXct</span>(plot_date), <span class="dt">y =</span> <span class="kw">sqrt</span>(NSDm),
+                            <span class="dt">color =</span> cc_MigrModLD, <span class="dt">group =</span> burst),
+            <span class="dt">alpha =</span> <span class="fl">0.25</span>) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">data =</span> temp_wide, <span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="kw">sqrt</span>(asymA)), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.3</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> temp_wide, <span class="kw">aes</span>(<span class="dt">xintercept =</span> xmidA_d),
+             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> temp_wide, <span class="kw">aes</span>(<span class="dt">xintercept =</span> xmidB_d),
+             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Net displacement (km)</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y =</span> <span class="dv">0</span>) +
+<span class="st">  </span><span class="kw">scale_color_gradientn</span>(<span class="dt">colours =</span> <span class="kw">viridis</span>(<span class="dv">10</span>), <span class="dt">name =</span> <span class="st">&quot;Concordance</span><span class="ch">\n</span><span class="st">Criterion&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">date_labels =</span> <span class="st">&quot;%b&quot;</span>, <span class="dt">date_breaks =</span> <span class="st">&quot;1 month&quot;</span>,
+                   <span class="dt">date_minor_breaks =</span> <span class="st">&quot;1 month&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>() +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/plot_nsd_model_fits-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+</div>
+<div id="plots-of-model-fit" class="section level1">
+<h1>Plots of model fit</h1>
+<div id="individual-examples-of-good-fitting-models" class="section level2">
+<h2>Individual examples of good-fitting models</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">newdata &lt;-<span class="st"> </span><span class="kw">select</span>(df_nsd_fitted, MooseYrID, nDaysYr, <span class="dv">31</span>:<span class="dv">36</span>)
+df_nsd_fitted$predicted &lt;-<span class="st"> </span><span class="kw">predict</span>(ranef4.MigrmodLD, newdata)
+
+migrant_params2 &lt;-<span class="st"> </span>migrant_params %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">base_d =</span> <span class="kw">as.POSIXct</span>(<span class="st">&quot;2000-03-01&quot;</span>),
+         <span class="dt">xmidA_d =</span> base_d +<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(xmidA, <span class="dv">0</span>)),
+         <span class="dt">xmidB_d =</span> base_d +<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(xmidB, <span class="dv">0</span>)),
+         <span class="dt">scale1_rs =</span> xmidA_d -<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(scale1, <span class="dv">0</span>)),
+         <span class="dt">scale1_re =</span> xmidA_d +<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(scale1, <span class="dv">0</span>)),
+         <span class="dt">scale2_rs =</span> xmidB_d -<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(scale2, <span class="dv">0</span>)),
+         <span class="dt">scale2_re =</span> xmidB_d +<span class="st"> </span><span class="dv">2</span> *<span class="st"> </span><span class="kw">days</span>(<span class="kw">round</span>(scale2, <span class="dv">0</span>))) %&gt;%
+<span class="st">  </span><span class="kw">mutate_each</span>(<span class="kw">funs</span>(as.numeric), <span class="kw">matches</span>(<span class="st">&quot;_d&quot;</span>))
+
+good &lt;-<span class="st"> </span><span class="kw">filter</span>(migrant_params2, cc_MigrModLD &gt;<span class="st"> </span><span class="fl">0.99</span>)
+temp &lt;-<span class="st"> </span>df_nsd_fitted %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(MooseYrID %in%<span class="st"> </span>good$MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(MooseYrID, plot_date, predicted, NSDm) %&gt;%
+<span class="st">  </span><span class="kw">gather</span>(var, value, -MooseYrID, -plot_date)
+
+<span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="dt">data =</span> good,
+            <span class="kw">aes</span>(<span class="dt">xmin =</span> scale1_rs, <span class="dt">xmax =</span> scale1_re, <span class="dt">ymin =</span> -<span class="ot">Inf</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.1</span>) +
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="dt">data =</span> good,
+            <span class="kw">aes</span>(<span class="dt">xmin =</span> scale2_rs, <span class="dt">xmax =</span> scale2_re, <span class="dt">ymin =</span> -<span class="ot">Inf</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.1</span>) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> temp, <span class="kw">aes</span>(<span class="dt">x =</span> plot_date, <span class="dt">y =</span> <span class="kw">sqrt</span>(value),<span class="dt">color =</span> var)) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">data =</span> good, <span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="kw">sqrt</span>(asymA)),
+             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.3</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> good, <span class="kw">aes</span>(<span class="dt">xintercept =</span> xmidA_d),
+             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> good, <span class="kw">aes</span>(<span class="dt">xintercept =</span> xmidB_d),
+             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Net displacement (km)</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray70&quot;</span>, <span class="st">&quot;dodgerblue2&quot;</span>),
+                     <span class="dt">name =</span> <span class="st">&quot;&quot;</span>,
+                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Actual&quot;</span>, <span class="st">&quot;Modeled&quot;</span>)) +
+<span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y =</span> <span class="dv">0</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~MooseYrID, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">date_labels =</span> <span class="st">&quot;%b&quot;</span>, <span class="dt">date_breaks =</span> <span class="st">&quot;1 month&quot;</span>,
+                   <span class="dt">date_minor_breaks =</span> <span class="st">&quot;1 month&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>() +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">legend.key.width =</span> grid::<span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>))</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/plot_individual_fitted_curves_good-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+<div id="individual-examples-of-poor-fitting-models" class="section level2">
+<h2>Individual examples of poor-fitting models</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">bad &lt;-<span class="st"> </span><span class="kw">filter</span>(migrant_params2, cc_MigrModLD &lt;<span class="st"> </span><span class="fl">0.7</span>)
+temp &lt;-<span class="st"> </span>df_nsd_fitted %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(MooseYrID %in%<span class="st"> </span>bad$MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(MooseYrID, plot_date, predicted, NSDm) %&gt;%
+<span class="st">  </span><span class="kw">gather</span>(var, value, -MooseYrID, -plot_date)
+
+<span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="dt">data =</span> bad,
+            <span class="kw">aes</span>(<span class="dt">xmin =</span> scale1_rs, <span class="dt">xmax =</span> scale1_re, <span class="dt">ymin =</span> -<span class="ot">Inf</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.1</span>) +
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="dt">data =</span> bad,
+            <span class="kw">aes</span>(<span class="dt">xmin =</span> scale2_rs, <span class="dt">xmax =</span> scale2_re, <span class="dt">ymin =</span> -<span class="ot">Inf</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>),
+            <span class="dt">fill =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.1</span>) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="dt">data =</span> temp, <span class="kw">aes</span>(<span class="dt">x =</span> plot_date, <span class="dt">y =</span> <span class="kw">sqrt</span>(value),<span class="dt">color =</span> var)) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">data =</span> bad, <span class="kw">aes</span>(<span class="dt">yintercept =</span> <span class="kw">sqrt</span>(asymA)),
+             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.3</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> bad, <span class="kw">aes</span>(<span class="dt">xintercept =</span> xmidA_d),
+             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> bad, <span class="kw">aes</span>(<span class="dt">xintercept =</span> xmidB_d),
+             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">size =</span> <span class="fl">0.3</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Net displacement (km)</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;gray70&quot;</span>, <span class="st">&quot;dodgerblue2&quot;</span>),
+                     <span class="dt">name =</span> <span class="st">&quot;&quot;</span>,
+                     <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Actual&quot;</span>, <span class="st">&quot;Modeled&quot;</span>)) +
+<span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y =</span> <span class="dv">0</span>) +
+<span class="st">  </span><span class="kw">facet_wrap</span>(~MooseYrID, <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">date_labels =</span> <span class="st">&quot;%b&quot;</span>, <span class="dt">date_breaks =</span> <span class="st">&quot;1 month&quot;</span>,
+                   <span class="dt">date_minor_breaks =</span> <span class="st">&quot;1 month&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>() +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>),
+        <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(),
+        <span class="dt">legend.key.width =</span> grid::<span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>))</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/plot_individual_fitted_curves_bad-1.png" /><!-- --></p>
+<br>
+<hr>
+<p><br></p>
+</div>
+</div>
+<div id="path-similarity-overview" class="section level1">
+<h1>Path Similarity: Overview</h1>
+<p>The hypothesis that we’re testing here is that if navigation during migration is guided primarily by memory, then individuals will show high repeatability of migration paths from one year to another.</p>
+<p>For each migratory path, we want to:</p>
+<ol style="list-style-type: decimal">
+<li>extract the two migratory portions only (remove summer and winter ranges)</li>
+<li>identify as either spring or fall migration</li>
+<li>calculate path similarity index between it and all other paths</li>
+<li>do the same but after “centering” the tracks to remove effects of geographic separation</li>
+</ol>
+<p>We can then create distance matricies between the paths and carry out analysis.</p>
+<p><br></p>
+<hr>
+<p><br></p>
+</div>
+<div id="extract-migratory-portions" class="section level1">
+<h1>Extract migratory portions</h1>
+<p>Here we build on the results from the <a href="2-identify-migrants.html">migrant identification</a> analysis.</p>
+<p>To keep this tidy, we use a “nested” tbl_df. The migration parameters are nested in the “params” column and the location data are nested in the “data” column.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create data table, one row for each MooseYrID and a &quot;params&quot; column that</span>
+<span class="co"># contains a tbl_df of all the migration parameters</span>
+mig_df &lt;-<span class="st"> </span>migrant_params2 %&gt;%
+<span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span>:<span class="dv">8</span>) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">nest</span>(<span class="dt">.key =</span> params)
+
+<span class="co"># Join migration parameters to location points</span>
+by_id &lt;-<span class="st"> </span>mma %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(<span class="dt">MooseYrID =</span> id, burst, <span class="dt">animal =</span> Object_ID, Sex) %&gt;%
+<span class="st">  </span><span class="kw">nest</span>() %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(mig_df)</code></pre></div>
+<p><br></p>
+<p>What this looks like:</p>
+<pre><code>## Source: local data frame [156 x 5]
+## 
+##           MooseYrID       animal    Sex              data         params
+##               (chr)        (chr) (fctr)             (chr)          (chr)
+## 1  aa_ac_04_002.yr1 aa_ac_04_002      F &lt;tbl_df [352,25]&gt; &lt;tbl_df [1,7]&gt;
+## 2  aa_ac_04_004.yr1 aa_ac_04_004      F &lt;tbl_df [355,25]&gt; &lt;tbl_df [1,7]&gt;
+## 3  aa_ac_04_008.yr1 aa_ac_04_008      F &lt;tbl_df [363,25]&gt; &lt;tbl_df [1,7]&gt;
+## 4  aa_ac_04_009.yr1 aa_ac_04_009      F &lt;tbl_df [352,25]&gt; &lt;tbl_df [1,7]&gt;
+## 5  aa_ac_04_013.yr1 aa_ac_04_013      F &lt;tbl_df [352,25]&gt; &lt;tbl_df [1,7]&gt;
+## 6  aa_ac_04_017.yr1 aa_ac_04_017      F &lt;tbl_df [361,25]&gt; &lt;tbl_df [1,7]&gt;
+## 7  aa_ac_04_020.yr1 aa_ac_04_020      F &lt;tbl_df [356,25]&gt; &lt;tbl_df [1,7]&gt;
+## 8  aa_ac_04_021.yr1 aa_ac_04_021      F &lt;tbl_df [349,25]&gt; &lt;tbl_df [1,7]&gt;
+## 9  aa_ac_04_023.yr1 aa_ac_04_023      F &lt;tbl_df [348,25]&gt; &lt;tbl_df [1,7]&gt;
+## 10 aa_ac_04_025.yr1 aa_ac_04_025      F &lt;tbl_df [356,25]&gt; &lt;tbl_df [1,7]&gt;
+## ..              ...          ...    ...               ...            ...</code></pre>
+<p><br></p>
+<p>Continuing along, we now need to take each MooseYrID trajectory, obtain the subset of points that corresponds to the spring and fall migrations, and discard the rest. This is based on the migration parameters obtained for each animal earlier (xmidA and xmidB represent the midpoints, and scale1 and scale2 relate to the duration).</p>
+<p>Since this needs to by applied separately for each trajectory based on the individual parameters, we first define a general function that carries out this subsetting. Then we can call it on each separate trajectory.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Define function that identifies migratory portions given location</span>
+<span class="co"># points (df) for one animal/year, migration paramaters for that</span>
+<span class="co"># animal/year (p), and a season (either &quot;spring&quot; or &quot;fall&quot;)</span>
+get_mig &lt;-<span class="st"> </span>function(df, p, season) {
+
+  if (season ==<span class="st"> &quot;spring&quot;</span>) {
+    m_mid &lt;-<span class="st"> </span>p$xmidA
+    m_scale &lt;-<span class="st"> </span>p$scale1
+  }
+  else if (season ==<span class="st"> &quot;fall&quot;</span>) {
+    m_mid &lt;-<span class="st"> </span>p$xmidB
+    m_scale &lt;-<span class="st"> </span>p$scale2
+  }
+
+  <span class="co"># Round start and end points to the nearest whole day</span>
+  m_start &lt;-<span class="st"> </span><span class="kw">round</span>(m_mid -<span class="st"> </span>(<span class="dv">2</span> *<span class="st"> </span>m_scale), <span class="dv">0</span>)
+  m_end &lt;-<span class="st"> </span><span class="kw">round</span>(m_mid +<span class="st"> </span>(<span class="dv">2</span> *<span class="st"> </span>m_scale), <span class="dv">0</span>)
+
+  <span class="co"># Subset the data</span>
+  res &lt;-<span class="st"> </span><span class="kw">filter</span>(df, nDaysYr &gt;=<span class="st"> </span>m_start &amp;<span class="st"> </span>nDaysYr &lt;=<span class="st"> </span>m_end)
+
+  <span class="kw">return</span>(res)
+
+}
+
+<span class="co"># Apply this function to the data for both spring and fall</span>
+migs &lt;-<span class="st"> </span>by_id %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">spring_mig =</span> purrr::<span class="kw">map2</span>(data, params, ~<span class="st"> </span><span class="kw">get_mig</span>(.x, .y, <span class="st">&quot;spring&quot;</span>)),
+         <span class="dt">fall_mig =</span> purrr::<span class="kw">map2</span>(data, params, ~<span class="st"> </span><span class="kw">get_mig</span>(.x, .y, <span class="st">&quot;fall&quot;</span>)))
+
+<span class="co"># Spring migrations</span>
+spring &lt;-<span class="st"> </span>migs %&gt;%
+<span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span>:<span class="dv">4</span>, spring_mig) %&gt;%
+<span class="st">  </span><span class="kw">unnest</span>()
+
+<span class="co"># Fall migrations</span>
+fall &lt;-<span class="st"> </span>migs %&gt;%
+<span class="st">  </span><span class="kw">select</span>(<span class="dv">1</span>:<span class="dv">4</span>, fall_mig) %&gt;%
+<span class="st">  </span><span class="kw">unnest</span>()
+
+<span class="co"># Convert migration paths to ltraj objects</span>
+spring_l &lt;-<span class="st"> </span>spring %&gt;%
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">id =</span> MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">droplevels</span>() %&gt;%
+<span class="st">  </span><span class="kw">as.data.frame</span>() %&gt;%
+<span class="st">  </span><span class="kw">dl</span>()
+
+fall_l &lt;-<span class="st"> </span>fall %&gt;%
+<span class="st">  </span><span class="kw">rename</span>(<span class="dt">id =</span> MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">droplevels</span>() %&gt;%
+<span class="st">  </span><span class="kw">as.data.frame</span>() %&gt;%
+<span class="st">  </span><span class="kw">dl</span>()</code></pre></div>
+<p><br></p>
+</div>
+<div id="path-similarity-measures" class="section level1">
+<h1>Path similarity measures</h1>
+<div id="calculate-similarities" class="section level2">
+<h2>Calculate similarities</h2>
+<p>This is the main section that calculates pairwise path similarity for every combination of migration paths. I use two different measures of path similarity: Frechet Distance and Hausdorff’s Distance.</p>
+<p>If you’re attempting to run this code, be aware that <em>it takes an extremely long time to run!</em> With ~151 separate paths for each migration phase, there are <code>choose(151, 2) =</code> 1.132510^{4} unique pairwise combinations for which the distance needs to be calculated, for each different similarity index. On my Macbook pro, this took about 26 hours for the Spring migration and another 26 hours for the Fall migration. The main bottleneck is the Frechet Distance; the Hausdorff Distance is much easier to calculate and only takes a few minutes.</p>
+<p><strong>Proceed with caution!!!!</strong></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Center the spring migrations by subtracting the starting conditions</span>
+<span class="co"># Each animal starts at (x, y) = (0, 0) on day 1</span>
+spring_centered &lt;-<span class="st"> </span>spring %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">x =</span> x -<span class="st"> </span><span class="kw">first</span>(x),
+         <span class="dt">y =</span> y -<span class="st"> </span><span class="kw">first</span>(y),
+         <span class="dt">nDaysYr =</span> nDaysYr -<span class="st"> </span><span class="kw">first</span>(nDaysYr) +<span class="st"> </span><span class="dv">1</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">id =</span> MooseYrID, burst, date, x, y, nDaysYr) %&gt;%
+<span class="st">  </span><span class="kw">droplevels</span>()
+
+fall_centered &lt;-<span class="st"> </span>fall %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">x =</span> x -<span class="st"> </span><span class="kw">first</span>(x),
+         <span class="dt">y =</span> y -<span class="st"> </span><span class="kw">first</span>(y),
+         <span class="dt">nDaysYr =</span> nDaysYr -<span class="st"> </span><span class="kw">first</span>(nDaysYr) +<span class="st"> </span><span class="dv">1</span>) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">id =</span> MooseYrID, burst, date, x, y, nDaysYr) %&gt;%
+<span class="st">  </span><span class="kw">droplevels</span>()
+
+<span class="co"># Convert to ltraj</span>
+spring_centered_l &lt;-<span class="st"> </span><span class="kw">dl</span>(spring_centered)
+fall_centered_l &lt;-<span class="st"> </span><span class="kw">dl</span>(fall_centered)
+
+<span class="co"># Wrapper for Frechet distance function that accepts ltraj objects</span>
+<span class="co"># Returns 2-D (x, y) or 3-D (x, y, time) Frechet distance</span>
+<span class="co"># Rounded to nearest kilometer for simplicity</span>
+get_frechet &lt;-<span class="st"> </span>function(l1, l2, <span class="dt">use_time =</span> <span class="ot">TRUE</span>) {
+
+  temp1 &lt;-<span class="st"> </span><span class="kw">ld</span>(l1)
+  temp2 &lt;-<span class="st"> </span><span class="kw">ld</span>(l2)
+
+  if (use_time) {
+    temp1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(temp1[, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)] /<span class="st"> </span><span class="dv">1000</span>, temp1[, <span class="st">&quot;nDaysYr&quot;</span>])
+    temp2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(temp2[, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)] /<span class="st"> </span><span class="dv">1000</span>, temp2[, <span class="st">&quot;nDaysYr&quot;</span>])
+  }
+  else {
+    temp1 &lt;-<span class="st"> </span><span class="kw">cbind</span>(temp1[, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)] /<span class="st"> </span><span class="dv">1000</span>)
+    temp2 &lt;-<span class="st"> </span><span class="kw">cbind</span>(temp2[, <span class="kw">c</span>(<span class="st">&quot;x&quot;</span>, <span class="st">&quot;y&quot;</span>)] /<span class="st"> </span><span class="dv">1000</span>)
+  }
+
+  temp1 &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(temp1)
+  temp2 &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(temp2)
+
+  res &lt;-<span class="st"> </span>SimilarityMeasures::<span class="kw">Frechet</span>(temp1, temp2)
+
+  <span class="kw">return</span>(res)
+
+}
+
+<span class="co"># Wrapper for Hausdorff distance function that accepts ltraj objects</span>
+<span class="co"># Returns 2-D (x, y) Hausdorff distance (i.e., ignores time)</span>
+<span class="co"># Rounded to nearest kilometer for simplicity</span>
+get_hausdorff &lt;-<span class="st"> </span>function(l1, l2) {
+
+  temp1 &lt;-<span class="st"> </span><span class="kw">ltraj2sldf</span>(l1)
+  temp2 &lt;-<span class="st"> </span><span class="kw">ltraj2sldf</span>(l2)
+
+  res &lt;-<span class="st"> </span>rgeos::<span class="kw">gDistance</span>(temp1, temp2, <span class="dt">hausdorff =</span> <span class="ot">TRUE</span>) /<span class="st"> </span><span class="dv">1000</span>
+
+  <span class="kw">return</span>(res)
+
+}
+
+<span class="co"># Wrapper for a Euclidean distance function that accepts ltraj objects</span>
+<span class="co"># Returns straight-line distance between last points</span>
+<span class="co"># Rounded to nearest kilometer for simplicity</span>
+get_endpoint_dist &lt;-<span class="st"> </span>function(l1, l2) {
+
+  temp1 &lt;-<span class="st"> </span><span class="kw">ld</span>(l1)
+  temp2 &lt;-<span class="st"> </span><span class="kw">ld</span>(l2)
+
+  temp1 &lt;-<span class="st"> </span>temp1[<span class="kw">nrow</span>(temp1), ]
+  temp2 &lt;-<span class="st"> </span>temp2[<span class="kw">nrow</span>(temp2), ]
+
+  res &lt;-<span class="st"> </span><span class="kw">sqrt</span>((temp1$y -<span class="st"> </span>temp2$y) ^<span class="st"> </span><span class="dv">2</span> +<span class="st"> </span>(temp1$x -<span class="st"> </span>temp2$x) ^<span class="st"> </span><span class="dv">2</span>) /<span class="st"> </span><span class="dv">1000</span>
+
+  <span class="kw">return</span>(res)
+
+}
+
+<span class="co"># Wrapper for a date difference function that accepts ltraj objects</span>
+<span class="co"># Returns time difference (in days) of either duration or start data of first and second tracks</span>
+<span class="co"># Rounded to nearest day</span>
+get_time_dist &lt;-<span class="st"> </span>function(l1, l2, <span class="dt">d =</span> <span class="ot">NULL</span>) {
+
+  if (<span class="kw">is.null</span>(d) |<span class="st"> </span>d %ni%<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;duration&quot;</span>, <span class="st">&quot;start&quot;</span>)) {
+    <span class="kw">stop</span>(<span class="st">&quot;Argument &#39;d&#39; must be either &#39;duration&#39; or &#39;start&#39;&quot;</span>)
+  }
+
+  temp1_s &lt;-<span class="st"> </span><span class="kw">summary</span>(l1)$date.begin
+  temp1_e &lt;-<span class="st"> </span><span class="kw">summary</span>(l1)$date.end
+
+  temp2_s &lt;-<span class="st"> </span><span class="kw">summary</span>(l2)$date.begin
+  temp2_e &lt;-<span class="st"> </span><span class="kw">summary</span>(l2)$date.end
+
+  if (d ==<span class="st"> &quot;duration&quot;</span>) {
+    temp1 &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">difftime</span>(temp1_e, temp1_s, <span class="dt">units =</span> <span class="st">&quot;days&quot;</span>))
+    temp2 &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(<span class="kw">difftime</span>(temp2_e, temp2_s, <span class="dt">units =</span> <span class="st">&quot;days&quot;</span>))
+    res &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">abs</span>(temp1 -<span class="st"> </span>temp2), <span class="dv">0</span>)
+  }
+  else if (d ==<span class="st"> &quot;start&quot;</span>) {
+    temp &lt;-<span class="st"> </span><span class="kw">yday</span>(temp1_s) -<span class="st"> </span><span class="kw">yday</span>(temp2_s)
+    res &lt;-<span class="st"> </span><span class="kw">round</span>(<span class="kw">abs</span>(temp), <span class="dv">0</span>)
+  }
+  else {
+    <span class="kw">stop</span>(<span class="st">&quot;Error!&quot;</span>)
+  }
+
+  <span class="kw">return</span>(res)
+
+}
+
+
+<span class="co"># Distances for spring migration</span>
+<span class="co"># Create empty matrices to hold Frechet distance results</span>
+len &lt;-<span class="st"> </span><span class="kw">length</span>(spring_l)
+
+<span class="co"># Frechet distances</span>
+frechet_mat_spring_ut &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+frechet_mat_spring_un &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+frechet_mat_spring_ct &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+frechet_mat_spring_cn &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+
+<span class="co">#Hausdorff distances</span>
+haus_mat_spring_un &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+haus_mat_spring_cn &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+
+<span class="co"># Endpoint distances</span>
+endpoint_mat_spring_u &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+endpoint_mat_spring_c &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+
+<span class="co"># Duration differencs</span>
+duration_mat_spring &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+
+<span class="co"># Start date differences</span>
+start_mat_spring &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+
+<span class="co"># Set up a progress bar</span>
+pb &lt;-<span class="st"> </span><span class="kw">txtProgressBar</span>(<span class="dt">min =</span> <span class="dv">0</span>, <span class="dt">max =</span> <span class="kw">choose</span>(len, <span class="dv">2</span>), <span class="dt">style =</span> <span class="dv">3</span>)
+n &lt;-<span class="st"> </span><span class="dv">1</span>
+
+<span class="co"># Set up a timer</span>
+ptm &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+
+<span class="co"># Warning: takes a *really* long time, ~26 hours!</span>
+for (i in <span class="dv">1</span>:(len -<span class="st"> </span><span class="dv">1</span>)) {
+  for (j in (i +<span class="st"> </span><span class="dv">1</span>):len) {
+    <span class="co"># Frechet non-centered</span>
+    frechet_mat_spring_ut[j, i] &lt;-<span class="st"> </span><span class="kw">get_frechet</span>(spring_l[i], spring_l[j], <span class="dt">use_time =</span> <span class="ot">TRUE</span>)
+    frechet_mat_spring_un[j, i] &lt;-<span class="st"> </span><span class="kw">get_frechet</span>(spring_l[i], spring_l[j], <span class="dt">use_time =</span> <span class="ot">FALSE</span>)
+
+    <span class="co"># Frechet centered</span>
+    frechet_mat_spring_ct[j, i] &lt;-<span class="st"> </span><span class="kw">get_frechet</span>(spring_centered_l[i], spring_centered_l[j], <span class="dt">use_time =</span> <span class="ot">TRUE</span>)
+    frechet_mat_spring_cn[j, i] &lt;-<span class="st"> </span><span class="kw">get_frechet</span>(spring_centered_l[i], spring_centered_l[j], <span class="dt">use_time =</span> <span class="ot">FALSE</span>)
+
+    <span class="co"># Hausdorff uncentered and centered</span>
+    haus_mat_spring_un[j, i] &lt;-<span class="st"> </span><span class="kw">get_hausdorff</span>(spring_l[i], spring_l[j])
+    haus_mat_spring_cn[j, i] &lt;-<span class="st"> </span><span class="kw">get_hausdorff</span>(spring_centered_l[i], spring_centered_l[j])
+
+    <span class="co"># Endpoints uncentered and centered</span>
+    endpoint_mat_spring_u[j, i] &lt;-<span class="st"> </span><span class="kw">get_endpoint_dist</span>(spring_l[i], spring_l[j])
+    endpoint_mat_spring_c[j, i] &lt;-<span class="st"> </span><span class="kw">get_endpoint_dist</span>(spring_centered_l[i], spring_centered_l[j])
+
+    <span class="co"># Duration differences</span>
+    duration_mat_spring[j, i] &lt;-<span class="st"> </span><span class="kw">get_time_dist</span>(spring_l[i], spring_l[j], <span class="st">&quot;duration&quot;</span>)
+
+    <span class="co"># Start date differences</span>
+    start_mat_spring[j, i] &lt;-<span class="st"> </span><span class="kw">get_time_dist</span>(spring_l[i], spring_l[j], <span class="st">&quot;start&quot;</span>)
+
+    <span class="co"># n is a counter that updates the progress bar</span>
+    n &lt;-<span class="st"> </span>n +<span class="st"> </span><span class="dv">1</span>
+    <span class="kw">setTxtProgressBar</span>(pb, n)
+  }
+}
+
+<span class="co"># Evaluate timer and close progress bar</span>
+dur &lt;-<span class="st"> </span><span class="kw">proc.time</span>() -<span class="st"> </span>ptm
+<span class="kw">close</span>(pb)
+
+<span class="co"># Set matrix column names</span>
+s_names &lt;-<span class="st"> </span><span class="kw">summary</span>(spring_l)$id
+<span class="kw">rownames</span>(frechet_mat_spring_ut) &lt;-<span class="st"> </span><span class="kw">colnames</span>(frechet_mat_spring_ut) &lt;-<span class="st"> </span>s_names
+<span class="kw">rownames</span>(frechet_mat_spring_un) &lt;-<span class="st"> </span><span class="kw">colnames</span>(frechet_mat_spring_un) &lt;-<span class="st"> </span>s_names
+<span class="kw">rownames</span>(frechet_mat_spring_ct) &lt;-<span class="st"> </span><span class="kw">colnames</span>(frechet_mat_spring_ct) &lt;-<span class="st"> </span>s_names
+<span class="kw">rownames</span>(frechet_mat_spring_cn) &lt;-<span class="st"> </span><span class="kw">colnames</span>(frechet_mat_spring_cn) &lt;-<span class="st"> </span>s_names
+<span class="kw">rownames</span>(haus_mat_spring_un) &lt;-<span class="st"> </span><span class="kw">colnames</span>(haus_mat_spring_un) &lt;-<span class="st"> </span>s_names
+<span class="kw">rownames</span>(haus_mat_spring_cn) &lt;-<span class="st"> </span><span class="kw">colnames</span>(haus_mat_spring_cn) &lt;-<span class="st"> </span>s_names
+<span class="kw">rownames</span>(endpoint_mat_spring_u) &lt;-<span class="st"> </span><span class="kw">colnames</span>(endpoint_mat_spring_u) &lt;-<span class="st"> </span>s_names
+<span class="kw">rownames</span>(endpoint_mat_spring_c) &lt;-<span class="st"> </span><span class="kw">colnames</span>(endpoint_mat_spring_c) &lt;-<span class="st"> </span>s_names
+<span class="kw">rownames</span>(duration_mat_spring) &lt;-<span class="st"> </span><span class="kw">colnames</span>(duration_mat_spring) &lt;-<span class="st"> </span>s_names
+<span class="kw">rownames</span>(start_mat_spring) &lt;-<span class="st"> </span><span class="kw">colnames</span>(start_mat_spring) &lt;-<span class="st"> </span>s_names
+
+
+
+<span class="co"># Distances for fall migration</span>
+<span class="co"># Create empty matrices to hold Frechet distance results</span>
+len &lt;-<span class="st"> </span><span class="kw">length</span>(fall_l)
+frechet_mat_fall_ut &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+frechet_mat_fall_un &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+frechet_mat_fall_ct &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+frechet_mat_fall_cn &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+haus_mat_fall_un &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+haus_mat_fall_cn &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+endpoint_mat_fall_u &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+endpoint_mat_fall_c &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+duration_mat_fall &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+start_mat_fall &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dt">nrow =</span> len, <span class="dt">ncol =</span> len)
+
+<span class="co"># Set up a progress bar</span>
+pb &lt;-<span class="st"> </span><span class="kw">txtProgressBar</span>(<span class="dt">min =</span> <span class="dv">0</span>, <span class="dt">max =</span> <span class="kw">choose</span>(len, <span class="dv">2</span>), <span class="dt">style =</span> <span class="dv">3</span>)
+n &lt;-<span class="st"> </span><span class="dv">1</span>
+
+<span class="co"># Set up a timer</span>
+ptm &lt;-<span class="st"> </span><span class="kw">proc.time</span>()
+
+<span class="co"># Warning: takes a *really* long time, ~26 hours!</span>
+for (i in <span class="dv">1</span>:(len -<span class="st"> </span><span class="dv">1</span>)) {
+  for (j in (i +<span class="st"> </span><span class="dv">1</span>):len) {
+    <span class="co"># Non-centered</span>
+    frechet_mat_fall_ut[j, i] &lt;-<span class="st"> </span><span class="kw">get_frechet</span>(fall_l[i], fall_l[j], <span class="dt">use_time =</span> <span class="ot">TRUE</span>)
+    frechet_mat_fall_un[j, i] &lt;-<span class="st"> </span><span class="kw">get_frechet</span>(fall_l[i], fall_l[j], <span class="dt">use_time =</span> <span class="ot">FALSE</span>)
+
+    <span class="co"># Centered</span>
+    frechet_mat_fall_ct[j, i] &lt;-<span class="st"> </span><span class="kw">get_frechet</span>(fall_centered_l[i], fall_centered_l[j], <span class="dt">use_time =</span> <span class="ot">TRUE</span>)
+    frechet_mat_fall_cn[j, i] &lt;-<span class="st"> </span><span class="kw">get_frechet</span>(fall_centered_l[i], fall_centered_l[j], <span class="dt">use_time =</span> <span class="ot">FALSE</span>)
+
+    <span class="co"># Hausdorff uncentered and centered</span>
+    haus_mat_fall_un[j, i] &lt;-<span class="st"> </span><span class="kw">get_hausdorff</span>(fall_l[i], fall_l[j])
+    haus_mat_fall_cn[j, i] &lt;-<span class="st"> </span><span class="kw">get_hausdorff</span>(fall_centered_l[i], fall_centered_l[j])
+
+    <span class="co"># Endpoints uncentered and centered</span>
+    endpoint_mat_fall_u[j, i] &lt;-<span class="st"> </span><span class="kw">get_endpoint_dist</span>(fall_l[i], fall_l[j])
+    endpoint_mat_fall_c[j, i] &lt;-<span class="st"> </span><span class="kw">get_endpoint_dist</span>(fall_centered_l[i], fall_centered_l[j])
+
+    <span class="co"># Duration differences</span>
+    duration_mat_fall[j, i] &lt;-<span class="st"> </span><span class="kw">get_time_dist</span>(fall_l[i], fall_l[j], <span class="st">&quot;duration&quot;</span>)
+
+    <span class="co"># Start date differences</span>
+    start_mat_fall[j, i] &lt;-<span class="st"> </span><span class="kw">get_time_dist</span>(fall_l[i], fall_l[j], <span class="st">&quot;start&quot;</span>)
+
+    <span class="co"># n is a counter that updates the progress bar</span>
+    n &lt;-<span class="st"> </span>n +<span class="st"> </span><span class="dv">1</span>
+    <span class="kw">setTxtProgressBar</span>(pb, n)
+  }
+}
+
+<span class="co"># Evaluate timer and close progress bar</span>
+dur &lt;-<span class="st"> </span><span class="kw">proc.time</span>() -<span class="st"> </span>ptm
+<span class="kw">close</span>(pb)
+
+<span class="co"># Set matrix column names</span>
+f_names &lt;-<span class="st"> </span><span class="kw">summary</span>(fall_l)$id
+<span class="kw">rownames</span>(frechet_mat_fall_ut) &lt;-<span class="st"> </span><span class="kw">colnames</span>(frechet_mat_fall_ut) &lt;-<span class="st"> </span>f_names
+<span class="kw">rownames</span>(frechet_mat_fall_un) &lt;-<span class="st"> </span><span class="kw">colnames</span>(frechet_mat_fall_un) &lt;-<span class="st"> </span>f_names
+<span class="kw">rownames</span>(frechet_mat_fall_ct) &lt;-<span class="st"> </span><span class="kw">colnames</span>(frechet_mat_fall_ct) &lt;-<span class="st"> </span>f_names
+<span class="kw">rownames</span>(frechet_mat_fall_cn) &lt;-<span class="st"> </span><span class="kw">colnames</span>(frechet_mat_fall_cn) &lt;-<span class="st"> </span>f_names
+<span class="kw">rownames</span>(haus_mat_fall_un) &lt;-<span class="st"> </span><span class="kw">colnames</span>(haus_mat_fall_un) &lt;-<span class="st"> </span>f_names
+<span class="kw">rownames</span>(haus_mat_fall_cn) &lt;-<span class="st"> </span><span class="kw">colnames</span>(haus_mat_fall_cn) &lt;-<span class="st"> </span>f_names
+<span class="kw">rownames</span>(endpoint_mat_fall_u) &lt;-<span class="st"> </span><span class="kw">colnames</span>(endpoint_mat_fall_u) &lt;-<span class="st"> </span>f_names
+<span class="kw">rownames</span>(endpoint_mat_fall_c) &lt;-<span class="st"> </span><span class="kw">colnames</span>(endpoint_mat_fall_c) &lt;-<span class="st"> </span>f_names
+<span class="kw">rownames</span>(duration_mat_fall) &lt;-<span class="st"> </span><span class="kw">colnames</span>(duration_mat_fall) &lt;-<span class="st"> </span>f_names
+<span class="kw">rownames</span>(start_mat_fall) &lt;-<span class="st"> </span><span class="kw">colnames</span>(start_mat_fall) &lt;-<span class="st"> </span>f_names</code></pre></div>
+<p><br></p>
+</div>
+<div id="put-distances-together" class="section level2">
+<h2>Put distances together</h2>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">moose_yrs &lt;-<span class="st"> </span>moose_annual %&gt;%
+<span class="st">  </span><span class="kw">summary</span>() %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year_of =</span> <span class="kw">year</span>(date.begin)) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(id, year_of) %&gt;%
+<span class="st">  </span><span class="kw">tbl_df</span>()
+
+moose_yrs$id &lt;-<span class="st"> </span><span class="kw">as.character</span>(moose_yrs$id)
+
+<span class="co"># Function that transforms a diagonal distance matrix into a tidy data frame</span>
+trans_mat &lt;-<span class="st"> </span>function(mat, season, c_label, t_label) {
+
+  <span class="co"># Convert the diagonal matrix to a dist object</span>
+  temp &lt;-<span class="st"> </span><span class="kw">as.dist</span>(mat)
+
+  <span class="co"># Converting back to matrix fills in same-track cells with 0 distance and</span>
+  <span class="co"># fills out the upper diagonal with the corresponding symmetrical values</span>
+  temp &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(temp)
+  temp[<span class="kw">which</span>(temp ==<span class="st"> </span>-<span class="dv">1</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span>
+
+  <span class="co"># Convert to data frame and create new column to hold id of focal track</span>
+  temp &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(temp)
+  temp$id &lt;-<span class="st"> </span><span class="kw">rownames</span>(mat)
+
+  <span class="co"># Gather to a tidy tbl_df. Dyad id is now called &quot;other_id&quot;</span>
+  temp &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(<span class="kw">gather</span>(temp, other_id, f_dist, -id))
+
+  <span class="co"># These are set based on the arguments supplied to the function call</span>
+  temp$season &lt;-<span class="st"> </span>season
+  temp$c_label &lt;-<span class="st"> </span>c_label
+  temp$t_label &lt;-<span class="st"> </span>t_label
+
+  <span class="co"># Determine if each dyad is the same animal in different years or</span>
+  <span class="co"># different animals entirely (based on name)</span>
+  temp &lt;-<span class="st"> </span>temp %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">animal1 =</span> <span class="kw">str_sub</span>(id, <span class="dv">1</span>, -<span class="dv">5</span>),
+           <span class="dt">animal2 =</span> <span class="kw">str_sub</span>(other_id, <span class="dv">1</span>, -<span class="dv">5</span>),
+           <span class="dt">status =</span> <span class="kw">ifelse</span>(animal1 ==<span class="st"> </span>animal2, <span class="st">&quot;Same&quot;</span>, <span class="st">&quot;Different&quot;</span>)) %&gt;%
+<span class="st">    </span><span class="kw">filter</span>(id !=<span class="st"> </span>other_id)
+
+  <span class="co"># Determine if each dyad is the same year of different year</span>
+  temp &lt;-<span class="st"> </span>temp %&gt;%
+<span class="st">    </span><span class="kw">inner_join</span>(<span class="kw">select</span>(moose_yrs, id, <span class="dt">id_year =</span> year_of), <span class="dt">by =</span> <span class="st">&quot;id&quot;</span>) %&gt;%
+<span class="st">    </span><span class="kw">inner_join</span>(<span class="kw">select</span>(moose_yrs, <span class="dt">other_id =</span> id, <span class="dt">other_year =</span> year_of), <span class="dt">by =</span> <span class="st">&quot;other_id&quot;</span>) %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">y_status =</span> <span class="kw">ifelse</span>(id_year ==<span class="st"> </span>other_year, <span class="st">&quot;Same&quot;</span>, <span class="st">&quot;Different&quot;</span>)) %&gt;%
+<span class="st">    </span><span class="kw">select</span>(-id_year, -other_year)
+
+  <span class="kw">return</span>(temp)
+
+}
+
+<span class="co"># Put all the distance matrices together</span>
+mat_list &lt;-<span class="st"> </span><span class="kw">list</span>(frechet_mat_spring_ut, frechet_mat_spring_un, frechet_mat_spring_ct, frechet_mat_spring_cn,
+             frechet_mat_fall_ut, frechet_mat_fall_un, frechet_mat_fall_ct, frechet_mat_fall_cn)
+season &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Spring&quot;</span>, <span class="st">&quot;Fall&quot;</span>), <span class="dt">each =</span> <span class="dv">4</span>)
+c_label &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Uncentered&quot;</span>, <span class="st">&quot;Centered&quot;</span>), <span class="dt">times =</span> <span class="dv">2</span>, <span class="dt">each =</span> <span class="dv">2</span>)
+t_label &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;With Timing&quot;</span>, <span class="st">&quot;Path Only&quot;</span>), <span class="dt">times =</span> <span class="dv">4</span>)
+
+<span class="co"># Apply the function to each element of mat_list with the appropriate arguments</span>
+dist_df &lt;-<span class="st"> </span><span class="kw">list</span>()
+
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(mat_list)) {
+  dist_df[[i]] &lt;-<span class="st"> </span><span class="kw">trans_mat</span>(mat_list[[i]], season[i], c_label[i], t_label[i])
+}
+
+<span class="co"># Bind it all together</span>
+dist_df &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(dist_df)
+dist_df$var &lt;-<span class="st"> &quot;Frechet&quot;</span>
+
+
+<span class="co"># Do same for Hausdorff distances</span>
+hmat_list &lt;-<span class="st"> </span><span class="kw">list</span>(haus_mat_spring_un, haus_mat_spring_cn, haus_mat_fall_un,
+                  haus_mat_fall_cn)
+season &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Spring&quot;</span>, <span class="st">&quot;Fall&quot;</span>), <span class="dt">each =</span> <span class="dv">2</span>)
+c_label &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Uncentered&quot;</span>, <span class="st">&quot;Centered&quot;</span>), <span class="dt">times =</span> <span class="dv">2</span>)
+t_label &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="st">&quot;Path Only&quot;</span>, <span class="dt">times =</span> <span class="dv">4</span>)
+
+<span class="co"># Apply the function to each element of mat_list with the appropriate arguments</span>
+h_dist_df &lt;-<span class="st"> </span><span class="kw">list</span>()
+
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(hmat_list)) {
+  h_dist_df[[i]] &lt;-<span class="st"> </span><span class="kw">trans_mat</span>(hmat_list[[i]], season[i], c_label[i], t_label[i])
+}
+
+<span class="co"># Bind it all together</span>
+h_dist_df &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(h_dist_df)
+h_dist_df$var &lt;-<span class="st"> &quot;Hausdorff&quot;</span>
+
+
+<span class="co"># Do same for endpoint distances</span>
+emat_list &lt;-<span class="st"> </span><span class="kw">list</span>(endpoint_mat_spring_u, endpoint_mat_spring_c, endpoint_mat_fall_u,
+                  endpoint_mat_fall_c)
+season &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Spring&quot;</span>, <span class="st">&quot;Fall&quot;</span>), <span class="dt">each =</span> <span class="dv">2</span>)
+c_label &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Uncentered&quot;</span>, <span class="st">&quot;Centered&quot;</span>), <span class="dt">times =</span> <span class="dv">2</span>)
+t_label &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="st">&quot;Path Only&quot;</span>, <span class="dt">times =</span> <span class="dv">4</span>)
+
+<span class="co"># Apply the function to each element of mat_list with the appropriate arguments</span>
+e_dist_df &lt;-<span class="st"> </span><span class="kw">list</span>()
+
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(emat_list)) {
+  e_dist_df[[i]] &lt;-<span class="st"> </span><span class="kw">trans_mat</span>(emat_list[[i]], season[i], c_label[i], t_label[i])
+}
+
+<span class="co"># Bind it all together</span>
+e_dist_df &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(e_dist_df)
+e_dist_df$var &lt;-<span class="st"> &quot;Endpoint&quot;</span>
+
+
+<span class="co"># Do same for date differences</span>
+dmat_list &lt;-<span class="st"> </span><span class="kw">list</span>(duration_mat_spring, start_mat_spring, duration_mat_fall,
+                  start_mat_fall)
+season &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Spring&quot;</span>, <span class="st">&quot;Fall&quot;</span>), <span class="dt">each =</span> <span class="dv">2</span>)
+c_label &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Uncentered&quot;</span>), <span class="dt">times =</span> <span class="dv">4</span>)
+t_label &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="st">&quot;Path Only&quot;</span>, <span class="dt">times =</span> <span class="dv">4</span>)
+dvar &lt;-<span class="st"> </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;Duration&quot;</span>, <span class="st">&quot;Start&quot;</span>), <span class="dt">times =</span> <span class="dv">2</span>)
+
+<span class="co"># Apply the function to each element of mat_list with the appropriate arguments</span>
+d_dist_df &lt;-<span class="st"> </span><span class="kw">list</span>()
+
+for (i in <span class="dv">1</span>:<span class="kw">length</span>(dmat_list)) {
+  d_dist_df[[i]] &lt;-<span class="st"> </span><span class="kw">trans_mat</span>(dmat_list[[i]], season[i], c_label[i], t_label[i])
+  d_dist_df[[i]]$var &lt;-<span class="st"> </span>dvar[i]
+}
+
+<span class="co"># Bind it all together</span>
+d_dist_df &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(d_dist_df)
+
+
+<span class="co"># Bind all distance dfs together</span>
+dist_df &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(dist_df, h_dist_df, e_dist_df, d_dist_df)
+
+<span class="kw">rm</span>(h_dist_df, e_dist_df, d_dist_df, mat_list, hmat_list, emat_list, dmat_list)</code></pre></div>
+<p><br></p>
+</div>
+</div>
+<div id="plot-distances" class="section level1">
+<h1>Plot distances</h1>
+<div id="heat-maps" class="section level2">
+<h2>Heat maps</h2>
+<p>First, we create a plotting function that can accept one of the raw matrices we created</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(gplots)
+
+heatmap_fc &lt;-<span class="st"> </span>function(m, <span class="dt">col =</span> <span class="kw">rev</span>(<span class="kw">magma</span>(<span class="dv">100</span>)), ...) {
+  m &lt;-<span class="st"> </span><span class="kw">as.dist</span>(m)
+  m &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(m)
+  m[<span class="kw">which</span>(m ==<span class="st"> </span>-<span class="dv">1</span>)] &lt;-<span class="st"> </span><span class="ot">NA</span>
+
+  <span class="kw">heatmap.2</span>(m, <span class="dt">trace =</span> <span class="st">&quot;none&quot;</span>,
+            <span class="dt">col =</span> col,
+            <span class="dt">labCol =</span> <span class="ot">FALSE</span>,
+            <span class="dt">na.col =</span> <span class="st">&quot;gray70&quot;</span>,
+            <span class="dt">dendrogram =</span> <span class="st">&quot;row&quot;</span>)
+}</code></pre></div>
+<p><br></p>
+<p>Pairwise Frechet distance Spring migration, uncentered, ignoring time</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap_fc</span>(frechet_mat_spring_un)</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/unnamed-chunk-5-1.png" /><!-- --></p>
+<p><br></p>
+<p>Pairwise Frechet distance Spring migration, centered, ignoring time</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap_fc</span>(frechet_mat_spring_cn)</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/unnamed-chunk-6-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+<div id="tracks-with-distances" class="section level2">
+<h2>Tracks with distances</h2>
+<p>Visualize the centering/non-centering and distances</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create a new data frame dist_tracks that has all the migration paths together</span>
+<span class="co"># with distances. Used for faceting in ggplot.</span>
+temp_s &lt;-<span class="st"> </span>spring %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">id =</span> MooseYrID, burst, date, x, y, nDaysYr) %&gt;%
+<span class="st">  </span><span class="kw">droplevels</span>() %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">season =</span> <span class="st">&quot;Spring&quot;</span>, <span class="dt">c_label =</span> <span class="st">&quot;Uncentered&quot;</span>)
+
+temp_f &lt;-<span class="st"> </span>fall %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(MooseYrID) %&gt;%
+<span class="st">  </span><span class="kw">select</span>(<span class="dt">id =</span> MooseYrID, burst, date, x, y, nDaysYr) %&gt;%
+<span class="st">  </span><span class="kw">droplevels</span>() %&gt;%
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">season =</span> <span class="st">&quot;Fall&quot;</span>, <span class="dt">c_label =</span> <span class="st">&quot;Uncentered&quot;</span>)
+
+dist_tracks &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(temp_s, temp_f,
+                         <span class="kw">mutate</span>(spring_centered, <span class="dt">season =</span> <span class="st">&quot;Spring&quot;</span>,
+                                <span class="dt">c_label =</span> <span class="st">&quot;Centered&quot;</span>),
+                         <span class="kw">mutate</span>(fall_centered, <span class="dt">season =</span> <span class="st">&quot;Fall&quot;</span>,
+                                <span class="dt">c_label =</span> <span class="st">&quot;Centered&quot;</span>))
+<span class="kw">rm</span>(temp_s, temp_f)
+dist_tracks$animal &lt;-<span class="st"> </span><span class="kw">str_sub</span>(dist_tracks$id, <span class="dv">1</span>, -<span class="dv">5</span>)
+
+<span class="co"># Custom plotting function</span>
+dist_track_plot &lt;-<span class="st"> </span>function(myid, myseason, <span class="dt">t_filter =</span> <span class="ot">NULL</span>, <span class="dt">c_filter =</span> <span class="ot">NULL</span>, <span class="dt">index =</span> <span class="st">&quot;Frechet&quot;</span>) {
+
+  f_track &lt;-<span class="st"> </span><span class="kw">filter</span>(dist_tracks, id ==<span class="st"> </span>myid, season ==<span class="st"> </span>myseason)
+  f_track &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(<span class="kw">mutate</span>(f_track, <span class="dt">t_label =</span> <span class="st">&quot;With Timing&quot;</span>),
+                       <span class="kw">mutate</span>(f_track, <span class="dt">t_label =</span> <span class="st">&quot;Path Only&quot;</span>))
+  f_animal &lt;-<span class="st"> </span><span class="kw">str_sub</span>(myid, <span class="dv">1</span>, -<span class="dv">5</span>)
+
+  if (index ==<span class="st"> &quot;Frechet&quot;</span>) {
+    temp &lt;-<span class="st"> </span><span class="kw">filter</span>(dist_df, var ==<span class="st"> &quot;Frechet&quot;</span> &amp;<span class="st"> </span>id ==<span class="st"> </span>myid &amp;<span class="st"> </span>season ==<span class="st"> </span>myseason)
+  }
+  else if (index ==<span class="st"> &quot;Hausdorff&quot;</span>) {
+    temp &lt;-<span class="st"> </span><span class="kw">filter</span>(dist_df, var ==<span class="st"> &quot;Hausdorff&quot;</span> &amp;<span class="st"> </span>id ==<span class="st"> </span>myid &amp;<span class="st"> </span>season ==<span class="st"> </span>myseason)
+  }
+  else{
+    break(<span class="st">&quot;Error!&quot;</span>)
+  }
+
+  s_tracks &lt;-<span class="st"> </span><span class="kw">filter</span>(dist_tracks, animal ==<span class="st"> </span>f_animal &amp;<span class="st"> </span>season ==<span class="st"> </span>myseason)
+  s_tracks &lt;-<span class="st"> </span><span class="kw">inner_join</span>(<span class="kw">select</span>(temp, <span class="dt">id =</span> other_id, f_dist, season, c_label, t_label),
+                         s_tracks, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;season&quot;</span>, <span class="st">&quot;c_label&quot;</span>))
+
+  o_tracks &lt;-<span class="st"> </span><span class="kw">inner_join</span>(<span class="kw">select</span>(temp, <span class="dt">id =</span> other_id, f_dist, season, c_label, t_label),
+                         <span class="kw">filter</span>(dist_tracks, animal !=<span class="st"> </span>f_animal &amp;<span class="st"> </span>season ==<span class="st"> </span>myseason),
+                         <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;id&quot;</span>, <span class="st">&quot;season&quot;</span>, <span class="st">&quot;c_label&quot;</span>))
+
+  if (!<span class="kw">is.null</span>(t_filter)) {
+    f_track &lt;-<span class="st"> </span><span class="kw">filter</span>(f_track, t_label ==<span class="st"> </span>t_filter)
+    s_tracks &lt;-<span class="st"> </span><span class="kw">filter</span>(s_tracks, t_label ==<span class="st"> </span>t_filter)
+    o_tracks &lt;-<span class="st"> </span><span class="kw">filter</span>(o_tracks, t_label ==<span class="st"> </span>t_filter)
+  }
+  if (!<span class="kw">is.null</span>(c_filter)) {
+    f_track &lt;-<span class="st"> </span><span class="kw">filter</span>(f_track, c_label ==<span class="st"> </span>c_filter)
+    s_tracks &lt;-<span class="st"> </span><span class="kw">filter</span>(s_tracks, c_label ==<span class="st"> </span>c_filter)
+    o_tracks &lt;-<span class="st"> </span><span class="kw">filter</span>(o_tracks, c_label ==<span class="st"> </span>c_filter)
+  }
+
+  <span class="kw">ggplot</span>() +
+<span class="st">    </span><span class="kw">geom_path</span>(<span class="dt">data =</span> o_tracks,
+              <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">group =</span> burst, <span class="dt">color =</span> f_dist),
+              <span class="dt">alpha =</span> <span class="fl">0.4</span>,
+              <span class="dt">size =</span> <span class="fl">0.25</span>) +
+<span class="st">    </span><span class="co"># geom_path(data = s_tracks,</span>
+<span class="st">    </span><span class="co">#           aes(x = x, y = y, group = burst, color = f_dist), size = 1) +</span>
+<span class="st">    </span><span class="kw">geom_path</span>(<span class="dt">data =</span> s_tracks,
+              <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">group =</span> burst), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="fl">0.25</span>) +
+<span class="st">    </span><span class="kw">geom_path</span>(<span class="dt">data =</span> f_track,
+              <span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> y, <span class="dt">group =</span> burst), <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">1</span>) +
+<span class="st">    </span><span class="kw">theme_fc</span>() +
+<span class="st">    </span><span class="kw">facet_wrap</span>(~t_label +<span class="st"> </span>c_label, <span class="dt">scales =</span> <span class="st">&quot;free&quot;</span>) +
+<span class="st">    </span><span class="kw">coord_equal</span>() +
+<span class="st">    </span><span class="kw">scale_colour_gradientn</span>(<span class="dt">colours =</span> <span class="kw">viridis</span>(<span class="dv">11</span>),
+                           <span class="dt">name =</span> <span class="kw">paste0</span>(index, <span class="st">&quot; Distance (km)&quot;</span>),
+                           <span class="dt">trans =</span> <span class="kw">sqrt_trans</span>()) +
+<span class="st">    </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>) +
+<span class="st">    </span><span class="kw">theme</span>(<span class="dt">axis.text =</span> <span class="kw">element_blank</span>(),
+          <span class="dt">axis.ticks =</span> <span class="kw">element_blank</span>(),
+          <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>())
+
+}</code></pre></div>
+<p><br></p>
+<p>Example plot: We look at the centered and uncentered distances to the spring migration path for YrMooseID <code>aa_ac_05_115.yr2</code>. This track is the thick red line. The same animal (<code>aa_ac_05_115</code>) has two other spring migrations: <code>aa_ac_05_115.yr3</code> and <code>aa_ac_05_115.yr3</code>. These are shown as thin red lines. All of the other spring migrations are shown with color shading that indicates the Frechet distance to the focal path, <code>aa_ac_05_115.yr2</code>. We can see the effect that centering has on the distance value. Centering reduces the influence of geographic separation on the distance calculation.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dist_track_plot</span>(<span class="dt">myid =</span> <span class="st">&quot;aa_ac_05_115.yr2&quot;</span>, <span class="dt">myseason =</span> <span class="st">&quot;Spring&quot;</span>,
+                <span class="dt">t_filter =</span> <span class="st">&quot;Path Only&quot;</span>)</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/unnamed-chunk-7-1.png" /><!-- --></p>
+<p><br></p>
+</div>
+</div>
+<div id="compare-frechet-distances" class="section level1">
+<h1>Compare Frechet distances</h1>
+<p>Now we begin to evaluate the hypothesis stated at the top of the page. Specifically, we expect the migration paths <em>of the same individual in different years</em> to be significantly more similar to each other (i.e., to have smaller Frechet distance) compared the paths of <em>different individuals</em>, regardless of year.</p>
+<p>One way to visualize this is to look at histograms of Frechet distance for same-individual path pairs vs. different-individual path pairs. Since there are vastly more different-individual dyads, we rescale these plots to show density rather than actual counts.</p>
+<p>From this point forward, I’m only going to consider 2-D Frechet distance, i.e., based on path geometry only and ignoring time. The reason for ignoring time is that we’re really only interested in the repeatability of the path and not the timing, which might vary from year to year due to weather conditions. Also, it’s not really obvious how the “distance” calculation should handle mixed units (kilometers for the x and y dimensions, days for the time dimension). The results for 3-D Frechet distance are qualitatively very similar to the 2-D results anyway, and likewise, the Hausdorff Distance gives similar results as well.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">filter</span>(dist_df, var ==<span class="st"> &quot;Frechet&quot;</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(f_dist) &amp;<span class="st"> </span>t_label ==<span class="st"> &quot;Path Only&quot;</span>),
+       <span class="kw">aes</span>(<span class="dt">x =</span> f_dist, <span class="dt">y =</span> ..density.., <span class="dt">fill =</span> status, <span class="dt">color =</span> status)) +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">binwidth =</span> <span class="dv">10</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>, <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_color_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Set2&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Dyad Type&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_fill_brewer</span>(<span class="dt">palette =</span> <span class="st">&quot;Set2&quot;</span>, <span class="dt">name =</span> <span class="st">&quot;Dyad Type&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>() +
+<span class="st">  </span><span class="kw">facet_grid</span>(season ~<span class="st"> </span>c_label) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Frechet Distance (km)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Density</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>))</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/frechet_distance_histogram-1.png" /><!-- --></p>
+<p>This plot cleary supports the idea that same-individual pairs tend to show greater path similarity than different-individual pairs.</p>
+<p><br></p>
+</div>
+<div id="permutation-test" class="section level1">
+<h1>Permutation test</h1>
+<p>We can use permutation methods to test the hypothesis that the migration paths of the same animal in different years show significantly greater similarity in terms of Frechet distance. The null hypothesis is that the observed mean similarity for same-animal paths is no different from random.</p>
+<p>First we create some functions for permuting the distances for a given “chunk”.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Permute status node labels</span>
+<span class="co"># Group by status and calculate median</span>
+resamp_dist &lt;-<span class="st"> </span>function(df) {
+
+  res &lt;-<span class="st"> </span>df %&gt;%
+<span class="st">    </span><span class="kw">mutate</span>(<span class="dt">status =</span> <span class="kw">sample</span>(status)) %&gt;%
+<span class="st">    </span><span class="kw">group_by</span>(status) %&gt;%
+<span class="st">    </span><span class="kw">summarise</span>(<span class="dt">mean_dist =</span> <span class="kw">mean</span>(f_dist, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) %&gt;%
+<span class="st">    </span><span class="kw">spread</span>(status, mean_dist)
+
+  <span class="kw">return</span>(res)
+}
+
+iterate_block &lt;-<span class="st"> </span>function(df, n) {
+
+  ids &lt;-<span class="st"> </span><span class="kw">unique</span>(df$id)
+
+  res &lt;-<span class="st"> </span><span class="kw">list</span>()
+  for (i in <span class="dv">1</span>:n) {
+    res[[i]] &lt;-<span class="st"> </span><span class="kw">resamp_dist</span>(df)
+  }
+
+  res &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(res)
+  <span class="kw">return</span>(res)
+}</code></pre></div>
+<p><br></p>
+<p>Then we calculate the observed mean for same-animal paths in different years.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">test_var &lt;-<span class="st"> &quot;Frechet&quot;</span>
+
+<span class="co"># Calculate observed median Frechet distance for same-animal</span>
+<span class="co"># and different-animal pairs</span>
+obs &lt;-<span class="st"> </span>dist_df %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(var ==<span class="st"> </span>test_var) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(season, c_label, t_label, status) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">mean_dist =</span> <span class="kw">mean</span>(f_dist, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)) %&gt;%
+<span class="st">  </span><span class="kw">spread</span>(status, mean_dist)</code></pre></div>
+<p><br> Next we carry out the permutation, compile the results, and summarize them for plotting.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Apply to permutation procedure to chunks (season, centering status, and time status)</span>
+resamp &lt;-<span class="st"> </span>dist_df %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(var ==<span class="st"> </span>test_var) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(season, c_label, t_label) %&gt;%
+<span class="st">  </span><span class="kw">do</span>(<span class="kw">iterate_block</span>(., <span class="dt">n =</span> <span class="dv">1000</span>))
+
+<span class="co"># Summarize the results (calculate median of permuted distances and 95% CI)</span>
+rand_sames &lt;-<span class="st"> </span>resamp %&gt;%
+<span class="st">  </span><span class="kw">gather</span>(status, mean_dist, -season, -c_label, -t_label) %&gt;%
+<span class="st">  </span><span class="kw">group_by</span>(season, c_label, t_label, status) %&gt;%
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">ci_high =</span> <span class="kw">quantile</span>(mean_dist, <span class="fl">0.995</span>),
+            <span class="dt">ci_low =</span> <span class="kw">quantile</span>(mean_dist, <span class="fl">0.005</span>),
+            <span class="dt">resamp_med =</span> <span class="kw">mean</span>(mean_dist)) %&gt;%
+<span class="st">  </span><span class="kw">filter</span>(status ==<span class="st"> &quot;Same&quot;</span>) %&gt;%
+<span class="st">  </span><span class="kw">inner_join</span>(<span class="kw">select</span>(obs, season, c_label, t_label, <span class="dt">mean_dist =</span> Same))
+
+resamp$season &lt;-<span class="st"> </span><span class="kw">factor</span>(resamp$season, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Spring&quot;</span>, <span class="st">&quot;Fall&quot;</span>))
+rand_sames$season &lt;-<span class="st"> </span><span class="kw">factor</span>(rand_sames$season, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;Spring&quot;</span>, <span class="st">&quot;Fall&quot;</span>))</code></pre></div>
+<p><br></p>
+<p>Finaly, plot the results.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>() +
+<span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">data =</span> <span class="kw">filter</span>(resamp, t_label ==<span class="st"> &quot;Path Only&quot;</span>),
+                 <span class="kw">aes</span>(<span class="dt">x =</span> Same, <span class="dt">fill =</span> season, <span class="dt">color =</span> season),
+                 <span class="dt">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">bins =</span> <span class="dv">50</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>) +
+<span class="st">  </span><span class="kw">geom_vline</span>(<span class="dt">data =</span> <span class="kw">filter</span>(rand_sames, t_label ==<span class="st"> &quot;Path Only&quot;</span> &amp;<span class="st"> </span>status ==<span class="st"> &quot;Same&quot;</span>),
+             <span class="kw">aes</span>(<span class="dt">xintercept =</span> mean_dist), <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> <span class="kw">filter</span>(rand_sames, t_label ==<span class="st"> &quot;Path Only&quot;</span> &amp;<span class="st"> </span>status ==<span class="st"> &quot;Same&quot;</span>),
+            <span class="kw">aes</span>(<span class="dt">x =</span> mean_dist +<span class="st"> </span><span class="dv">5</span>,
+                <span class="dt">label =</span> <span class="kw">paste0</span>(<span class="st">&quot;Observed value: &quot;</span>, <span class="kw">round</span>(mean_dist, <span class="dv">0</span>), <span class="st">&quot; km&quot;</span>)),
+            <span class="dt">y =</span> <span class="dv">115</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">angle =</span> -<span class="dv">90</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">size =</span> <span class="dv">3</span>) +
+<span class="st">  </span><span class="kw">geom_rect</span>(<span class="dt">data =</span> <span class="kw">filter</span>(rand_sames, t_label ==<span class="st"> &quot;Path Only&quot;</span> &amp;<span class="st"> </span>status ==<span class="st"> &quot;Same&quot;</span>),
+            <span class="kw">aes</span>(<span class="dt">xmin =</span> ci_low, <span class="dt">xmax =</span> ci_high, <span class="dt">ymin =</span> <span class="dv">0</span>, <span class="dt">ymax =</span> <span class="ot">Inf</span>, <span class="dt">color =</span> season, <span class="dt">fill =</span> season),
+            <span class="dt">alpha =</span> <span class="fl">0.2</span>) +
+<span class="st">  </span><span class="kw">geom_hline</span>(<span class="dt">yintercept =</span> <span class="dv">0</span>, <span class="dt">color =</span> <span class="st">&quot;gray90&quot;</span>) +
+<span class="st">  </span><span class="kw">facet_grid</span>(season ~<span class="st"> </span>c_label) +
+<span class="st">  </span><span class="kw">scale_color_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;forestgreen&quot;</span>, <span class="st">&quot;salmon&quot;</span>), <span class="dt">guide =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;forestgreen&quot;</span>, <span class="st">&quot;salmon&quot;</span>), <span class="dt">guide =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">x =</span> <span class="dv">0</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>() +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Permuted Mean Distance (km)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>)</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/plot_perm_test-1.png" /><!-- --></p>
+<p>The observed mean value clearly lies outside the 95% CI in each of the conditions, so we reject the null hypothesis. Same-animal paths in different years are significantly more similar to each other than would be expected if migration paths were taken at random.</p>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,32 @@
+---
+title: "ssr-environmental-change"
+author: "Fernando Campos"
+date: "March 26, 2015"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r set_options, echo = FALSE}
+library(knitr)
+opts_knit$set(root.dir = normalizePath('~/Dropbox/R/SSRChange_Climate/'))
+opts_chunk$set(fig.path = 'figures/ssr-environmental-change/',
+               fig.height = 6, 
+               fig.width = 8, 
+               tidy = FALSE, 
+               warning = FALSE,
+               cache.path = '~/Dropbox/R/SSRChange_Climate/Cache/',
+               cache = TRUE)
+read_chunk('~/Dropbox/R/SSRChange_Climate/SSRChange_Climate.R')
+```
+
+<br>
+<hr>
+<br>
+
+# A multi-decade investigation of tropial dry forest regeneration and its effects on primate population dynamics
+
+
+```{r child = '_child/ssr-environmental-change/ssr-change.Rmd'}
+```

@@ -1,0 +1,211 @@
+
+```{r prepare_workspace, message = FALSE}
+```
+
+```{r prep_census_data, message = FALSE}
+```
+
+Udated Census Results
+-----------------------
+
+The first set of results here are basically a continuation of previous census results. This mostly rehashes the results from your 2012 book chapter, with a few notable changes:
+- I have added the two final years (2011 and 2013)
+- I have included all the recent minor changes made to the 2003 and 2007 censuses
+- I have recalculated summary stats for past years using the same rules as recent years.
+
+As I mentioned in an email to you a while back, I wasn't able to perfectly reproduce the numbers from the book chaper, but they are fairly close. I don't know if it's worth explaining in the manuscript, but it's probably just due to slight differenes in how the "replacement" counts were handeled.  Regardless, it seems that small discrepancies are not unusual, because the numbers also differ slightly between the 2001 and 2012 census papers.
+
+First is a plot of total estimated population size. This plot is also broken up by age/sex class. The "Unknown" category shows the supplemental animals added to the estimate to correct for sampling effort (i.e., the replacements for very poor counts or not-found groups).
+
+```{r census_total_size, message = FALSE, fig.width = 10}
+```
+
+```{r plot_total_size, message = FALSE}
+```
+
+```{r census_demography, message = FALSE}
+```
+
+<br>
+For interest's sake, here is a stacked area percentage plot of group compositions over time. The data here only include **high quality** counts, as poor / fair counts are unreliable for determining group compositions. _This will probably be left out of the paper._
+
+```{r plot_group_comps, message = FALSE, fig.width = 10}
+```
+
+```{r plot_mean_size, message = FALSE}
+```
+
+```{r plot_num_groups, message = FALSE}
+```
+
+<br>
+Finally, this plot shows how three major population parameters changed over time. Loess smoothers are added to aid visual interpretation of the trend.
+
+```{r plot_combined_census, message = FALSE, fig.height = 12, fig.width = 10}
+```
+
+#### Some important take-aways for this section: <br>
+1.  Total population size for the capuchins finally appears to be leveling off after decades of growth. <br>
+2.  Both mean group size and total number of groups have remained relatively constant over the last decade. <br>
+3.  Mean group size peaked in the early 90s, whereas total number of groups appears to be at its peak now. <br>
+
+***********
+<br>
+<br>
+
+Quantifying Forest Habitat Regeneration in SSR
+-----------------------
+
+```{r load_files_function, message = FALSE}
+```
+
+```{r lc_rat_function, message = FALSE}
+```
+
+```{r prep_files, message = FALSE}
+```
+
+```{r prep_plots, message = FALSE}
+```
+
+I used a set of 11 satellite images spanning 1985 to 2011 to quantify changes in the degree of forest evergreenness in SSR. I'll spare you the details in this summary; suffice to say now that it's similar to what I wrote in the home range paper, only with 11 images rather than one. All the images were acquired within two weeks of March 20.
+
+Despite my best efforts to normalize the images to one another, quite a lot of unexpected variablity remains. For example, as you can see in the plots below, things are greening-up nicely until 1992-1993, when it suddenly bottoms out. It happens again in 1998. I believe that this is due to the variable timing of leaf shedding, which is probably affected by the strength of the preceeding late wet season. As I discuss below, these extreme years may be linked to the ENSO phenomenon. Despite the ups and downs, there does appear to be a clear "greening" trend as younger forest classes are replaced by more mature ones. Here is a plot of land cover; the categories refer to the degree of evergreenness.
+
+
+```{r plot_lc, message = FALSE, fig.height = 12, fig.width = 12}
+```
+
+As I mentioned above, there are some really unusual years that deviate from the overall greening trend, specifically the images for 1992, 1993, and 1998. These appear to have been exceptionally dry periods in SSR. Here is are two plots that show rainfall patterns in the park, and how they might relate to ENSO phases.
+
+The top plot shows total yearly rainfall at the site. The dashed line is the annual median and the dotted line is the annual mean. The bottom plot shows a monthly time series of Southern Oscillation Index values during the same period. Sustained negative values below -8 indicate El Niño episodes, while sustained positive values above +8 indicate La Niña episodes. The former are associated with dry conditions in SSR, while the latter are associated with wet conditions. The squiggly line is a 5-month weighted mean smoother of monthly SOI values over the entire period.
+
+```{r plot_yearly_rainfall, message = FALSE}
+```
+
+```{r enso, message = FALSE, fig.width = 12, fig.height = 10}
+```
+
+As you can see, 1991 and 1992 are two of the lowest rainfall years on record, and not only that, but they're consecutive. It must have been a brutal time for the trees and monkeys. This was during an unusually prolonged El Niño period. In fact, you can see that the driest years correspond pretty well with strong El Niño episodes, like in 1983, 1991-1994, and 1997. Here's another plot that shows when exactly the rain fell in 91 and 92 years compared to normal years.
+
+```{r rain_cumsum, message = FALSE, fig.height = 10}
+```
+
+My point is that these two wet seasons were exceptionally bad, and so it follows leaf-shedding phenology was probably affected as the trees suffered during this time. This probably explains the much less green images for the years following these weak wet seasons: 1992, 1993, and 1998.
+
+<br><br>
+
+Here's another plot showing the relationship between the Southern Oscillation Index and the rainfall trend. The thin blue line is a seasonally decomposed trend of monthly rainfall totals over the entire study period, i.e., it's the remaining pattern in rainfall values _after_ accounting for the very strong season pattern. The thick blue line is a LOESS smoother of this trend. The thin orange line is the 5-month moving weighted average of the SOI values, as plotted above, while the thick orange line is another LOESS smoother. As you can see, the patterns match up pretty well. Since the values differed in magnitude quite a lot, I applied a z-transofmation for this plot to improve visual interpretation. The cross-correlation between the two time series 0.605, and the lag which results in maximum correlation is 1.67 months (i.e., SOI leads rainfall, and above-average SOI is likely to lead to above-average rainfall about 1.67 months later).
+
+```{r rain_stl, message = FALSE}
+```
+
+```{r enso_stl, message = FALSE}
+```
+
+```{r rain_enso_ccf, message = FALSE, fig.width = 10, fig.height = 7}
+```
+
+***********
+<br>
+
+### Class-level analysis
+
+To analyze land cover change, I calculated a variety of metrics that quantify different aspects of landscape spatial pattern. There are literally hundreds of metrics out there that people use, and many of them are redundant. I followed some recently published guidelines for selecting a core set of "consistent and universal" metrics. Here are some descriptions, taken verbatim from [the paper](http://dx.doi.org/10.1016/j.ecolind.2007.12.002):
+
+```{r load_metric_tables, message = FALSE, results = 'asis', echo = FALSE}
+```
+
+The plots below show trends in these metrics (plus proportion of landscape) from 1985 to 2011 for each habitat class (i.e., "Class level" metrics in table above).
+
+```{r global_class_analysis, message = FALSE, fig.width = 9}
+```
+
+#### Things to notice: <br>
+
+1.  Marked decrease in highly deciduous shrubland and replacement by more evergreen land cover. <br>
+2.  Major decrease in large patch dominance for "none" class. <br>
+3.  Across the board increase in patch shape complexity. <br>
+4.  Nothing much going on with neighborhood similarity. <br>
+5.  Substantial decrease in nearest neighbor distance for more evergreen classes <br>
+6.  Corresponding decrease in patch dispersion among evergreen classes <br>
+7.  Not much noteworthy about edge contrast. <br>
+8.  Opposing trends for highly deciduous and highly evergreen classes.
+
+<br>
+
+### Landscape-level analysis
+
+I also looked at a variety of metrics for the landscape as a whole (i.e., "Landscape level" metrics). These are obtained by summing or averaging over all class types, and describe changes in the landscape as a whole.
+
+```{r global_landscape_analysis, message = FALSE, fig.width = 9}
+```
+
+#### Take-aways: <br>
+
+1.  The results here tell a pretty consistent story, which is that the landscape is becoming more diverse, patchy, and mixed over time. This may seem weird until you consider that in the early 80s, it was largely dominated by relatively expansive areas of very young regenerating pasture that were highly deciduous. Over time, these areas have been broken up a and converted (patchily) to  secondary forest stages that show varying levels of evergreenness. All this makes good intuitive sense with what we can observe on the ground.
+
+************
+<br>
+<br>
+
+Sub-regional analysis of monkey--forest growth dynamics
+-----------------------
+
+Finally, I carried out a "sub-regional" analysis to see if and how the patterns of monkey population and landscape change differed spatially among regions of the park.
+
+I created sub-regions of interest based on the GPS locations of all capuchin groups found during the 2003, 2007, 2011, and 2013 censuses. **Linda**: I changed the method for how the regions were defined because the old ones looked weird and lumpy. Here's the new descripion: I created networks of proximate groups by linking each pair of points separated by less than 1 km with a straight line segment. I then buffered these line segments by 500 m on both sides and dissolved the boundaries among overlapping buffers. After removing small lacunae and bridging trivial gaps, each disjoint set of merged buffers was defined as a sub-region of interest (Figure X). All sub-regions are therefore separated by areas that are evidently used very infrequently, if at all, by capuchin groups. Here's what the regions look like:
+
+![RegionsMap][RegionsMap.png]
+
+After assigning each known group to one of these sub-regions, I carried out some of the same analyses as described above for each sub-region. However, rather than calculating the full suite of population summary stats and landscape metrics, I focused on total sub-population size and proportion of landscape for each habitat class in each sub-region.
+
+Here's a plot of population size over time in each subregion. 
+
+```{r regional_class_analysis, message = FALSE}
+```
+
+```{r regional_landscape_analysis, message = FALSE}
+```
+
+```{r prep_regional_demog, message = FALSE}
+```
+
+```{r plot_regional_pop_size, message = FALSE, fig.width = 12}
+```
+
+As you can see, there are two primary foci of capuchin density in the park:
+- the Plateau area, which includes the admin area, the La Penca stuff, and the valleys that drain off to the east (Duende, Puercos, Guapote, etc.)
+- the Naranjo primary forest + a few large tributaries that are continuous with this forest.
+
+Perhaps more interestingly, it is only in the Plateau sub-region that we see population continuing to increase steadily. In all other sub-regions, population growth appears to have leveled off decades ago. Why might that be?
+
+We can remove Nancite and Santa Elena because they only consist of a single group, or at most two groups. Here is a plot of capuchin population density in each region, using the total area of the region (ignoring habitat types). It's interesting that all the densities appear to be converging at around 12 animals / km^2, and again, it's only the Plateau that seems to be still increasing (albeit slowly).
+
+```{r plot_regional_dens, message = FALSE, fig.width = 12}
+```
+
+Here's a plot forest cover change in each sub-region:
+
+```{r plot_regional_class, message = FALSE, fig.width = 12}
+```
+
+I think perhaps the thing that stands out most here (with respect to the Plateau sub-region) is the relatively large gain in moderately evergreen forest compared to the other sub-regions. There were also large gains in highly evergreen forest, but the same can be said for various other regions of the park. The drop in totally deciduous land cover also seems to be the most precipitous and absolute in the plateau region such that there is practically zero completely open shrubland in the present day.
+
+Some wild speculation: I suggest that the continued population growth in the Plateau region might be due to greater gains in moderately deciduous intermediate-stage forest compared to other areas of the park. Soil type could be an important factor, as the Plateau region is relatively flat and probably has greater soil depth than the other regions.
+
+****************
+<br>
+<br>
+
+Major Conclusions
+--------------
+
+1.  After decades of increase, the capuchin population's growth has slowed and may now be close to zero.
+1.  As we already knew, there has been a gradual greening trend in the SSR that has accompanied a shift in the habitat composition as old pastures and disturbed areas regenerate.
+3.  These patterns are spatially heterogeneous. The Plateau has experienced the greatest gains in intermediate-stage forest, and it also contains the only still-increasing sub-population of capuchins.
+4.  These patterns are also influenced by rainfall, and thus by the ENSO cycle. We have seen extreme dry years trigger extensive early leaf-shedding.
+5.  Some more wild speculation here, but the timing of some major changes in the capuchin population dynamics coincides with the prolonged ENSO episode of the early to mid 90s. During this time, population growth slowed considerably, mean group size decreased, and the total number of groups increased, perhaps as a result of large groups dissolving. Since then, these parameters have remained fairly constant.
+6.  I'm sure this has a variety of conservation and management implications, but I'll leave those for the manuscript.
+
+[RegionsMap]: RegionsMap.png "Regions Map"

@@ -1,0 +1,48 @@
+---
+title: "Repeatability of Migration Routes in Moose"
+author: "Fernando Campos"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+```{r set_options, echo = FALSE}
+library(knitr)
+opts_knit$set(root.dir = normalizePath('~/Dropbox/MooseNavigation/'))
+opts_chunk$set(fig.path = 'figures/moose-migration-repeatability/',
+               fig.height = 8, 
+               fig.width = 12, 
+               tidy = FALSE, 
+               warning = FALSE,
+               cache.path = '~/Documents/Projects/MooseNavigation/Cache/',
+               cache = TRUE)
+read_chunk('~/Dropbox/MooseNavigation/code/moose-tracks-daily.R')
+read_chunk('~/Dropbox/MooseNavigation/code/identify-migrants.R')
+read_chunk('~/Dropbox/MooseNavigation/code/path-similarity.R')
+```
+
+<br>
+<hr>
+<br>
+
+# Study Objectives
+
+1. Make a descriptive statistical assessment of moose motion during migration.
+
+    - How does the orientation of daily movement steps change change over the annual cycle and in relation to the seasonal migrations?
+
+    - How do step lengths change over the annual cycle and in relation to the seasonal migrations?
+
+2. Quantify repeatibility in the migration paths of moose, focusing on within-individual vs. between-individual variation.
+
+
+```{r child = '_child/moose-navigation-repeatability/1-descriptive-summary.Rmd'}
+```
+
+```{r child = '_child/moose-navigation-repeatability/2-identify-migrants.Rmd'}
+```
+
+```{r child = '_child/moose-navigation-repeatability/3-path-similarity.Rmd'}
+```
