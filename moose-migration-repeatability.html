@@ -11,7 +11,7 @@
 
 <meta name="author" content="Fernando Campos" />
 
-<meta name="date" content="2016-04-11" />
+<meta name="date" content="2016-04-14" />
 
 <title>Repeatability of Migration Routes in Moose</title>
 
@@ -359,7 +359,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Repeatability of Migration Routes in Moose</h1>
 <h4 class="author"><em>Fernando Campos</em></h4>
-<h4 class="date"><em>2016-04-11</em></h4>
+<h4 class="date"><em>2016-04-14</em></h4>
 
 </div>
 
@@ -554,7 +554,24 @@ mma$plot_date &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span cl
 </div>
 <div id="nsd-plot" class="section level2">
 <h2>NSD plot</h2>
-<p>Against day of year (as if all occurred in same year) <img src="figures/moose-migration-repeatability/nsd_density_plot-1.png" /><!-- --></p>
+<p>Against day of year (as if all occurred in same year)</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(mma, <span class="kw">aes</span>(<span class="dt">x =</span> plot_date, <span class="dt">y =</span> <span class="kw">sqrt</span>(nsd/<span class="dv">1000000</span>))) +
+<span class="st">  </span><span class="kw">stat_density_2d</span>(<span class="dt">geom =</span> <span class="st">&quot;raster&quot;</span>, <span class="kw">aes</span>(<span class="dt">fill =</span> ..density..),
+                  <span class="dt">contour =</span> <span class="ot">FALSE</span>, <span class="dt">n =</span> <span class="dv">200</span>) +
+<span class="st">  </span><span class="kw">geom_path</span>(<span class="kw">aes</span>(<span class="dt">group =</span> burst), <span class="dt">alpha =</span> <span class="fl">0.05</span>) +
+<span class="st">  </span><span class="kw">scale_fill_gradientn</span>(<span class="dt">colours =</span> <span class="kw">c</span>(<span class="st">&quot;#FFFFFF&quot;</span>, <span class="kw">rev</span>(<span class="kw">viridis</span>(<span class="dv">20</span>, <span class="dt">option =</span> <span class="st">&quot;magma&quot;</span>))),
+                       <span class="co"># trans = sqrt_trans(),</span>
+                       <span class="dt">name =</span> <span class="st">&quot;Density&quot;</span>) +
+<span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">date_labels =</span> <span class="st">&quot;%b&quot;</span>, <span class="dt">date_breaks =</span> <span class="st">&quot;1 month&quot;</span>,
+                   <span class="dt">date_minor_breaks =</span> <span class="st">&quot;1 month&quot;</span>) +
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Net displacement (km)</span><span class="ch">\n</span><span class="st">&quot;</span>) +
+<span class="st">  </span><span class="kw">theme_fc</span>() +
+<span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">y =</span> <span class="dv">0</span>) +
+<span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">expand =</span> <span class="ot">FALSE</span>) +
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.ontop =</span> <span class="ot">TRUE</span>,
+        <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
+        <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>())</code></pre></div>
+<p><img src="figures/moose-migration-repeatability/nsd_density_plot-1.png" /><!-- --></p>
 <p><br></p>
 </div>
 </div>

@@ -73,7 +73,7 @@ Up is North
 
 ## NSD plot
 Against day of year (as if all occurred in same year)
-```{r nsd_density_plot, message = FALSE, echo = FALSE}
+```{r nsd_density_plot, message = FALSE}
 ```
 
 <br>
