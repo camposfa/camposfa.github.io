@@ -11,19 +11,20 @@
 
 <meta name="author" content="Fernando Campos" />
 
-<meta name="date" content="2016-04-14" />
+<meta name="date" content="2016-04-15" />
 
 <title>Repeatability of Migration Routes in Moose</title>
 
-<script src="libs/jquery-1.11.3/jquery.min.js"></script>
-<script src="libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
-<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
-<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
-<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -98,7 +99,6 @@ h6 {
 }
 </style>
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" type="text/css" />
 
 </head>
 
@@ -182,7 +182,7 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script src="libs/navigation-1.0/tabsets.js"></script>
+<script src="site_libs/navigation-1.0/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -190,7 +190,7 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script src="libs/navigation-1.0/codefolding.js"></script>
+<script src="site_libs/navigation-1.0/codefolding.js"></script>
 <script>
 $(document).ready(function () {
   window.initializeCodeFolding("show" === "show");
@@ -295,61 +295,89 @@ div.tocify {
 
 
 
-<nav class="navbar navbar-default  navbar-fixed-top" role="navigation">
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-        <span class="sr-only">Toggle navigation</span>
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
       <a class="navbar-brand" href="index.html">Code</a>
     </div>
-
-    <!-- Collect the nav links, forms, and other content for toggling -->
-    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+    <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
         <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">R Packages <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="r-packages-plhdbR.html">plhdbR</a></li>
-            <li><a href="r-packages-paceR.html">paceR</a></li>
-            <li><a href="r-packages-ClimGrid.html">ClimGrid</a></li>
-          </ul>
-        </li>
-        
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Reproducible Analysis <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="moose-migration-repeatability.html">Moose Navigation</a></li>
-            <li><a href="capuchin-home-ranges.html">Capuchin Home Ranges</a></li>
-          </ul>
-        </li>
-        
-        <li class="dropdown">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PACE Tutorials <span class="caret"></span></a>
-          <ul class="dropdown-menu">
-            <li><a href="#">Fruit Biomass</a></li>
-            <li><a href="#">Leaf Seasonality</a></li>
-            <li><a href="#">Weather Data</a></li>
-          </ul>
-        </li>
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    R Packages
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="r-packages-plhdbR.html">plhdbR</a>
+    </li>
+    <li>
+      <a href="r-packages-paceR.html">paceR</a>
+    </li>
+    <li>
+      <a href="r-packages-ClimGrid.html">ClimGrid</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Reproducible Analysis
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Moose</li>
+    <li>
+      <a href="moose-migration-repeatability.html">Migration Repeatability</a>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-header">Capuchins</li>
+    <li>
+      <a href="capuchin-home-ranges.html">Capuchin Home Ranges</a>
+    </li>
+  </ul>
+</li>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    PACE Tutorials
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li class="dropdown-header">Fruit Biomass (in prep)</li>
+    <li class="dropdown-header">Leaf Seasonality (in prep)</li>
+    <li class="dropdown-header">Weather Data (in prep)</li>
+  </ul>
+</li>
       </ul>
-        
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="https://github.com/camposfa"><i class="fa fa-github fa-lg"></i></a></li>
+        <li>
+  <a href="https://github.com/camposfa">
+    <span class="fa fa-github fa-lg"></span>
+     
+  </a>
+</li>
+<li>
+  <a href="http://people.ucalgary.ca/~facampos">
+    <span class="fa fa-home fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
-      
-      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
-</nav><!--/.navbar -->
+</div><!--/.navbar -->
 
 <div class="fluid-row" id="header">
 
 <div class="btn-group pull-right">
-<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="text-muted">Code</span> <span class="text-muted caret"></span></button>
+<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu" style="min-width: 50px;">
 <li><a id="rmd-show-all-code" href="#">Show All</a></li>
 <li><a id="rmd-hide-all-code" href="#">Hide All</a></li>
@@ -359,7 +387,7 @@ div.tocify {
 
 <h1 class="title toc-ignore">Repeatability of Migration Routes in Moose</h1>
 <h4 class="author"><em>Fernando Campos</em></h4>
-<h4 class="date"><em>2016-04-14</em></h4>
+<h4 class="date"><em>2016-04-15</em></h4>
 
 </div>
 

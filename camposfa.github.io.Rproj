@@ -14,4 +14,4 @@ LaTeX: XeLaTeX
 
 StripTrailingWhitespace: Yes
 
-BuildType: Makefile
+BuildType: Website

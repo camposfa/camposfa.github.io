@@ -1,0 +1,41 @@
+name: "campos-code"
+output_dir: "."
+navbar:
+  title: "Code"
+  left:
+    - text: "R Packages"
+      menu:
+        - text: "plhdbR"
+          href: "r-packages-plhdbR.html"
+        - text: "paceR"
+          href: "r-packages-paceR.html"
+        - text: "ClimGrid"
+          href: "r-packages-ClimGrid.html"
+
+    - text: "Reproducible Analysis"
+      menu:
+        - text: "Moose"
+        - text: "Migration Repeatability"
+          href: moose-migration-repeatability.html
+        - text: "---------"
+        - text: "Capuchins"
+        - text: "Capuchin Home Ranges"
+          href: capuchin-home-ranges.html
+    - text: "PACE Tutorials"
+      menu:
+        - text: "Fruit Biomass (in prep)"
+        - text: "Leaf Seasonality (in prep)"
+        - text: "Weather Data (in prep)"
+  right:
+    - icon: fa-github fa-lg
+      href: https://github.com/camposfa
+    - icon: fa-home fa-lg
+      href: http://people.ucalgary.ca/~facampos
+output:
+  html_document:
+    theme: cosmo
+    highlight: tango
+    self_contained: false
+    lib_dir: libs
+    code_folding: show
+    toc: false
