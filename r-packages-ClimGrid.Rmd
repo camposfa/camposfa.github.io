@@ -1,3 +1,9 @@
+---
+output: 
+  html_document:
+    code_folding: none
+---
+
 <br><br>
 
 # [ClimGrid <i class="fa fa-github"></i>](https://github.com/camposfa/ClimGrid)

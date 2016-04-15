@@ -1,3 +1,10 @@
+---
+output: 
+  html_document:
+    code_folding: none
+---
+
+
 <br><br>
 
 # [paceR <i class="fa fa-github"></i>](https://github.com/camposfa/paceR)
