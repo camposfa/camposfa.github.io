@@ -23,7 +23,8 @@ navbar:
           href: capuchin-home-ranges.html
     - text: "PACE Tutorials"
       menu:
-        - text: "Fruit Biomass (in prep)"
+        - text: "Fruit Biomass"
+          href: pace-fruit-biomass.html
         - text: "Leaf Seasonality (in prep)"
         - text: "Weather Data (in prep)"
   right:
