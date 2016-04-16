@@ -5,16 +5,14 @@ output:
     code_folding: none
 ---
 
-<br><br>
+<br>
 
-# [ClimGrid <i class="fa fa-github"></i>](https://github.com/camposfa/ClimGrid)
-
-![](figures/r-packages/ClimGrid.jpg)
+[![](figures/r-packages/ClimGrid.jpg)](https://github.com/camposfa/ClimGrid)
 
 <br>
 <hr>
 <br>
 
-`ClimGrid` is an R package for obtaining and analyzing gridded climate data and global climate oscillation indices.
+[ClimGrid <i class="fa fa-github"></i>](https://github.com/camposfa/ClimGrid) is an R package for obtaining and analyzing gridded climate data and global climate oscillation indices.
 
 Additional functionality and documentation will be added soon.

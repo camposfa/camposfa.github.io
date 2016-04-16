@@ -5,17 +5,14 @@ output:
     code_folding: none
 ---
 
+<br>
 
-<br><br>
-
-# [paceR <i class="fa fa-github"></i>](https://github.com/camposfa/paceR)
-
-![](figures/r-packages/paceR.jpg)
+[![](figures/r-packages/paceR.jpg)](https://github.com/camposfa/paceR)
 
 <br>
 <hr>
 <br>
 
-`paceR` is a collection of functions that make it easy to get data from the University of Calgary's PACE Database into R for further analysis.
+[paceR <i class="fa fa-github"></i>](https://github.com/camposfa/paceR) is a collection of functions that make it easy to get data from the University of Calgary's PACE Database into R for further analysis.
 
 To use the tools, you must have access to the PACE Database. If you don't know how to do this, you can ask [Fernando](mailto:facampos@ucalgary.ca), [Urs](mailto:urs.kalbitzer@ucalgary.ca), or [John](mailto:jaddicot@ucalgary.ca).
