@@ -28,7 +28,7 @@ The first two data sets can be pulled directly from the PACE database. The FPV d
 
 # First Steps
 
-Before doing anything, you must install the `paceR` package for R and set up your connections to the PACE database. There are instructions for doing this [here](README.md). This is the largest hurdle and **nothing else will work until this is done correctly!**
+Before doing anything, you must install the `paceR` package for R and set up your connections to the PACE database. There are instructions for doing this [here](https://github.com/camposfa/paceR). This is the largest hurdle and **nothing else will work until this is done correctly!**
 
 Then you can load the required packages:
 
