@@ -96,6 +96,9 @@ h5 {
 h6 {
   font-size: 12px;
 }
+.table th:not([align]) {
+  text-align: left;
+}
 </style>
 
 
@@ -181,7 +184,7 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script src="site_libs/navigation-1.0/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -189,7 +192,7 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script src="site_libs/navigation-1.0/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <script>
 $(document).ready(function () {
   window.initializeCodeFolding("show" === "show");
@@ -237,6 +240,7 @@ $(document).ready(function ()  {
   width: 100%;
 }
 }
+
 
 .toc-content {
   padding-left: 30px;
@@ -365,7 +369,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="http://people.ucalgary.ca/~facampos">
+  <a href="http://fcampos.tulane.edu">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -380,10 +384,11 @@ div.tocify {
 <div class="btn-group pull-right">
 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All</a></li>
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
 </div>
+
 
 
 <h1 class="title toc-ignore">Capuchin Home Ranges</h1>
@@ -442,7 +447,7 @@ ran &lt;-<span class="st"> </span><span class="kw">as.ltraj</span>(<span class="
 
 <span class="co"># Plot the trajectories for each group</span>
 <span class="kw">plot</span>(ran, <span class="dt">final =</span> <span class="ot">FALSE</span>, <span class="dt">addpoints =</span> <span class="ot">FALSE</span>)</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/load_data-1.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/load_data-1.png" width="1152" /></p>
 <p><br></p>
 <p>Check data and plot researcher contributions</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Convert to data frame</span>
@@ -482,7 +487,7 @@ researcher_contrib[researcher_contrib$n_pts ==<span class="st"> </span><span cla
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>) +
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Observation Periods&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_grid</span>(id ~<span class="st"> </span>., <span class="dt">drop =</span> <span class="ot">TRUE</span>)</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/review_data-1.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/review_data-1.png" width="1152" /></p>
 <p><br></p>
 <p>Number of points by group and observer</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(ran_df, <span class="kw">aes</span>(<span class="dt">x =</span> id, <span class="dt">fill =</span> observer)) +<span class="st"> </span>
@@ -492,7 +497,7 @@ researcher_contrib[researcher_contrib$n_pts ==<span class="st"> </span><span cla
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of Points&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/plot_contributions2-1.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/plot_contributions2-1.png" width="1152" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">give.n &lt;-<span class="st"> </span>function(x){
   <span class="kw">return</span>(<span class="kw">c</span>(<span class="dt">y =</span> <span class="dv">500</span>, <span class="dt">label =</span> <span class="kw">length</span>(x)))
 }
@@ -504,7 +509,7 @@ researcher_contrib[researcher_contrib$n_pts ==<span class="st"> </span><span cla
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">stat_summary</span>(<span class="kw">aes</span>(<span class="dt">y =</span> <span class="dv">500</span>), <span class="dt">fun.data =</span> give.n, <span class="dt">geom =</span> <span class="st">&quot;text&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">size =</span> <span class="dv">4</span>) +<span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Group&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Number of Points&quot;</span>)</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/plot_contributions2-2.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/plot_contributions2-2.png" width="1152" /></p>
 <p><br></p>
 </div>
 </div>
@@ -592,7 +597,7 @@ ob_all &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(ob_all)
 <span class="co"># Now we need to see how many location points actually lie in each time interval</span>
 <span class="co"># for each group. We do this by joining to ran_df</span>
 temp &lt;-<span class="st"> </span><span class="kw">left_join</span>(ob_all, ran_df)</code></pre></div>
-<pre><code>## Joining by: &quot;id&quot;</code></pre>
+<pre><code>## Joining, by = &quot;id&quot;</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Create date interval for filtering</span>
 temp$date_interval &lt;-<span class="st"> </span><span class="kw">interval</span>(temp$date_begin, temp$date_end)
 
@@ -620,6 +625,7 @@ ob &lt;-<span class="st"> </span>ob_all %&gt;%<span class="st"> </span>
 
 ob$ints &lt;-<span class="st"> </span><span class="kw">interval</span>(ob$date_begin, ob$date_end)
 ob &lt;-<span class="st"> </span><span class="kw">select</span>(ob, -date_begin, -date_end)</code></pre></div>
+<pre><code>## Adding missing grouping variables: `date_begin`</code></pre>
 <p><br></p>
 </div>
 <div id="hr-interval-plots" class="section level2">
@@ -676,7 +682,7 @@ p2 &lt;-<span class="st"> </span><span class="kw">ggplot</span>(ob, <span class=
 <span class="st">  </span><span class="kw">ggtitle</span>(<span class="st">&quot;Included HR intervals&quot;</span>)
 
 <span class="kw">grid.arrange</span>(p1, p2)</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/plot_times-1.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/plot_times-1.png" width="1152" /></p>
 <p><br> ****** <br></p>
 </div>
 </div>
@@ -808,7 +814,7 @@ final_comps$adult_mass &lt;-<span class="st"> </span>((final_comps$n_af +<span c
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Adult mass (kg)&quot;</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">45</span>, <span class="dt">hjust =</span> <span class="dv">1</span>)) +
 <span class="st">  </span><span class="kw">facet_grid</span>(. ~<span class="st"> </span>id)</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/calculate_group_size-1.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/calculate_group_size-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 <div id="available-fruit-biomass" class="section level2">
@@ -839,7 +845,7 @@ biomass_daily$spline &lt;-<span class="st"> </span><span class="kw">spline</span
             <span class="dt">y =</span> biomass$combined_monthly_kg, <span class="dt">n =</span> <span class="dv">366</span>))
 <span class="kw">points</span>(<span class="dt">x =</span> biomass$day_of_year, 
        <span class="dt">y =</span> biomass$combined_monthly_kg, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">pch =</span> <span class="dv">16</span>)</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/calculate_fruit-1.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/calculate_fruit-1.png" width="1152" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Extend over complete range of study dates</span>
 start_date &lt;-<span class="st"> </span><span class="kw">as.Date</span>(<span class="kw">min</span>(<span class="kw">int_start</span>(ob$ints)))
 end_date &lt;-<span class="st"> </span><span class="kw">as.Date</span>(<span class="kw">max</span>(<span class="kw">int_end</span>(ob$ints)))
@@ -925,7 +931,7 @@ lc_grad &lt;-<span class="st"> </span><span class="kw">colorRampPalette</span>(<
 
 <span class="co"># image(hab, col = brewer.pal(4, &quot;YlGn&quot;))</span>
 <span class="kw">image</span>(hab, <span class="dt">col =</span> lc_grad)</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/load_habitat_maps-1.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/load_habitat_maps-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 </div>
@@ -1214,7 +1220,7 @@ area_model_results$term &lt;-<span class="st"> </span>
         <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">8</span>)) +
 <span class="st">  </span><span class="kw">facet_grid</span>(scale ~<span class="st"> </span>response) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/plot_area_results-1.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/plot_area_results-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 </div>
@@ -1355,7 +1361,7 @@ ndvi_model_results$term &lt;-<span class="st"> </span>
         <span class="dt">axis.text.y =</span> <span class="kw">element_text</span>(<span class="dt">size =</span> <span class="dv">8</span>)) +
 <span class="st">  </span><span class="kw">facet_grid</span>(scale ~<span class="st"> </span>response) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/plot_ndvi_results-1.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/plot_ndvi_results-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 </div>
@@ -1458,7 +1464,7 @@ zones_model_results$term &lt;-<span class="st"> </span>
         <span class="dt">panel.border =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>, <span class="dt">colour =</span> <span class="st">&quot;grey50&quot;</span>)) +
 <span class="st">  </span><span class="kw">facet_grid</span>(scale ~<span class="st"> </span>.) +
 <span class="st">  </span><span class="kw">coord_flip</span>()</code></pre></div>
-<p><img src="figures/capuchin-home-ranges/plot_zones_results-1.png" /><!-- --></p>
+<p><img src="figures/capuchin-home-ranges/plot_zones_results-1.png" width="576" /></p>
 </div>
 </div>
 </div>

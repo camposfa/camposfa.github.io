@@ -11,7 +11,7 @@
 
 <meta name="author" content="Fernando Campos" />
 
-<meta name="date" content="2016-04-15" />
+<meta name="date" content="2016-07-18" />
 
 <title>Repeatability of Migration Routes in Moose</title>
 
@@ -96,6 +96,9 @@ h5 {
 }
 h6 {
   font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
 }
 </style>
 
@@ -182,7 +185,7 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script src="site_libs/navigation-1.0/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -190,7 +193,7 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script src="site_libs/navigation-1.0/codefolding.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <script>
 $(document).ready(function () {
   window.initializeCodeFolding("show" === "show");
@@ -238,6 +241,7 @@ $(document).ready(function ()  {
   width: 100%;
 }
 }
+
 
 .toc-content {
   padding-left: 30px;
@@ -366,7 +370,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="http://people.ucalgary.ca/~facampos">
+  <a href="http://fcampos.tulane.edu">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -381,15 +385,16 @@ div.tocify {
 <div class="btn-group pull-right">
 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All</a></li>
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
 </div>
 
 
+
 <h1 class="title toc-ignore">Repeatability of Migration Routes in Moose</h1>
 <h4 class="author"><em>Fernando Campos</em></h4>
-<h4 class="date"><em>2016-04-15</em></h4>
+<h4 class="date"><em>2016-07-18</em></h4>
 
 </div>
 
@@ -505,7 +510,7 @@ mma$plot_date &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span cl
 <span class="st">  </span><span class="kw">coord_polar</span>(<span class="dt">start =</span> -pi) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Relative Turn Angle&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_fc</span>()</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/rel_angle_plot_combined-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/rel_angle_plot_combined-1.png" width="1152" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">filter</span>(mma, dt_days ==<span class="st"> </span><span class="dv">1</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(rel.angle)),
        <span class="kw">aes</span>(<span class="dt">x =</span> rel.angle)) +
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">24</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
@@ -516,7 +521,7 @@ mma$plot_date &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span cl
 <span class="st">  </span><span class="kw">coord_polar</span>(<span class="dt">start =</span> -pi) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Relative Turn Angle&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_fc</span>()</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/rel_angle_plot_monthly-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/rel_angle_plot_monthly-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 <div id="absolute-turn-angle-plots" class="section level2">
@@ -531,7 +536,7 @@ mma$plot_date &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span cl
 <span class="st">  </span><span class="kw">coord_polar</span>() +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Absolute Turn Angle&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_fc</span>()</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/abs_angle_plot_combined-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/abs_angle_plot_combined-1.png" width="1152" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ggplot</span>(<span class="kw">filter</span>(mma, dt_days ==<span class="st"> </span><span class="dv">1</span> &amp;<span class="st"> </span>!<span class="kw">is.na</span>(abs.angle)),
        <span class="kw">aes</span>(<span class="dt">x =</span> abs.angle)) +
 <span class="st">  </span><span class="kw">geom_histogram</span>(<span class="dt">bins =</span> <span class="dv">24</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;gray50&quot;</span>, <span class="dt">alpha =</span> <span class="fl">0.5</span>) +
@@ -543,7 +548,7 @@ mma$plot_date &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span cl
 <span class="st">  </span><span class="kw">coord_polar</span>() +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Absolute Turn Angle&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_fc</span>()</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/abs_angle_plot_monthly-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/abs_angle_plot_monthly-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 <div id="step-length-distributions" class="section level2">
@@ -557,7 +562,7 @@ mma$plot_date &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span cl
 <span class="st">  </span><span class="kw">facet_grid</span>(month_of ~<span class="st"> </span>., <span class="dt">scales =</span> <span class="st">&quot;free_y&quot;</span>) +
 <span class="st">  </span><span class="kw">scale_x_sqrt</span>() +
 <span class="st">  </span><span class="kw">coord_cartesian</span>(<span class="dt">xlim =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">20000</span>))</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/step_length_plot-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/step_length_plot-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 <div id="density-of-step-lengths" class="section level2">
@@ -579,7 +584,7 @@ mma$plot_date &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span cl
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.ontop =</span> <span class="ot">TRUE</span>,
         <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
         <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>())</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/step_density_plot-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/step_density_plot-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 <div id="nsd-plot" class="section level2">
@@ -601,7 +606,7 @@ mma$plot_date &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span cl
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">panel.ontop =</span> <span class="ot">TRUE</span>,
         <span class="dt">panel.background =</span> <span class="kw">element_rect</span>(<span class="dt">fill =</span> <span class="ot">NA</span>),
         <span class="dt">panel.grid.minor =</span> <span class="kw">element_blank</span>())</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/nsd_density_plot-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/nsd_density_plot-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 </div>
@@ -666,7 +671,7 @@ cities_nor &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(c
 <span class="st">  </span><span class="kw">theme_osa</span>() +
 <span class="st">  </span><span class="kw">scale_colour_discrete</span>(<span class="dt">guide =</span> <span class="ot">FALSE</span>) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Easting&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Northing</span><span class="ch">\n</span><span class="st">&quot;</span>)</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/create_moose_map-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/create_moose_map-1.png" width="1152" /></p>
 <br>
 <hr>
 <p><br></p>
@@ -734,7 +739,7 @@ temp$var &lt;-<span class="st"> </span><span class="kw">factor</span>(temp$var, 
         <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(),
         <span class="dt">legend.key.width =</span> grid::<span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>)) +
 <span class="st">  </span><span class="kw">coord_cartesian</span>()</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/roll_mean_comparison-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/roll_mean_comparison-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 </div>
@@ -926,7 +931,7 @@ df_smooth_fitted &lt;-<span class="st"> </span><span class="kw">inner_join</span
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),
         <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>),
         <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>())</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/plot_all_nsd_models-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/plot_all_nsd_models-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 </div>
@@ -991,7 +996,7 @@ fil &lt;-<span class="st"> </span><span class="kw">quote</span>(bestMod.cc1 &lt;
 plot_labs &lt;-<span class="st"> </span><span class="kw">get_labs</span>(df_smooth_mig, fil)
 plot_df &lt;-<span class="st"> </span><span class="kw">filter_</span>(df_smooth_mig, fil)
 <span class="kw">plot_mig</span>(plot_df, plot_labs)</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/migration_nsd_filtering-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/migration_nsd_filtering-1.png" width="1152" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_smooth_mig &lt;-<span class="st"> </span><span class="kw">filter</span>(df_smooth_mig, bestMod.cc1 &gt;=<span class="st"> </span><span class="fl">0.85</span>)
 
 
@@ -1001,7 +1006,7 @@ fil &lt;-<span class="st"> </span><span class="kw">quote</span>(xmidB &gt;<span 
 plot_labs &lt;-<span class="st"> </span><span class="kw">get_labs</span>(df_smooth_mig, fil)
 plot_df &lt;-<span class="st"> </span><span class="kw">filter_</span>(df_smooth_mig, fil)
 <span class="kw">plot_mig</span>(plot_df, plot_labs)</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/migration_nsd_filtering-2.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/migration_nsd_filtering-2.png" width="1152" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_smooth_mig &lt;-<span class="st"> </span><span class="kw">filter</span>(df_smooth_mig, xmidB &lt;=<span class="st"> </span><span class="dv">360</span> &amp;<span class="st"> </span>xmidA &gt;=<span class="st"> </span><span class="dv">50</span> &amp;<span class="st"> </span>xmidA &lt;=<span class="st"> </span><span class="dv">260</span>)
 
 
@@ -1011,7 +1016,7 @@ fil &lt;-<span class="st"> </span><span class="kw">quote</span>(asymB &lt;<span 
 plot_labs &lt;-<span class="st"> </span><span class="kw">get_labs</span>(df_smooth_mig, fil)
 plot_df &lt;-<span class="st"> </span><span class="kw">filter_</span>(df_smooth_mig, fil)
 <span class="kw">plot_mig</span>(plot_df, plot_labs)</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/migration_nsd_filtering-3.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/migration_nsd_filtering-3.png" width="1152" /></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_smooth_mig &lt;-<span class="st"> </span><span class="kw">filter</span>(df_smooth_mig, asymB &gt;=<span class="st"> </span><span class="dv">90</span>)
 
 
@@ -1097,7 +1102,7 @@ temp_sum$var &lt;-<span class="st"> </span><span class="kw">row.names</span>(tem
             <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
 <span class="st">  </span><span class="kw">facet_wrap</span>(~var, <span class="dt">scales =</span> <span class="st">&quot;free_x&quot;</span>) +
 <span class="st">  </span><span class="kw">theme_fc</span>()</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/plot_nsd_model_params-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/plot_nsd_model_params-1.png" width="1152" /></p>
 <p><br></p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp_wide &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="kw">t</span>(<span class="kw">fixed.effects</span>(MigrModLD)))
 
@@ -1135,7 +1140,7 @@ temp_wide &lt;-<span class="st"> </span>temp_wide %&gt;%
 <span class="st">  </span><span class="kw">theme_fc</span>() +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">strip.background =</span> <span class="kw">element_blank</span>(),
         <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>())</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/plot_nsd_model_fits-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/plot_nsd_model_fits-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 </div>
@@ -1189,7 +1194,7 @@ temp &lt;-<span class="st"> </span>df_nsd_fitted %&gt;%
         <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>),
         <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(),
         <span class="dt">legend.key.width =</span> grid::<span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>))</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/plot_individual_fitted_curves_good-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/plot_individual_fitted_curves_good-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 <div id="individual-examples-of-poor-fitting-models" class="section level2">
@@ -1227,7 +1232,7 @@ temp &lt;-<span class="st"> </span>df_nsd_fitted %&gt;%
         <span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>),
         <span class="dt">panel.grid =</span> <span class="kw">element_blank</span>(),
         <span class="dt">legend.key.width =</span> grid::<span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>))</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/plot_individual_fitted_curves_bad-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/plot_individual_fitted_curves_bad-1.png" width="1152" /></p>
 <br>
 <hr>
 <p><br></p>
@@ -1266,21 +1271,20 @@ by_id &lt;-<span class="st"> </span>mma %&gt;%
 <span class="st">  </span><span class="kw">inner_join</span>(mig_df)</code></pre></div>
 <p><br></p>
 <p>What this looks like:</p>
-<pre><code>## Source: local data frame [156 x 5]
-## 
-##           MooseYrID       animal    Sex              data         params
-##               (chr)        (chr) (fctr)             (chr)          (chr)
-## 1  aa_ac_04_002.yr1 aa_ac_04_002      F &lt;tbl_df [352,25]&gt; &lt;tbl_df [1,7]&gt;
-## 2  aa_ac_04_004.yr1 aa_ac_04_004      F &lt;tbl_df [355,25]&gt; &lt;tbl_df [1,7]&gt;
-## 3  aa_ac_04_008.yr1 aa_ac_04_008      F &lt;tbl_df [363,25]&gt; &lt;tbl_df [1,7]&gt;
-## 4  aa_ac_04_009.yr1 aa_ac_04_009      F &lt;tbl_df [352,25]&gt; &lt;tbl_df [1,7]&gt;
-## 5  aa_ac_04_013.yr1 aa_ac_04_013      F &lt;tbl_df [352,25]&gt; &lt;tbl_df [1,7]&gt;
-## 6  aa_ac_04_017.yr1 aa_ac_04_017      F &lt;tbl_df [361,25]&gt; &lt;tbl_df [1,7]&gt;
-## 7  aa_ac_04_020.yr1 aa_ac_04_020      F &lt;tbl_df [356,25]&gt; &lt;tbl_df [1,7]&gt;
-## 8  aa_ac_04_021.yr1 aa_ac_04_021      F &lt;tbl_df [349,25]&gt; &lt;tbl_df [1,7]&gt;
-## 9  aa_ac_04_023.yr1 aa_ac_04_023      F &lt;tbl_df [348,25]&gt; &lt;tbl_df [1,7]&gt;
-## 10 aa_ac_04_025.yr1 aa_ac_04_025      F &lt;tbl_df [356,25]&gt; &lt;tbl_df [1,7]&gt;
-## ..              ...          ...    ...               ...            ...</code></pre>
+<pre><code>## # A tibble: 156 x 5
+##           MooseYrID       animal    Sex                data
+##               &lt;chr&gt;        &lt;chr&gt; &lt;fctr&gt;              &lt;list&gt;
+## 1  aa_ac_04_002.yr1 aa_ac_04_002      F &lt;tibble [352 x 25]&gt;
+## 2  aa_ac_04_004.yr1 aa_ac_04_004      F &lt;tibble [355 x 25]&gt;
+## 3  aa_ac_04_008.yr1 aa_ac_04_008      F &lt;tibble [363 x 25]&gt;
+## 4  aa_ac_04_009.yr1 aa_ac_04_009      F &lt;tibble [352 x 25]&gt;
+## 5  aa_ac_04_013.yr1 aa_ac_04_013      F &lt;tibble [352 x 25]&gt;
+## 6  aa_ac_04_017.yr1 aa_ac_04_017      F &lt;tibble [361 x 25]&gt;
+## 7  aa_ac_04_020.yr1 aa_ac_04_020      F &lt;tibble [356 x 25]&gt;
+## 8  aa_ac_04_021.yr1 aa_ac_04_021      F &lt;tibble [349 x 25]&gt;
+## 9  aa_ac_04_023.yr1 aa_ac_04_023      F &lt;tibble [348 x 25]&gt;
+## 10 aa_ac_04_025.yr1 aa_ac_04_025      F &lt;tibble [356 x 25]&gt;
+## # ... with 146 more rows, and 1 more variables: params &lt;list&gt;</code></pre>
 <p><br></p>
 <p>Continuing along, we now need to take each MooseYrID trajectory, obtain the subset of points that corresponds to the spring and fall migrations, and discard the rest. This is based on the migration parameters obtained for each animal earlier (xmidA and xmidB represent the midpoints, and scale1 and scale2 relate to the duration).</p>
 <p>Since this needs to by applied separately for each trajectory based on the individual parameters, we first define a general function that carries out this subsetting. Then we can call it on each separate trajectory.</p>
@@ -1765,11 +1769,11 @@ heatmap_fc &lt;-<span class="st"> </span>function(m, <span class="dt">col =</spa
 <p><br></p>
 <p>Pairwise Frechet distance Spring migration, uncentered, ignoring time</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap_fc</span>(frechet_mat_spring_un)</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/unnamed-chunk-5-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/unnamed-chunk-5-1.png" width="1152" /></p>
 <p><br></p>
 <p>Pairwise Frechet distance Spring migration, centered, ignoring time</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">heatmap_fc</span>(frechet_mat_spring_cn)</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/unnamed-chunk-6-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/unnamed-chunk-6-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 <div id="tracks-with-distances" class="section level2">
@@ -1861,7 +1865,7 @@ dist_track_plot &lt;-<span class="st"> </span>function(myid, myseason, <span cla
 <p>Example plot: We look at the centered and uncentered distances to the spring migration path for YrMooseID <code>aa_ac_05_115.yr2</code>. This track is the thick red line. The same animal (<code>aa_ac_05_115</code>) has two other spring migrations: <code>aa_ac_05_115.yr3</code> and <code>aa_ac_05_115.yr3</code>. These are shown as thin red lines. All of the other spring migrations are shown with color shading that indicates the Frechet distance to the focal path, <code>aa_ac_05_115.yr2</code>. We can see the effect that centering has on the distance value. Centering reduces the influence of geographic separation on the distance calculation.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dist_track_plot</span>(<span class="dt">myid =</span> <span class="st">&quot;aa_ac_05_115.yr2&quot;</span>, <span class="dt">myseason =</span> <span class="st">&quot;Spring&quot;</span>,
                 <span class="dt">t_filter =</span> <span class="st">&quot;Path Only&quot;</span>)</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/unnamed-chunk-7-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/unnamed-chunk-7-1.png" width="1152" /></p>
 <p><br></p>
 </div>
 </div>
@@ -1879,7 +1883,7 @@ dist_track_plot &lt;-<span class="st"> </span>function(myid, myseason, <span cla
 <span class="st">  </span><span class="kw">facet_grid</span>(season ~<span class="st"> </span>c_label) +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Frechet Distance (km)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Density</span><span class="ch">\n</span><span class="st">&quot;</span>) +
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.key.width =</span> <span class="kw">unit</span>(<span class="fl">0.5</span>, <span class="st">&quot;cm&quot;</span>))</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/frechet_distance_histogram-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/frechet_distance_histogram-1.png" width="1152" /></p>
 <p>This plot cleary supports the idea that same-individual pairs tend to show greater path similarity than different-individual pairs.</p>
 <p><br></p>
 </div>
@@ -1964,7 +1968,7 @@ rand_sames$season &lt;-<span class="st"> </span><span class="kw">factor</span>(r
 <span class="st">  </span><span class="kw">expand_limits</span>(<span class="dt">x =</span> <span class="dv">0</span>) +
 <span class="st">  </span><span class="kw">theme_fc</span>() +
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;</span><span class="ch">\n</span><span class="st">Permuted Mean Distance (km)&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Count</span><span class="ch">\n</span><span class="st">&quot;</span>)</code></pre></div>
-<p><img src="figures/moose-migration-repeatability/plot_perm_test-1.png" /><!-- --></p>
+<p><img src="figures/moose-migration-repeatability/plot_perm_test-1.png" width="1152" /></p>
 <p>The observed mean value clearly lies outside the 95% CI in each of the conditions, so we reject the null hypothesis. Same-animal paths in different years are significantly more similar to each other than would be expected if migration paths were taken at random.</p>
 </div>
 
