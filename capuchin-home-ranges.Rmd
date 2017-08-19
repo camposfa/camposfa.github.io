@@ -14,7 +14,7 @@ Source files available on [Github](https://github.com/camposfa/HomeRanges)
 
 [Contact me](mailto:camposfa@gmail.com) if you are interested in the raw data
 
-```{r echo=FALSE}
+```{r echo = FALSE}
 knitr::opts_chunk$set(fig.path = 'figures/capuchin-home-ranges/', 
                fig.height = 6, 
                fig.width = 12, 

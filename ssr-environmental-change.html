@@ -4,7 +4,7 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
@@ -16,14 +16,16 @@
 <title>ssr-environmental-change</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
 
@@ -97,6 +99,9 @@ h5 {
 h6 {
   font-size: 12px;
 }
+.table th:not([align]) {
+  text-align: left;
+}
 </style>
 
 
@@ -125,6 +130,7 @@ button.code-folding-btn:focus {
   outline: none;
 }
 </style>
+
 
 <style type="text/css">
 /* padding for bootstrap navbar */
@@ -182,7 +188,6 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script src="site_libs/navigation-1.0/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -190,7 +195,9 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script src="site_libs/navigation-1.0/codefolding.js"></script>
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 <script>
 $(document).ready(function () {
   window.initializeCodeFolding("show" === "show");
@@ -214,7 +221,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
@@ -238,6 +245,7 @@ $(document).ready(function ()  {
   width: 100%;
 }
 }
+
 
 .toc-content {
   padding-left: 30px;
@@ -272,8 +280,9 @@ div.tocify {
 }
 
 .tocify-subheader .tocify-item {
-  font-size: 0.9em;
-  padding-left: 5px;
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -366,7 +375,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="http://people.ucalgary.ca/~facampos">
+  <a href="https://people.duke.edu/~fac13">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -381,10 +390,11 @@ div.tocify {
 <div class="btn-group pull-right">
 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All</a></li>
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
 </div>
+
 
 
 <h1 class="title toc-ignore">ssr-environmental-change</h1>
@@ -404,8 +414,8 @@ list.of.packages &lt;-<span class="st"> </span><span class="kw">c</span>(<span c
                       <span class="st">&quot;scales&quot;</span>, <span class="st">&quot;colorspace&quot;</span>, <span class="st">&quot;stringr&quot;</span>, <span class="st">&quot;gridExtra&quot;</span>, 
                       <span class="st">&quot;zoo&quot;</span>, <span class="st">&quot;RcppRoll&quot;</span>, <span class="st">&quot;xtable&quot;</span>, <span class="st">&quot;dplyr&quot;</span>, <span class="st">&quot;tidyr&quot;</span>,
                       <span class="st">&quot;reshape2&quot;</span>)
-new.packages &lt;-<span class="st"> </span>list.of.packages[!(list.of.packages %in%<span class="st"> </span><span class="kw">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>])]
-if(<span class="kw">length</span>(new.packages)) <span class="kw">install.packages</span>(<span class="kw">unlist</span>(new.packages))
+new.packages &lt;-<span class="st"> </span>list.of.packages[<span class="op">!</span>(list.of.packages <span class="op">%in%</span><span class="st"> </span><span class="kw">installed.packages</span>()[,<span class="st">&quot;Package&quot;</span>])]
+<span class="cf">if</span>(<span class="kw">length</span>(new.packages)) <span class="kw">install.packages</span>(<span class="kw">unlist</span>(new.packages))
 <span class="kw">lapply</span>(list.of.packages, require, <span class="dt">character.only =</span> T)</code></pre></div>
 <pre><code>## [[1]]
 ## [1] TRUE
@@ -451,77 +461,77 @@ if(<span class="kw">length</span>(new.packages)) <span class="kw">install.packag
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">load</span>(<span class="st">&quot;~/Dropbox/R/SSRChange_Climate/.RData&quot;</span>)</code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">census &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;CensusSummary.csv&quot;</span>)
 
-census$DateOf &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(census$DateOf)
-census$GroupNumber &lt;-<span class="st"> </span><span class="kw">factor</span>(census$GroupNumber)
+census<span class="op">$</span>DateOf &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(census<span class="op">$</span>DateOf)
+census<span class="op">$</span>GroupNumber &lt;-<span class="st"> </span><span class="kw">factor</span>(census<span class="op">$</span>GroupNumber)
 <span class="kw">names</span>(census)[<span class="dv">29</span>] &lt;-<span class="st"> &quot;Infant&quot;</span>
-census$c_male &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">21</span>, <span class="dv">23</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
-census$c_female &lt;-<span class="st"> </span>census$Fem
-census$c_juvenile &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">24</span>:<span class="dv">26</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
-census$c_infant &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">27</span>:<span class="dv">30</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
-census$c_simm &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">27</span>:<span class="dv">30</span>, <span class="dv">25</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
-census$c_unk &lt;-<span class="st"> </span>census$Unk
-census[<span class="kw">is.na</span>(census$c_female),]$c_female &lt;-<span class="st"> </span><span class="dv">0</span>
-census[<span class="kw">is.na</span>(census$c_unk),]$c_unk &lt;-<span class="st"> </span><span class="dv">0</span>
-census$c_total &lt;-<span class="st"> </span>census$Total
-census[<span class="kw">is.na</span>(census$Total),]$c_total &lt;-<span class="st"> </span><span class="dv">0</span>
+census<span class="op">$</span>c_male &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">21</span>, <span class="dv">23</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+census<span class="op">$</span>c_female &lt;-<span class="st"> </span>census<span class="op">$</span>Fem
+census<span class="op">$</span>c_juvenile &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">24</span><span class="op">:</span><span class="dv">26</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+census<span class="op">$</span>c_infant &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">27</span><span class="op">:</span><span class="dv">30</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+census<span class="op">$</span>c_simm &lt;-<span class="st"> </span><span class="kw">rowSums</span>(census[, <span class="kw">c</span>(<span class="dv">27</span><span class="op">:</span><span class="dv">30</span>, <span class="dv">25</span>)], <span class="dt">na.rm =</span> <span class="ot">TRUE</span>)
+census<span class="op">$</span>c_unk &lt;-<span class="st"> </span>census<span class="op">$</span>Unk
+census[<span class="kw">is.na</span>(census<span class="op">$</span>c_female),]<span class="op">$</span>c_female &lt;-<span class="st"> </span><span class="dv">0</span>
+census[<span class="kw">is.na</span>(census<span class="op">$</span>c_unk),]<span class="op">$</span>c_unk &lt;-<span class="st"> </span><span class="dv">0</span>
+census<span class="op">$</span>c_total &lt;-<span class="st"> </span>census<span class="op">$</span>Total
+census[<span class="kw">is.na</span>(census<span class="op">$</span>Total),]<span class="op">$</span>c_total &lt;-<span class="st"> </span><span class="dv">0</span>
 
-heat_grad &lt;-<span class="st"> </span><span class="kw">heat_hcl</span>(<span class="dv">12</span>, <span class="dt">c =</span> <span class="kw">c</span>(<span class="dv">80</span>, <span class="dv">30</span>), <span class="dt">l =</span> <span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">90</span>), <span class="dt">power =</span> <span class="kw">c</span>(<span class="dv">1</span>/<span class="dv">5</span>, <span class="dv">2</span>))</code></pre></div>
+heat_grad &lt;-<span class="st"> </span><span class="kw">heat_hcl</span>(<span class="dv">12</span>, <span class="dt">c =</span> <span class="kw">c</span>(<span class="dv">80</span>, <span class="dv">30</span>), <span class="dt">l =</span> <span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">90</span>), <span class="dt">power =</span> <span class="kw">c</span>(<span class="dv">1</span><span class="op">/</span><span class="dv">5</span>, <span class="dv">2</span>))</code></pre></div>
 <div id="udated-census-results" class="section level2">
 <h2>Udated Census Results</h2>
 <p>The first set of results here are basically a continuation of previous census results. This mostly rehashes the results from your 2012 book chapter, with a few notable changes: - I have added the two final years (2011 and 2013) - I have included all the recent minor changes made to the 2003 and 2007 censuses - I have recalculated summary stats for past years using the same rules as recent years.</p>
 <p>As I mentioned in an email to you a while back, I wasn’t able to perfectly reproduce the numbers from the book chaper, but they are fairly close. I don’t know if it’s worth explaining in the manuscript, but it’s probably just due to slight differenes in how the “replacement” counts were handeled. Regardless, it seems that small discrepancies are not unusual, because the numbers also differ slightly between the 2001 and 2012 census papers.</p>
 <p>First is a plot of total estimated population size. This plot is also broken up by age/sex class. The “Unknown” category shows the supplemental animals added to the estimate to correct for sampling effort (i.e., the replacements for very poor counts or not-found groups).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c_total &lt;-<span class="st"> </span>census %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(c_total &gt;<span class="st"> </span><span class="dv">0</span> &amp;<span class="st"> </span>GroupLetter !=<span class="st"> &quot;&quot;</span> &amp;<span class="st"> </span>Year !=<span class="st"> </span><span class="dv">1993</span> &amp;<span class="st"> </span>
-<span class="st">           </span>UseForTotalEstimate ==<span class="st"> &quot;Yes&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(Year) %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c_total &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(c_total <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>GroupLetter <span class="op">!=</span><span class="st"> &quot;&quot;</span> <span class="op">&amp;</span><span class="st"> </span>Year <span class="op">!=</span><span class="st"> </span><span class="dv">1993</span> <span class="op">&amp;</span><span class="st"> </span>
+<span class="st">           </span>UseForTotalEstimate <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(Year) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Males =</span> <span class="kw">sum</span>(c_male),
             <span class="dt">Females =</span> <span class="kw">sum</span>(c_female),
             <span class="dt">Juveniles =</span> <span class="kw">sum</span>(c_juvenile),
             <span class="dt">Infants =</span> <span class="kw">sum</span>(c_infant),
             <span class="dt">Unknown =</span> <span class="kw">sum</span>(c_unk),
-            <span class="dt">Total =</span> <span class="kw">sum</span>(c_total)) %&gt;%
-<span class="st">  </span><span class="kw">gather</span>(variable, count, -Year) %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(variable !=<span class="st"> &quot;Total&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(Year) %&gt;%
+            <span class="dt">Total =</span> <span class="kw">sum</span>(c_total)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">gather</span>(variable, count, <span class="op">-</span>Year) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(variable <span class="op">!=</span><span class="st"> &quot;Total&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(Year) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n_total =</span> <span class="kw">sum</span>(count, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
 
 smooth_all &lt;-<span class="st"> </span>c_total</code></pre></div>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c_demog &lt;-<span class="st"> </span>census %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(c_total &gt;<span class="st"> </span><span class="dv">0</span> &amp;<span class="st"> </span>GroupLetter !=<span class="st"> &quot;&quot;</span> &amp;<span class="st"> </span>Year !=<span class="st"> </span><span class="dv">1993</span> &amp;
-<span class="st">           </span>UseForDemography ==<span class="st"> &quot;Yes&quot;</span>) %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c_demog &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(c_total <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>GroupLetter <span class="op">!=</span><span class="st"> &quot;&quot;</span> <span class="op">&amp;</span><span class="st"> </span>Year <span class="op">!=</span><span class="st"> </span><span class="dv">1993</span> <span class="op">&amp;</span>
+<span class="st">           </span>UseForDemography <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">group_by</span>(Year)
 
-c_groups &lt;-<span class="st"> </span>c_demog %&gt;%
+c_groups &lt;-<span class="st"> </span>c_demog <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n_total =</span> <span class="kw">sum</span>(c_male, c_female, c_juvenile, 
                           c_infant, c_unk, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
             <span class="dt">n_group =</span> <span class="kw">length</span>(Year),
             <span class="dt">mean_g =</span> <span class="kw">mean</span>(c_total, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>),
             <span class="dt">med_g =</span> <span class="kw">median</span>(c_total, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>))
 
-c_ifr &lt;-<span class="st"> </span>c_demog %&gt;%
+c_ifr &lt;-<span class="st"> </span>c_demog <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">Males =</span> <span class="kw">sum</span>(c_male),
             <span class="dt">Females =</span> <span class="kw">sum</span>(c_female),
             <span class="dt">Juveniles =</span> <span class="kw">sum</span>(c_juvenile),
             <span class="dt">SImm =</span> <span class="kw">sum</span>(c_simm),
             <span class="dt">Infants =</span> <span class="kw">sum</span>(c_infant),
             <span class="dt">Unknown =</span> <span class="kw">sum</span>(c_unk),
-            <span class="dt">mf_ratio =</span> Males /<span class="st"> </span>Females, 
-            <span class="dt">if_ratio =</span> SImm /<span class="st"> </span>Females,
-            <span class="dt">jf_ratio =</span> Juveniles /<span class="st"> </span>Females, 
-            <span class="dt">immf_ratio =</span> (Infants +<span class="st"> </span>Juveniles) /<span class="st"> </span>Females) %&gt;%
-<span class="st">  </span><span class="kw">select</span>(Year, <span class="dv">8</span>:<span class="dv">11</span>)
+            <span class="dt">mf_ratio =</span> Males <span class="op">/</span><span class="st"> </span>Females, 
+            <span class="dt">if_ratio =</span> SImm <span class="op">/</span><span class="st"> </span>Females,
+            <span class="dt">jf_ratio =</span> Juveniles <span class="op">/</span><span class="st"> </span>Females, 
+            <span class="dt">immf_ratio =</span> (Infants <span class="op">+</span><span class="st"> </span>Juveniles) <span class="op">/</span><span class="st"> </span>Females) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">select</span>(Year, <span class="dv">8</span><span class="op">:</span><span class="dv">11</span>)
 
 smooth_all &lt;-<span class="st"> </span><span class="kw">cbind</span>(smooth_all, c_groups[, <span class="st">&quot;mean_g&quot;</span>], 
                     c_ifr[, <span class="st">&quot;if_ratio&quot;</span>])
-<span class="kw">names</span>(smooth_all)[<span class="dv">3</span>:<span class="dv">4</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mean_g&quot;</span>, <span class="st">&quot;if_ratio&quot;</span>)</code></pre></div>
+<span class="kw">names</span>(smooth_all)[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>] &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mean_g&quot;</span>, <span class="st">&quot;if_ratio&quot;</span>)</code></pre></div>
 <p><br> For interest’s sake, here is a stacked area percentage plot of group compositions over time. The data here only include <strong>high quality</strong> counts, as poor / fair counts are unreliable for determining group compositions. <em>This will probably be left out of the paper.</em></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c_ngroups &lt;-<span class="st"> </span>census %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(c_total &gt;<span class="st"> </span><span class="dv">0</span> &amp;<span class="st"> </span>Year !=<span class="st"> </span><span class="dv">1993</span> &amp;<span class="st"> </span>UseForTotalEstimate ==<span class="st"> &quot;Yes&quot;</span>) %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(Year, CensusGroupName) %&gt;%
-<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n_animals =</span> <span class="kw">sum</span>(c_total)) %&gt;%
-<span class="st">  </span><span class="kw">ungroup</span>() %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(Year) %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">c_ngroups &lt;-<span class="st"> </span>census <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(c_total <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>Year <span class="op">!=</span><span class="st"> </span><span class="dv">1993</span> <span class="op">&amp;</span><span class="st"> </span>UseForTotalEstimate <span class="op">==</span><span class="st"> &quot;Yes&quot;</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(Year, CensusGroupName) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n_animals =</span> <span class="kw">sum</span>(c_total)) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">ungroup</span>() <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(Year) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">g_mean =</span> <span class="kw">round</span>(<span class="kw">mean</span>(n_animals, <span class="dt">na.rm =</span> <span class="ot">TRUE</span>), <span class="dv">1</span>),
             <span class="dt">n_groups =</span> <span class="kw">length</span>(Year))
 
@@ -563,49 +573,49 @@ smooth_all &lt;-<span class="st"> </span><span class="kw">cbind</span>(smooth_al
 <span class="co"># write.csv(ssr, file = &quot;ssr_rain.csv&quot;, row.names = FALSE)</span>
 
 daily_rain &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;ssr_rain.csv&quot;</span>)
-daily_rain$date_of &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(daily_rain$date_of)
+daily_rain<span class="op">$</span>date_of &lt;-<span class="st"> </span><span class="kw">as.POSIXct</span>(daily_rain<span class="op">$</span>date_of)
 
-yearly_rain &lt;-<span class="st"> </span>daily_rain %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(year_of &lt;<span class="st"> </span><span class="dv">2015</span>) %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(year_of) %&gt;%
+yearly_rain &lt;-<span class="st"> </span>daily_rain <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(year_of <span class="op">&lt;</span><span class="st"> </span><span class="dv">2015</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(year_of) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">summarise</span>(<span class="dt">total_rain =</span> <span class="kw">sum</span>(rainfall))
 
-y_rain_median &lt;-<span class="st"> </span><span class="kw">median</span>(yearly_rain$total_rain)
-y_rain_mean &lt;-<span class="st"> </span><span class="kw">mean</span>(yearly_rain$total_rain)
+y_rain_median &lt;-<span class="st"> </span><span class="kw">median</span>(yearly_rain<span class="op">$</span>total_rain)
+y_rain_mean &lt;-<span class="st"> </span><span class="kw">mean</span>(yearly_rain<span class="op">$</span>total_rain)
 yearly_rain &lt;-<span class="st"> </span><span class="kw">mutate</span>(yearly_rain, 
                       <span class="dt">date_of =</span> <span class="kw">as.POSIXct</span>(<span class="kw">paste</span>(year_of, <span class="st">&quot;07-01&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;-&quot;</span>)))
 
 y_rain_plot &lt;-<span class="st"> </span><span class="kw">ggplot</span>(yearly_rain, 
                       <span class="kw">aes</span>(<span class="dt">x =</span> date_of, <span class="dt">y =</span> total_rain, <span class="dt">fill =</span> total_rain,
-                          <span class="dt">group =</span> year_of)) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) +<span class="st"> </span>
+                          <span class="dt">group =</span> year_of)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">color =</span> <span class="st">&quot;black&quot;</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_fill_gradient2</span>(<span class="dt">name =</span> <span class="st">&quot;Total Rain (mm)&quot;</span>, 
                        <span class="dt">midpoint =</span> y_rain_median, 
                        <span class="dt">low =</span> <span class="st">&quot;#8C510A&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;#01665E&quot;</span>, <span class="dt">mid =</span> <span class="st">&quot;#F5F5F5&quot;</span>,
-                       <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">min</span>(yearly_rain$total_rain), 
-                                  <span class="kw">max</span>(yearly_rain$total_rain)),
-                       <span class="dt">guide =</span> <span class="ot">FALSE</span>) +
-<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Year&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Total rainfall (mm)&quot;</span>) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_bw</span>() +<span class="st"> </span>
+                       <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">min</span>(yearly_rain<span class="op">$</span>total_rain), 
+                                  <span class="kw">max</span>(yearly_rain<span class="op">$</span>total_rain)),
+                       <span class="dt">guide =</span> <span class="ot">FALSE</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Year&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Total rainfall (mm)&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> y_rain_median),
-             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>) +
+             <span class="dt">lty =</span> <span class="dv">2</span>, <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">geom_hline</span>(<span class="kw">aes</span>(<span class="dt">yintercept =</span> y_rain_mean),
-             <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>) +
+             <span class="dt">lty =</span> <span class="dv">3</span>, <span class="dt">color =</span> <span class="st">&quot;gray30&quot;</span>) <span class="op">+</span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>, 
         <span class="dt">axis.text.y =</span> <span class="kw">element_blank</span>(),
-        <span class="dt">panel.grid.major.x=</span> <span class="kw">element_blank</span>()) +<span class="st"> </span>
+        <span class="dt">panel.grid.major.x=</span> <span class="kw">element_blank</span>()) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">date_labels =</span> <span class="st">&quot;%Y&quot;</span>,
                    <span class="dt">limits =</span> <span class="kw">c</span>(<span class="kw">ymd</span>(<span class="st">&quot;1978-05-01&quot;</span>, <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>), 
                               <span class="kw">ymd</span>(<span class="st">&quot;2014-05-01&quot;</span>, <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>)),
                    <span class="dt">date_minor_breaks =</span> <span class="st">&quot;1 year&quot;</span>)</code></pre></div>
 <p>As you can see, 1991 and 1992 are two of the lowest rainfall years on record, and not only that, but they’re consecutive. It must have been a brutal time for the trees and monkeys. This was during an unusually prolonged El Niño period. In fact, you can see that the driest years correspond pretty well with strong El Niño episodes, like in 1983, 1991-1994, and 1997. Here’s another plot that shows when exactly the rain fell in 91 and 92 years compared to normal years.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dd &lt;-<span class="st"> </span>daily_rain %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(year_of !=<span class="st"> </span><span class="dv">1979</span>) %&gt;%
-<span class="st">  </span><span class="kw">group_by</span>(year_of) %&gt;%
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dd &lt;-<span class="st"> </span>daily_rain <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(year_of <span class="op">!=</span><span class="st"> </span><span class="dv">1979</span>) <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">group_by</span>(year_of) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">mutate</span>(<span class="dt">cs =</span> <span class="kw">cumsum</span>(rainfall))
 
-mm &lt;-<span class="st"> </span>dd %&gt;%<span class="st"> </span>
-<span class="st">  </span><span class="kw">filter</span>(<span class="kw">month</span>(date_of) ==<span class="st"> </span><span class="dv">12</span> &amp;<span class="st"> </span><span class="kw">day</span>(date_of) ==<span class="st"> </span><span class="dv">31</span>) %&gt;%
+mm &lt;-<span class="st"> </span>dd <span class="op">%&gt;%</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">filter</span>(<span class="kw">month</span>(date_of) <span class="op">==</span><span class="st"> </span><span class="dv">12</span> <span class="op">&amp;</span><span class="st"> </span><span class="kw">day</span>(date_of) <span class="op">==</span><span class="st"> </span><span class="dv">31</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(date_of, cs)
 
 <span class="kw">names</span>(mm)[<span class="dv">3</span>] &lt;-<span class="st"> &quot;year_total&quot;</span>
@@ -614,110 +624,110 @@ r_cum &lt;-<span class="st"> </span><span class="kw">left_join</span>(dd, <span 
 
 r_cum &lt;-<span class="st"> </span><span class="kw">left_join</span>(r_cum, <span class="kw">select</span>(mei_yearly, year_of, mei_mean))
 
-r_cum$date_of &lt;-<span class="st"> </span><span class="kw">ymd</span>(r_cum$date_of, <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>)
-r_cum$month_of &lt;-<span class="st"> </span><span class="kw">month</span>(r_cum$date_of)
+r_cum<span class="op">$</span>date_of &lt;-<span class="st"> </span><span class="kw">ymd</span>(r_cum<span class="op">$</span>date_of, <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>)
+r_cum<span class="op">$</span>month_of &lt;-<span class="st"> </span><span class="kw">month</span>(r_cum<span class="op">$</span>date_of)
 
-temp &lt;-<span class="st"> </span>mei %&gt;%
-<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">month_of =</span> <span class="kw">month</span>(date_of)) %&gt;%
+temp &lt;-<span class="st"> </span>mei <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">mutate</span>(<span class="dt">month_of =</span> <span class="kw">month</span>(date_of)) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(mei, year_of, month_of, mei)
 
 r_cum &lt;-<span class="st"> </span><span class="kw">left_join</span>(r_cum, temp, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;year_of&quot;</span>, <span class="st">&quot;month_of&quot;</span>))
 
 mm &lt;-<span class="st"> </span><span class="kw">inner_join</span>(mm, <span class="kw">select</span>(r_cum, date_of, mei_mean))
 
-<span class="kw">ggplot</span>() +<span class="st"> </span>
+<span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_step</span>(<span class="dt">data =</span> r_cum, 
             <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)), 
                 <span class="dt">y =</span> cs, <span class="dt">group =</span> year_of, <span class="dt">color =</span> mei_mean), 
-            <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> mm, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">10</span>), 
+            <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> mm, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)) <span class="op">+</span><span class="st"> </span><span class="kw">days</span>(<span class="dv">10</span>), 
                            <span class="dt">y =</span> year_total, <span class="dt">color =</span> mei_mean,
                            <span class="dt">group =</span> year_of, <span class="dt">label =</span> year_of), 
-            <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>) +
-<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;months&quot;</span>), <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%b&quot;</span>)) +
+            <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;months&quot;</span>), <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%b&quot;</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">scale_color_gradientn</span>(<span class="dt">name =</span> <span class="st">&quot;MEI Annual Mean&quot;</span>, 
                         <span class="dt">colours =</span> <span class="kw">rev</span>(<span class="kw">brewer.pal</span>(<span class="dv">11</span>, <span class="st">&quot;RdYlBu&quot;</span>)),
-                        <span class="dt">limits =</span> <span class="kw">c</span>(-<span class="fl">1.65</span>, <span class="fl">1.65</span>)) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_classic</span>() +<span class="st"> </span>
+                        <span class="dt">limits =</span> <span class="kw">c</span>(<span class="op">-</span><span class="fl">1.65</span>, <span class="fl">1.65</span>)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_classic</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>,
         <span class="dt">legend.key.width=</span><span class="kw">unit</span>(<span class="dv">2</span>, <span class="st">&quot;cm&quot;</span>),
-        <span class="dt">legend.key.height=</span><span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>)) +<span class="st"> </span>
+        <span class="dt">legend.key.height=</span><span class="kw">unit</span>(<span class="fl">0.2</span>, <span class="st">&quot;cm&quot;</span>)) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Cummulative rainfall (mm)&quot;</span>)</code></pre></div>
-<p><img src="figures/ssr-environmental-change/rain_cumsum-1.png" /><!-- --></p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r_2014 &lt;-<span class="st"> </span>dd %&gt;%
-<span class="st">  </span><span class="kw">filter</span>(year_of ==<span class="st"> </span><span class="dv">2014</span>) %&gt;%
+<p><img src="figures/ssr-environmental-change/rain_cumsum-1.png" width="768" /></p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">r_<span class="dv">2014</span> &lt;-<span class="st"> </span>dd <span class="op">%&gt;%</span>
+<span class="st">  </span><span class="kw">filter</span>(year_of <span class="op">==</span><span class="st"> </span><span class="dv">2014</span>) <span class="op">%&gt;%</span>
 <span class="st">  </span><span class="kw">select</span>(date_of, cs)
 
 r_2014_t &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">year_of =</span> <span class="dv">2014</span>, 
-                       <span class="dt">date_of =</span> <span class="kw">max</span>(<span class="kw">as.Date</span>(r_2014$date_of)),
-                       <span class="dt">year_total =</span> <span class="kw">max</span>(r_2014$cs))
+                       <span class="dt">date_of =</span> <span class="kw">max</span>(<span class="kw">as.Date</span>(r_<span class="dv">2014</span><span class="op">$</span>date_of)),
+                       <span class="dt">year_total =</span> <span class="kw">max</span>(r_<span class="dv">2014</span><span class="op">$</span>cs))
 
-<span class="kw">ggplot</span>() +<span class="st"> </span>
+<span class="kw">ggplot</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">geom_step</span>(<span class="dt">data =</span> r_cum, 
             <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)), 
                 <span class="dt">y =</span> cs, <span class="dt">group =</span> year_of), 
-            <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> mm, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">10</span>), 
+            <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">alpha =</span> <span class="fl">0.8</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> mm, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)) <span class="op">+</span><span class="st"> </span><span class="kw">days</span>(<span class="dv">10</span>), 
                            <span class="dt">y =</span> year_total,
                            <span class="dt">group =</span> year_of, <span class="dt">label =</span> year_of), 
-            <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) +
-<span class="st">  </span><span class="kw">geom_step</span>(<span class="dt">data =</span> r_2014,
+            <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">alpha =</span> <span class="fl">0.7</span>, <span class="dt">color =</span> <span class="st">&quot;gray50&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_step</span>(<span class="dt">data =</span> r_<span class="dv">2014</span>,
             <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)),
                 <span class="dt">y =</span> cs),
-            <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
-<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> r_2014_t, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">10</span>), 
+            <span class="dt">size =</span> <span class="dv">1</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">geom_text</span>(<span class="dt">data =</span> r_2014_t, <span class="kw">aes</span>(<span class="dt">x =</span> <span class="kw">as.Date</span>(<span class="kw">yday</span>(date_of)) <span class="op">+</span><span class="st"> </span><span class="kw">days</span>(<span class="dv">10</span>), 
                            <span class="dt">y =</span> year_total,
                            <span class="dt">label =</span> year_of), 
-            <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) +
-<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;months&quot;</span>), <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%b&quot;</span>)) +
+            <span class="dt">size =</span> <span class="dv">3</span>, <span class="dt">color =</span> <span class="st">&quot;red&quot;</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw">scale_x_date</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="st">&quot;months&quot;</span>), <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%b&quot;</span>)) <span class="op">+</span>
 <span class="co">#   scale_color_gradientn(name = &quot;MEI Annual Mean&quot;, </span>
 <span class="co">#                         colours = rev(brewer.pal(11, &quot;RdYlBu&quot;)),</span>
 <span class="co">#                         limits = c(-1.65, 1.65)) + </span>
-<span class="st">  </span><span class="kw">theme_classic</span>() +<span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_classic</span>() <span class="op">+</span><span class="st"> </span>
 <span class="co">#   theme(legend.position = &quot;bottom&quot;,</span>
 <span class="co">#         legend.key.width=unit(2, &quot;cm&quot;),</span>
 <span class="co">#         legend.key.height=unit(0.2, &quot;cm&quot;)) + </span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Month&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Cummulative rainfall (mm)&quot;</span>)</code></pre></div>
-<p><img src="figures/ssr-environmental-change/rain_cumsum-2.png" /><!-- --></p>
+<p><img src="figures/ssr-environmental-change/rain_cumsum-2.png" width="768" /></p>
 <p>My point is that these two wet seasons were exceptionally bad, and so it follows leaf-shedding phenology was probably affected as the trees suffered during this time. This probably explains the much less green images for the years following these weak wet seasons: 1992, 1993, and 1998.</p>
 <p><br><br></p>
 <p>Here’s another plot showing the relationship between the Southern Oscillation Index and the rainfall trend. The thin blue line is a seasonally decomposed trend of monthly rainfall totals over the entire study period, i.e., it’s the remaining pattern in rainfall values <em>after</em> accounting for the very strong season pattern. The thick blue line is a LOESS smoother of this trend. The thin orange line is the 5-month moving weighted average of the SOI values, as plotted above, while the thick orange line is another LOESS smoother. As you can see, the patterns match up pretty well. Since the values differed in magnitude quite a lot, I applied a z-transofmation for this plot to improve visual interpretation. The cross-correlation between the two time series 0.605, and the lag which results in maximum correlation is 1.67 months (i.e., SOI leads rainfall, and above-average SOI is likely to lead to above-average rainfall about 1.67 months later).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp &lt;-<span class="st"> </span><span class="kw">zoo</span>(w_month$rain_sum, w_month$date_of, <span class="dt">frequency =</span> <span class="dv">12</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">temp &lt;-<span class="st"> </span><span class="kw">zoo</span>(w_month<span class="op">$</span>rain_sum, w_month<span class="op">$</span>date_of, <span class="dt">frequency =</span> <span class="dv">12</span>)
 
 rain_ts &lt;-<span class="st"> </span><span class="kw">ts</span>(<span class="kw">coredata</span>(temp), <span class="dt">freq =</span> <span class="kw">frequency</span>(temp), 
               <span class="dt">start =</span> <span class="kw">c</span>(<span class="kw">year</span>(<span class="kw">start</span>(temp)), <span class="kw">month</span>(<span class="kw">start</span>(temp))), 
               <span class="dt">end =</span> <span class="kw">c</span>(<span class="kw">year</span>(<span class="kw">end</span>(temp)), <span class="kw">month</span>(<span class="kw">end</span>(temp))))
 
 stl_dates &lt;-<span class="st"> </span><span class="kw">floor_date</span>(<span class="kw">ymd</span>(<span class="kw">rownames</span>(<span class="kw">data.frame</span>(temp)), <span class="dt">tz =</span> <span class="st">&quot;UTC&quot;</span>), 
-                        <span class="dt">unit =</span> <span class="st">&quot;month&quot;</span>) +<span class="st"> </span><span class="kw">days</span>(<span class="dv">14</span>)
+                        <span class="dt">unit =</span> <span class="st">&quot;month&quot;</span>) <span class="op">+</span><span class="st"> </span><span class="kw">days</span>(<span class="dv">14</span>)
 
 rain_stl &lt;-<span class="st"> </span><span class="kw">data.frame</span>(stl_dates)
 
-for(i in <span class="dv">4</span>:<span class="dv">37</span>){
+<span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">4</span><span class="op">:</span><span class="dv">37</span>){
   temp &lt;-<span class="st"> </span><span class="kw">stl</span>(rain_ts, <span class="dt">s.window =</span> <span class="st">&quot;periodic&quot;</span>, 
               <span class="dt">t.window =</span> i, <span class="dt">t.degree =</span> <span class="dv">0</span>)
-  rain_stl &lt;-<span class="st"> </span><span class="kw">cbind</span>(rain_stl, <span class="kw">data.frame</span>(temp$time.series)$trend)
-  <span class="kw">names</span>(rain_stl)[i -<span class="st"> </span><span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">paste</span>(i, <span class="st">&quot;months&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>)
+  rain_stl &lt;-<span class="st"> </span><span class="kw">cbind</span>(rain_stl, <span class="kw">data.frame</span>(temp<span class="op">$</span>time.series)<span class="op">$</span>trend)
+  <span class="kw">names</span>(rain_stl)[i <span class="op">-</span><span class="st"> </span><span class="dv">2</span>] &lt;-<span class="st"> </span><span class="kw">paste</span>(i, <span class="st">&quot;months&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;_&quot;</span>)
 }
 
-rain_stl &lt;-<span class="st"> </span><span class="kw">gather</span>(rain_stl, window, value, -stl_dates)
+rain_stl &lt;-<span class="st"> </span><span class="kw">gather</span>(rain_stl, window, value, <span class="op">-</span>stl_dates)
 
-rain_stl &lt;-<span class="st"> </span><span class="kw">mutate</span>(rain_stl, <span class="dt">n_months =</span> <span class="kw">as.numeric</span>(<span class="kw">as.character</span>(<span class="kw">str_extract</span>(rain_stl$window, <span class="dt">pattern =</span> <span class="st">&quot;[0-9]+&quot;</span>))))
+rain_stl &lt;-<span class="st"> </span><span class="kw">mutate</span>(rain_stl, <span class="dt">n_months =</span> <span class="kw">as.numeric</span>(<span class="kw">as.character</span>(<span class="kw">str_extract</span>(rain_stl<span class="op">$</span>window, <span class="dt">pattern =</span> <span class="st">&quot;[0-9]+&quot;</span>))))
 
 <span class="kw">ggplot</span>(rain_stl, <span class="kw">aes</span>(<span class="dt">x =</span> stl_dates, <span class="dt">y =</span> value, 
-                     <span class="dt">color =</span> n_months, <span class="dt">group =</span> window)) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_line</span>() +<span class="st"> </span>
+                     <span class="dt">color =</span> n_months, <span class="dt">group =</span> window)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>() <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_color_gradientn</span>(<span class="dt">colours =</span> <span class="kw">rev</span>(heat_grad),
-                        <span class="dt">name =</span> <span class="st">&quot;Sliding window </span><span class="ch">\n</span><span class="st">length (months)&quot;</span>) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">theme_classic</span>() +<span class="st"> </span>
-<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> <span class="kw">filter</span>(rain_stl, n_months ==<span class="st"> </span><span class="dv">18</span>),
+                        <span class="dt">name =</span> <span class="st">&quot;Sliding window </span><span class="ch">\n</span><span class="st">length (months)&quot;</span>) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme_classic</span>() <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">geom_line</span>(<span class="dt">data =</span> <span class="kw">filter</span>(rain_stl, n_months <span class="op">==</span><span class="st"> </span><span class="dv">18</span>),
             <span class="kw">aes</span>(<span class="dt">x =</span> stl_dates, <span class="dt">y =</span> value, <span class="dt">group =</span> window),
-            <span class="dt">color =</span> <span class="st">&quot;#00AAFF&quot;</span>, <span class="dt">size =</span> <span class="fl">0.8</span>) +<span class="st"> </span>
+            <span class="dt">color =</span> <span class="st">&quot;#00AAFF&quot;</span>, <span class="dt">size =</span> <span class="fl">0.8</span>) <span class="op">+</span><span class="st"> </span>
 <span class="st">  </span><span class="kw">scale_x_datetime</span>(<span class="dt">breaks =</span> <span class="kw">date_breaks</span>(<span class="dt">width =</span> <span class="st">&quot;2 years&quot;</span>),
-                   <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%Y&quot;</span>)) +<span class="st"> </span>
-<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">vjust =</span> <span class="fl">0.5</span>)) +
+                   <span class="dt">labels =</span> <span class="kw">date_format</span>(<span class="st">&quot;%Y&quot;</span>)) <span class="op">+</span><span class="st"> </span>
+<span class="st">  </span><span class="kw">theme</span>(<span class="dt">axis.text.x =</span> <span class="kw">element_text</span>(<span class="dt">angle =</span> <span class="dv">90</span>, <span class="dt">vjust =</span> <span class="fl">0.5</span>)) <span class="op">+</span>
 <span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;Date&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;Rainfall trend&quot;</span>)</code></pre></div>
-<p><img src="figures/ssr-environmental-change/rain_stl-1.png" /><!-- --></p>
+<p><img src="figures/ssr-environmental-change/rain_stl-1.png" width="768" /></p>
 <hr />
 <p><br></p>
 <div id="class-level-analysis" class="section level3">
@@ -791,9 +801,13 @@ rain_stl &lt;-<span class="st"> </span><span class="kw">mutate</span>(rain_stl, 
 <script>
 
 // add bootstrap table styles to pandoc tables
-$(document).ready(function () {
+function bootstrapStylePandocTables() {
   $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
 });
+
 
 </script>
 
@@ -802,7 +816,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>

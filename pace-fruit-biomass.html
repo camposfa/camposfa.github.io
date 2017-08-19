@@ -4,26 +4,28 @@
 
 <head>
 
-<meta charset="utf-8">
+<meta charset="utf-8" />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
 
 <meta name="author" content="Fernando Campos" />
 
-<meta name="date" content="2016-04-15" />
+<meta name="date" content="2017-08-19" />
 
 <title>Santa Rosa Fruit Biomass</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
-<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
-<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
-<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<script src="site_libs/navigation-1.1/codefolding.js"></script>
 <link href="site_libs/font-awesome-4.5.0/css/font-awesome.min.css" rel="stylesheet" />
 
 
@@ -97,6 +99,9 @@ h5 {
 h6 {
   font-size: 12px;
 }
+.table th:not([align]) {
+  text-align: left;
+}
 </style>
 
 
@@ -125,6 +130,7 @@ button.code-folding-btn:focus {
   outline: none;
 }
 </style>
+
 
 <style type="text/css">
 /* padding for bootstrap navbar */
@@ -182,7 +188,6 @@ $(document).ready(function () {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
-<script src="site_libs/navigation-1.0/tabsets.js"></script>
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
@@ -190,7 +195,9 @@ $(document).ready(function () {
 </script>
 
 <!-- code folding -->
-<script src="site_libs/navigation-1.0/codefolding.js"></script>
+<style type="text/css">
+.code-folding-btn { margin-bottom: 4px; }
+</style>
 <script>
 $(document).ready(function () {
   window.initializeCodeFolding("show" === "show");
@@ -214,7 +221,7 @@ $(document).ready(function ()  {
       theme: "bootstrap3",
       context: '.toc-content',
       hashGenerator: function (text) {
-        return text.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
       },
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
@@ -238,6 +245,7 @@ $(document).ready(function ()  {
   width: 100%;
 }
 }
+
 
 .toc-content {
   padding-left: 30px;
@@ -272,8 +280,9 @@ div.tocify {
 }
 
 .tocify-subheader .tocify-item {
-  font-size: 0.9em;
-  padding-left: 5px;
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
 }
 
 .tocify .list-group-item {
@@ -366,7 +375,7 @@ div.tocify {
   </a>
 </li>
 <li>
-  <a href="http://people.ucalgary.ca/~facampos">
+  <a href="https://people.duke.edu/~fac13">
     <span class="fa fa-home fa-lg"></span>
      
   </a>
@@ -381,15 +390,16 @@ div.tocify {
 <div class="btn-group pull-right">
 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span>Code</span> <span class="caret"></span></button>
 <ul class="dropdown-menu" style="min-width: 50px;">
-<li><a id="rmd-show-all-code" href="#">Show All</a></li>
-<li><a id="rmd-hide-all-code" href="#">Hide All</a></li>
+<li><a id="rmd-show-all-code" href="#">Show All Code</a></li>
+<li><a id="rmd-hide-all-code" href="#">Hide All Code</a></li>
 </ul>
 </div>
 
 
+
 <h1 class="title toc-ignore">Santa Rosa Fruit Biomass</h1>
 <h4 class="author"><em>Fernando Campos</em></h4>
-<h4 class="date"><em>2016-04-15</em></h4>
+<h4 class="date"><em>2017-08-19</em></h4>
 
 </div>
 
@@ -424,9 +434,12 @@ tr &lt;-<span class="st"> </span><span class="kw">get_pace_tbl</span>(paceR_db, 
 <span class="co"># Read in FPV file (not currently in PACE!)</span>
 fpv &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(<span class="kw">read.csv</span>(<span class="st">&quot;_data/pace-fruit-biomass/AllFPV.csv&quot;</span>))
 
+<span class="co"># Read most recent fig file</span>
+figs &lt;-<span class="st"> </span><span class="kw">tbl_df</span>(<span class="kw">read.csv</span>(<span class="st">&quot;_data/pace-fruit-biomass/FicusData_Nov13_2013.csv&quot;</span>))
+
 <span class="co"># Create set of species to exclude</span>
 exclude_species &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;SCAP&quot;</span>, <span class="st">&quot;SPAV&quot;</span>, <span class="st">&quot;CCAN&quot;</span>, <span class="st">&quot;BUNG&quot;</span>, <span class="st">&quot;HCOU&quot;</span>,
-                    <span class="st">&quot;ATIB&quot;</span>, <span class="st">&quot;GULM&quot;</span>, <span class="st">&quot;LCAN&quot;</span>, <span class="st">&quot;LSPE&quot;</span>, <span class="st">&quot;FUNK&quot;</span>)</code></pre></div>
+                     <span class="st">&quot;ATIB&quot;</span>, <span class="st">&quot;GULM&quot;</span>, <span class="st">&quot;LCAN&quot;</span>, <span class="st">&quot;LSPE&quot;</span>, <span class="st">&quot;FUNK&quot;</span>)</code></pre></div>
 </div>
 <div id="calculations" class="section level1">
 <h1>Calculations</h1>
@@ -435,70 +448,72 @@ exclude_species &lt;-<span class="st"> </span><span class="kw">c</span>(<span cl
 <div id="no-smoothing" class="section level2">
 <h2>No Smoothing</h2>
 <p>When the function is called with <code>smooth = &quot;none&quot;</code>, the raw availability indices are averaged for each species in each month and these values are used to calculate biomass for each species.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">biomass_avail_raw &lt;-<span class="st"> </span><span class="kw">get_biomass_sr</span>(ph, tr, fpv, exclude_species, <span class="dt">smooth =</span> <span class="st">&quot;none&quot;</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">biomass_avail_raw &lt;-<span class="st"> </span><span class="kw">get_biomass_sr</span>(ph, tr, fpv, figs, exclude_species, 
+                                    <span class="dt">smooth =</span> <span class="st">&quot;none&quot;</span>)</code></pre></div>
 <p>We can look at some of the values…</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">biomass_avail_raw %&gt;%<span class="st"> </span><span class="kw">select</span>(SpeciesName, year_of, month_of, biomass_monthly_kg)</code></pre></div>
-<pre><code>## Source: local data frame [3,695 x 4]
-## Groups: SpeciesName, year_of [347]
-## 
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">biomass_avail_raw <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">select</span>(SpeciesName, year_of, month_of, biomass_monthly_kg)</code></pre></div>
+<pre><code>## # A tibble: 5,362 x 4
+## # Groups:   SpeciesName, year_of [478]
 ##         SpeciesName year_of month_of biomass_monthly_kg
-##               (chr)  (fctr)   (fctr)              (dbl)
-## 1  Alibertia edulis    2007      Feb          0.0000000
-## 2  Alibertia edulis    2007      Mar          2.5059181
-## 3  Alibertia edulis    2007      Apr          0.0000000
-## 4  Alibertia edulis    2007      May          0.0000000
-## 5  Alibertia edulis    2007      Jun          0.8949708
-## 6  Alibertia edulis    2007      Jul          0.8949708
-## 7  Alibertia edulis    2007      Aug          0.0000000
-## 8  Alibertia edulis    2007      Oct          0.6712281
-## 9  Alibertia edulis    2007      Nov          4.9223392
-## 10 Alibertia edulis    2007      Dec          0.0000000
-## ..              ...     ...      ...                ...</code></pre>
+##               &lt;chr&gt;  &lt;fctr&gt;   &lt;fctr&gt;              &lt;dbl&gt;
+##  1 Alibertia edulis    2007      Feb           0.000000
+##  2 Alibertia edulis    2007      Mar           4.257945
+##  3 Alibertia edulis    2007      Apr           0.000000
+##  4 Alibertia edulis    2007      May           0.000000
+##  5 Alibertia edulis    2007      Jun           1.520695
+##  6 Alibertia edulis    2007      Jul           1.520695
+##  7 Alibertia edulis    2007      Aug           0.000000
+##  8 Alibertia edulis    2007      Oct           1.140521
+##  9 Alibertia edulis    2007      Nov           8.363821
+## 10 Alibertia edulis    2007      Dec           0.000000
+## # ... with 5,352 more rows</code></pre>
 <p>The function <code>plot_biomass_species</code> visualizes this using a heatmap.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_biomass_species</span>(biomass_avail_raw)</code></pre></div>
-<p><img src="figures/pace-fruit-biomass/unnamed-chunk-7-1.png" /><!-- --></p>
+<p><img src="figures/pace-fruit-biomass/plot_biomass_raw-1.png" width="1152" /></p>
 <p>Summarise the data by adding up all species in each month.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b_summary_raw &lt;-<span class="st"> </span><span class="kw">biomass_monthly_summary</span>(biomass_avail_raw)</code></pre></div>
 <p>Now plot the summary.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot_biomass_monthly</span>(b_summary_raw)</code></pre></div>
-<p><img src="figures/pace-fruit-biomass/unnamed-chunk-9-1.png" /><!-- --></p>
+<p><img src="figures/pace-fruit-biomass/plot_summary_biomass_raw-1.png" width="672" /></p>
 </div>
 <div id="loess-smoothing" class="section level2">
 <h2>Loess Smoothing</h2>
 <p>When the function is called with <code>smooth = &quot;loess&quot;</code>, the raw availability indices are smoothed using <a href="https://stat.ethz.ch/R-manual/R-patched/library/stats/html/loess.html">Local Polynomial Regression Fitting</a>. The loess smoother is applied to each species and year separately, which allows the seasonal pattern of fruiting for a given species to differ from year to year.</p>
 <p>Let’s carry out the same steps with this method. First for each species.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">biomass_avail_lo &lt;-<span class="st"> </span><span class="kw">get_biomass_sr</span>(ph, tr, fpv, exclude_species, <span class="dt">smooth =</span> <span class="st">&quot;loess&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">biomass_avail_lo &lt;-<span class="st"> </span><span class="kw">get_biomass_sr</span>(ph, tr, fpv, figs, exclude_species, 
+                                   <span class="dt">smooth =</span> <span class="st">&quot;loess&quot;</span>)
 <span class="kw">plot_biomass_species</span>(biomass_avail_lo)</code></pre></div>
-<p><img src="figures/pace-fruit-biomass/unnamed-chunk-10-1.png" /><!-- --></p>
+<p><img src="figures/pace-fruit-biomass/biomass_lo-1.png" width="1152" /></p>
 <p>And then the summary. This smoothing method produces an overall pattern similar to the raw scores, but its main effects are 1) dampening/devaluing extreme values and outliers, and 2) allowing availability scores in adjacent months to have some influence on each other.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b_summary_lo &lt;-<span class="st"> </span><span class="kw">biomass_monthly_summary</span>(biomass_avail_lo)
 <span class="kw">plot_biomass_monthly</span>(b_summary_lo)</code></pre></div>
-<p><img src="figures/pace-fruit-biomass/unnamed-chunk-11-1.png" /><!-- --></p>
+<p><img src="figures/pace-fruit-biomass/plot_biomass_lo-1.png" width="672" /></p>
 </div>
 <div id="gamm-smoothing" class="section level2">
 <h2>GAMM Smoothing</h2>
 <p>When the function is called with <code>smooth = &quot;gam&quot;</code>, the raw availability indices are smoothed using <a href="https://stat.ethz.ch/R-manual/R-devel/library/mgcv/html/gamm.html">Generalized Additive Mixed Models</a>. This is applied to each species separately. This smoothing method assumes that <em>the month-to-month fruiting pattern for a given species is the same from year to year</em>; what differs is the degree to which that species’ cycle is expressed in any particular year. This assumption is probably bad for some species (like <em>Ficus</em>), but it’s probably a reasonable assumption for many species.</p>
 <p>Let’s carry out the same steps with this method. First for each species.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">biomass_avail_gam &lt;-<span class="st"> </span><span class="kw">get_biomass_sr</span>(ph, tr, fpv, exclude_species, <span class="dt">smooth =</span> <span class="st">&quot;gam&quot;</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">biomass_avail_gam &lt;-<span class="st"> </span><span class="kw">get_biomass_sr</span>(ph, tr, fpv, figs, exclude_species, 
+                                    <span class="dt">smooth =</span> <span class="st">&quot;gam&quot;</span>)
 <span class="kw">plot_biomass_species</span>(biomass_avail_gam)</code></pre></div>
-<p><img src="figures/pace-fruit-biomass/unnamed-chunk-12-1.png" /><!-- --></p>
+<p><img src="figures/pace-fruit-biomass/plot_biomass_gam-1.png" width="1152" /></p>
 <p>And then the summary. This produces an overall pattern that is approximately the same across years as far as the <em>timing</em> of fruit abundance peaks and troughs for each species. The pattern differs quite a bit from the others. I think the main strengths of this method are that it’s easy to identify variation around the “typical” conditions, e.g., which months tend to have higher or lower fruit abundance, and which years are relatively good or bad.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">b_summary_gam &lt;-<span class="st"> </span><span class="kw">biomass_monthly_summary</span>(biomass_avail_gam)
 <span class="kw">plot_biomass_monthly</span>(b_summary_gam)</code></pre></div>
-<p><img src="figures/pace-fruit-biomass/unnamed-chunk-13-1.png" /><!-- --></p>
+<p><img src="figures/pace-fruit-biomass/summary_biomass_gam-1.png" width="672" /></p>
 </div>
 </div>
 <div id="comparison" class="section level1">
 <h1>Comparison</h1>
 <p>Finally, we can make a side-by-side plot of the three methods</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># Side by side plot</span>
-b_summary_raw$method &lt;-<span class="st"> &quot;none&quot;</span>
-b_summary_gam$method &lt;-<span class="st"> &quot;gam&quot;</span>
-b_summary_lo$method &lt;-<span class="st"> &quot;loess&quot;</span>
+b_summary_raw<span class="op">$</span>method &lt;-<span class="st"> &quot;none&quot;</span>
+b_summary_gam<span class="op">$</span>method &lt;-<span class="st"> &quot;gam&quot;</span>
+b_summary_lo<span class="op">$</span>method &lt;-<span class="st"> &quot;loess&quot;</span>
 temp &lt;-<span class="st"> </span><span class="kw">bind_rows</span>(b_summary_raw, b_summary_lo, b_summary_gam)
-temp$method &lt;-<span class="st"> </span><span class="kw">factor</span>(temp$method, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;none&quot;</span>, <span class="st">&quot;loess&quot;</span>, <span class="st">&quot;gam&quot;</span>))
-<span class="kw">plot_biomass_monthly</span>(temp) +<span class="st"> </span><span class="kw">facet_wrap</span>(~method)</code></pre></div>
-<p><img src="figures/pace-fruit-biomass/unnamed-chunk-14-1.png" /><!-- --></p>
+temp<span class="op">$</span>method &lt;-<span class="st"> </span><span class="kw">factor</span>(temp<span class="op">$</span>method, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="st">&quot;none&quot;</span>, <span class="st">&quot;loess&quot;</span>, <span class="st">&quot;gam&quot;</span>))
+<span class="kw">plot_biomass_monthly</span>(temp) <span class="op">+</span><span class="st"> </span><span class="kw">facet_wrap</span>(<span class="op">~</span>method)</code></pre></div>
+<p><img src="figures/pace-fruit-biomass/compare_all-1.png" width="1056" /></p>
 </div>
 
 
@@ -511,9 +526,13 @@ temp$method &lt;-<span class="st"> </span><span class="kw">factor</span>(temp$me
 <script>
 
 // add bootstrap table styles to pandoc tables
-$(document).ready(function () {
+function bootstrapStylePandocTables() {
   $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
 });
+
 
 </script>
 
@@ -522,7 +541,7 @@ $(document).ready(function () {
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
-    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
 </script>
